@@ -2,6 +2,7 @@
 // The whole site is one old television. This is a port of the Claude Design prototype
 // (design/cleanyour.tv.dc.html): same refs, state and methods, with the content coming in as props.
 import React from "react";
+import PortfolioChannel from "./PortfolioChannel";
 import { GH, brandsOf } from "@/lib/parse";
 import type { SiteData } from "@/lib/parse";
 import { GROUPS, KONAMI, NAMES, ORDER, PRESS, PRESS_LOGO_W, S, SHOWCASE_IMAGES, cdn, thumb, TERM, TERM_TOTAL, THEMES, TILE_COLORS, classify, termCost, wait } from "@/lib/site";
@@ -553,11 +554,7 @@ export default class TvSite extends React.Component<Props, State> {
           <div ref={this.r.screen} className="m-screen" style={S("position:relative;height:100%;border-radius:clamp(8px,1.5vw,22px);background:#000;overflow:hidden;container-type:inline-size;box-shadow:0 0 0 2px #000,0 0 0 3px #232326,inset 0 0 60px rgba(0,0,0,.9)")}>
             <div ref={this.r.scroll} className="m-scroll" style={S("position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y proximity;scrollbar-width:none")}>
               {this.renderBoot()}
-              {this.renderStory()}
-              {this.renderWall()}
-              {this.renderHowTo()}
-              {this.renderMade()}
-              {this.renderCredits()}
+              {[1, 2, 3, 4, 5].map(n => <PortfolioChannel key={n} number={n} />)}
               <section id="ch-end" aria-label="End of transmission" className="m-end" style={S("position:relative;min-height:70%;scroll-snap-align:none;background:var(--page,#15181e);color:var(--ink,rgba(255,255,255,.95));display:grid;place-items:center;border-top:1px solid var(--line,rgba(255,255,255,.12))")}>
                 <div ref={this.r.end} style={S("display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:24px")}>
                   <div style={S("font-family:'VT323',monospace;font-size:28px;letter-spacing:.14em;color:var(--ink-dim,rgba(255,255,255,.6))")}>END OF TRANSMISSION</div>
@@ -591,7 +588,7 @@ export default class TvSite extends React.Component<Props, State> {
             <div aria-hidden="true" className="m-crt" style={{ ...S("position:absolute;inset:0;z-index:9;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 58%,rgba(0,0,0,.42) 100%),linear-gradient(112deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,0) 38%);transition:opacity .6s"), opacity: s.ch === 0 ? 1 : 0.3 }} />
           </div>
           <div className="m-strip" style={S("position:absolute;left:0;right:0;bottom:0;height:max(64px,5vw);display:flex;align-items:center;justify-content:center;gap:16px;pointer-events:none")}>
-            <div style={S("font-size:10px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.22)")}>cleanyour.tv</div>
+            <div style={S("font-size:10px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.22)")}>MARKETPLACE TV</div>
             <div aria-hidden="true" style={S("width:6px;height:6px;border-radius:50%;background:var(--led,#4bff7a);box-shadow:0 0 6px var(--led,#4bff7a),0 0 1px #000")} />
           </div>
         </div>
