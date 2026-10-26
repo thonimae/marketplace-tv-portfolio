@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { ServiceBroadcast, InsightsBroadcast } from "./MarketplaceEditorial";
 
 const email = "thonymaherison@gmail.com";
 const rim = "1px solid var(--line,rgba(255,255,255,.19))";
@@ -34,16 +35,10 @@ const notes=[
 ];
 function Offer({o}:{o:typeof offers[number]}){return <article style={card}><Label>{o.tag}</Label><h3 style={h3}>{o.name}</h3><p style={{...description,fontWeight:500}}>{o.for}</p><p style={{...description,opacity:.7}}>{o.result}</p><details style={detail}><summary style={{cursor:"pointer",color:brand,fontWeight:500}}>Voir les prestations et modalités</summary><ul style={{paddingLeft:22}}>{o.detail.map(x=><li key={x} style={{margin:"10px 0"}}>{x}</li>)}</ul><p style={{opacity:.75}}><strong>Format :</strong> {o.format}</p></details></article>}
 function Article({tag,title,summary,outcome}:{tag:string;title:string;summary:string;outcome:string}){return <article style={card}><Label>{tag}</Label><h3 style={h3}>{title}</h3><p style={description}>{summary}</p><div style={{borderTop:rim,marginTop:20,paddingTop:18}}><Label>CE QUI A ÉTÉ FAIT / CONSTATÉ</Label><p style={{...description,margin:0}}>{outcome}</p></div></article>}
-export default function PortfolioChannel({number}:{number:number}){
+export default function PortfolioChannel({number,onNavigate}:{number:number;onNavigate:(n:number)=>void}){
 if(number<1||number>5)return null;
 return <section id={`ch-0${number}`} data-ch={number} aria-label={`Chaîne 0${number}`} style={{position:"relative",minHeight:"100%",scrollSnapAlign:"start",padding:"clamp(70px,8cqw,110px) clamp(20px,6cqw,84px)",background:"var(--page,#15181e)",color:"var(--ink,#f5f3ed)",display:"flex",flexDirection:"column",gap:"clamp(28px,4cqw,52px)"}}>
-{number===1&&<>
- <Intro n={1} kicker="EXPERTISE" title="Votre compte Amazon." accent="Un suivi concret." text="Trois façons de travailler ensemble, selon votre besoin. Gestion régulière, projet catalogue ou intervention ciblée : nous définissons le périmètre avant de commencer."/>
- <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,310px),1fr))",gap:14}}>{offers.map(o=><Offer key={o.tag} o={o}/>)}</div>
- <div style={{...card,background:"transparent"}}><Label>COMMENT JE TRAVAILLE</Label><h3 style={h3}>Observer. Agir. Vérifier. Avancer ensemble.</h3><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,210px),1fr))",gap:16}}>{steps.map(([t,d])=><div key={t}><Label>{t}</Label><p style={{fontSize:16,lineHeight:1.5,opacity:.85}}>{d}</p></div>)}</div></div>
- <div style={{...card,background:"transparent"}}><Label>DES OUTILS ADAPTÉS À AMAZON AUJOURD'HUI</Label><h3 style={h3}>Une méthode qui évolue avec les outils.</h3><p style={description}>J'intègre les outils d'intelligence artificielle et d'automatisation à mon quotidien pour faciliter l'analyse des données, le travail sur les catalogues et le suivi des opérations. Chaque proposition reste vérifiée et les actions sensibles sont validées avec vous.</p></div>
- <Cta subject="Discutons de mon compte Amazon">Parlons de votre compte</Cta>
-</>}
+{number===1&&<ServiceBroadcast go={onNavigate}/>}
 {number===2&&<>
  <Intro n={2} kicker="EXPÉRIENCE" title="Des opérations vécues." accent="Pas seulement décrites." text="Mon parcours s'est construit dans la gestion réelle de comptes Vendor et Seller Central, d'abord en environnement d'agence, puis auprès de marques en indépendant."/>
  <div style={{display:"grid",gap:15}}>
@@ -53,12 +48,7 @@ return <section id={`ch-0${number}`} data-ch={number} aria-label={`Chaîne 0${nu
  <div><Label>EXEMPLES CONCRETS</Label><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,300px),1fr))",gap:14}}>{notes.map(x=><Article key={x.tag} {...x}/>)}</div><p style={{fontSize:15,opacity:.65,marginTop:20}}>Situations anonymisées. Les résultats présentés sont limités aux observations documentées.</p></div>
  <Cta subject="Échanger sur une mission Amazon">Échanger sur une mission</Cta>
 </>}
-{number===3&&<>
- <Intro n={3} kicker="INSIGHTS" title="Les vrais sujets." accent="Le travail derrière." text="Notes de terrain issues de situations rencontrées sur Amazon : ce qui bloquait, ce qu'il fallait vérifier, les actions engagées et les résultats réellement observés."/>
- <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,300px),1fr))",gap:14}}>{notes.map(x=><Article key={x.tag} {...x}/>)}</div>
- <div style={card}><Label>À VENIR / JOURNAL</Label><h3 style={h3}>Un blog technique, sans recettes miracles.</h3><p style={description}>Le format long permettra de développer chaque dossier, avec son contexte, les contraintes Amazon et les contrôles effectués. Les articles complets ne sont pas encore publiés.</p></div>
- <Cta subject="Question sur mes notes de terrain">Discutons de votre situation</Cta>
-</>}
+{number===3&&<InsightsBroadcast go={onNavigate}/>}
 {number===4&&<>
  <Intro n={4} kicker="À PROPOS" title="Thony Maherison." accent="Amazon au quotidien." text="Je travaille en indépendant avec des marques qui ont besoin d'un interlocuteur impliqué dans leurs opérations Amazon, capable d'intervenir sur le terrain et de communiquer clairement."/>
  <div style={card}><Label>MON APPROCHE</Label><p style={description}>Mon parcours m'a amené du service client et des solutions digitales à l'environnement marketplace, puis à la gestion de comptes Vendor et Seller Central en agence et en freelance. Je travaille à distance, en français et en anglais, avec des marques présentes sur les marchés européens.</p><p style={description}>Je m'engage sur ce que je maîtrise : la rigueur du travail, la clarté des échanges, la vérification des corrections et la transparence lorsque quelque chose dépend d'Amazon ou d'un autre intervenant.</p></div>
