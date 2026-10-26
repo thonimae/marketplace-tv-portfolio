@@ -10,10 +10,10 @@ import { GROUPS, KONAMI, NAMES, ORDER, PRESS, PRESS_LOGO_W, S, SHOWCASE_IMAGES, 
 // Home dock: TV list and Add-ons are pages; Get started (How to) and Showcase (Built on it) are channels 3 and 4 here.
 // The TV list comes first: "which TVs does it work on" is what people ask most. The app moved to the pills.
 const DOCK: { label: string; href: string; ch?: number }[] = [
-  { label: "TV list", href: "/tvs" },
-  { label: "Get started", href: "#ch-03", ch: 3 },
-  { label: "Add-ons", href: "/addons" },
-  { label: "Showcase", href: "#ch-04", ch: 4 },
+  { label: "Expertise", href: "#ch-01", ch: 1 },
+  { label: "Experience", href: "#ch-02", ch: 2 },
+  { label: "Insights", href: "#ch-03", ch: 3 },
+  { label: "Contact", href: "#ch-05", ch: 5 },
 ];
 import type { ThemeName } from "@/lib/site";
 
@@ -23,7 +23,7 @@ const BOOT_DELAY = 700;
 const PH = "https://www.producthunt.com/products/cleanyourtv";
 const FEAT_SECS = 6;
 /** The phone channel bar's short labels, in channel order. */
-const TABS = ["Home", "Story", "On air", "Set up", "Built on it", "Credits"];
+const TABS = ["Home", "Expertise", "Experience", "Insights", "About", "Contact"];
 
 type Counter = { key: string; label: string; value: number; max: number; display: number };
 type Slide = { kind: "show" | "theme"; name: string; what: string; meta: string; by: string; byUrl: string; url: string; wall: "aurora" | "black"; tiles: number; site?: ThemeName; kicker: string; image?: string; group: string };
@@ -564,7 +564,7 @@ export default class TvSite extends React.Component<Props, State> {
                     <div ref={this.gaugeRef} style={S("position:relative;height:10px;margin-top:-18px;width:0;background:repeating-linear-gradient(90deg,currentColor 0 5px,transparent 5px 8px);color:var(--ink,#fff);transition:width .08s linear")} />
                   </div>
                   <button onClick={() => this.onPower()} style={S("height:44px;padding:0 20px;border-radius:22px;border:0;background:var(--pill-bg,rgba(255,255,255,.12));box-shadow:inset 0 0 0 1px var(--pill-rim,rgba(255,255,255,.22));font-size:15px;font-weight:500")}>Turn it off</button>
-                  <a href={COFFEE} target="_blank" rel="noopener" className="mx-coffee" style={S("font-size:14px;color:var(--ink-dim,rgba(255,255,255,.6))")}>Buy me a coffee</a>
+                  <a href="#ch-01" onClick={(e) => {e.preventDefault();this.channel(1)}} className="mx-coffee" style={S("font-size:14px;color:var(--ink-dim,rgba(255,255,255,.6))")}>Explore my work</a>
                 </div>
               </section>
             </div>
@@ -573,14 +573,8 @@ export default class TvSite extends React.Component<Props, State> {
             <canvas ref={this.staticRef} width={192} height={108} aria-hidden="true" style={S("position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;opacity:0;z-index:6;pointer-events:none")} />
             <div ref={this.r.flash} aria-hidden="true" style={S("position:absolute;inset:0;background:#fff;opacity:0;z-index:7;pointer-events:none;transform-origin:center")} />
             <div ref={this.r.off} style={S("position:absolute;inset:0;z-index:8;display:none;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,2cqw,24px);padding:6cqw;background:radial-gradient(80% 70% at 50% 40%,#0c0c0e,#050506);color:rgba(255,255,255,.88);text-align:center;font-size:clamp(14px,1.6cqw,19px);font-weight:400;opacity:0")}>
-              <div style={S("display:flex;gap:clamp(14px,3cqw,40px);flex-wrap:wrap;justify-content:center;font-weight:400")}>
-                <a href={GH} target="_blank" rel="noopener">GitHub</a>
-                <a href={TWEET} target="_blank" rel="noopener">The tweet</a>
-                <a href={GH + "/blob/main/LICENSE"} target="_blank" rel="noopener">MIT licence</a>
-                <a href={COFFEE} target="_blank" rel="noopener">Buy me a coffee</a>
-                <a href={PH} target="_blank" rel="noopener">Product Hunt</a>
-              </div>
-              <p style={S("margin:0;max-width:34em;line-height:1.45;text-wrap:pretty")}>Started as one afternoon on my parents&apos; TV. Built with Claude Code.</p>
+              <div style={S("font-family:'VT323',monospace;font-size:clamp(25px,3cqw,40px);letter-spacing:.15em;color:var(--brand,#cfffcf)")}>MARKETPLACE JOURNAL</div>
+              <p style={S("margin:0;max-width:34em;line-height:1.45;text-wrap:pretty")}>Independent Amazon & Marketplace Consultant · Europe</p>
               <button onClick={() => this.powerOn()} className="hov-white" style={S("height:44px;padding:0 20px;border-radius:22px;border:0;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);font-family:'VT323',monospace;font-size:clamp(18px,1.8cqw,22px);letter-spacing:.08em")}>TURN IT BACK ON</button>
             </div>
             {/* The CRT layers read as texture on the boot channel and as murk over text, so they fade once you scroll. */}
@@ -603,10 +597,10 @@ export default class TvSite extends React.Component<Props, State> {
 
   renderNudge() {
     return (
-      <div role="dialog" aria-label="New: add-ons, themes and settings" className="m-nudge">
+      <div role="dialog" aria-label="Portfolio navigation" className="m-nudge">
         <span className="m-nudge-k">NEW</span>
-        <span className="m-nudge-t">Themes, settings and add-ons for the launcher</span>
-        <a href="/addons" className="m-nudge-go">Take a look</a>
+        <span className="m-nudge-t">Explore marketplace expertise and insights</span>
+        <a href="#ch-01" className="m-nudge-go" onClick={(e) => {e.preventDefault();this.channel(1)}}>Explore</a>
         <button type="button" aria-label="Close" className="m-nudge-x" onClick={() => this.setState({ nudge: false })}>×</button>
       </div>
     );
@@ -614,157 +608,55 @@ export default class TvSite extends React.Component<Props, State> {
 
   renderBoot() {
     const s = this.state;
-    const counters = s.counters.map((c) => ({ ...c, text: c.display.toLocaleString("en-US"), pct: s.booted ? Math.min(100, c.value / c.max * 100) : 0 }));
-    const tile = "position:relative;width:clamp(64px,14cqw,180px);aspect-ratio:16/9;border-radius:clamp(8px,1.25cqw,16px);display:grid;place-items:center;font-weight:500;font-size:clamp(10px,1.4cqw,18px);letter-spacing:.02em;color:#fff;opacity:0;transition:transform .25s;cursor:default;background:";
-    const name = "position:absolute;top:calc(100% + clamp(10px,1.4cqw,18px));left:0;right:0;text-align:center;font-size:clamp(9px,1.1cqw,14px);font-weight:500;letter-spacing:.02em;color:var(--ink,rgba(255,255,255,.95));opacity:0;transition:opacity .25s";
-    const pill = "height:clamp(24px,3.3cqw,42px);padding:0 clamp(10px,1.5cqw,20px);border-radius:999px;background:var(--pill-bg,linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08)));box-shadow:inset 0 0 0 1px var(--pill-rim,rgba(255,255,255,.22));display:flex;align-items:center;font-size:clamp(9px,1.15cqw,15px);font-weight:500";
-    const zap = "flex-shrink:0;width:11cqw;aspect-ratio:16/9;border-radius:.8cqw;display:grid;place-items:center;";
-    const chip = "flex-shrink:0;padding:.7cqw 1.6cqw;border-radius:.6cqw;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)";
+    const tile = "position:relative;width:clamp(64px,14cqw,180px);aspect-ratio:16/9;border-radius:clamp(8px,1.25cqw,16px);display:grid;place-items:center;font-weight:500;font-size:clamp(10px,1.4cqw,18px);letter-spacing:.02em;color:#fff;opacity:0;transition:transform .25s;cursor:pointer;background:";
+    const name = "position:absolute;top:calc(100% + clamp(10px,1.4cqw,18px));left:0;right:0;text-align:center;font-size:clamp(9px,1.1cqw,14px);font-weight:500;opacity:0;transition:opacity .25s";
     const hoverTile = (e: React.MouseEvent<HTMLElement>) => { if (this.state.booted) this.focusTile(Number(e.currentTarget.dataset.tile)); };
-    const clickTile = (e: React.MouseEvent<HTMLElement>) => { if (!this.state.booted) return; this.click(); e.currentTarget.animate([{ transform: "scale(1.06)" }, { transform: "scale(.98)" }, { transform: "scale(1.06)" }], { duration: 220, easing: "ease-out" }); };
     return (
-      <section id="ch-00" data-ch="0" aria-label="Channel 00, Boot" className="m-hero" onClick={() => this.skip()} style={S("position:relative;height:100%;scroll-snap-align:start;overflow:hidden")}>
+      <section id="ch-00" data-ch="0" aria-label="Channel 00, Home" className="m-hero" onClick={() => this.skip()} style={S("position:relative;height:100%;scroll-snap-align:start;overflow:hidden")}>
         <div ref={this.r.launcher} style={S("position:absolute;inset:0;background-color:var(--bg,#000);background-image:var(--wall,none);background-size:cover;background-position:center;color:var(--ink,rgba(255,255,255,.95))")}>
-          <div ref={this.r.ambient} style={S("position:absolute;inset:0;background:radial-gradient(55% 50% at 30% 42%,var(--glow,rgba(0,0,0,0)) 0%,rgba(0,0,0,0) 70%);transition:opacity .6s;opacity:.9;pointer-events:none")} />
-          <div className="m-hero-top" style={S("position:absolute;left:4.2cqw;right:4.2cqw;top:clamp(44px,5.6cqw,72px);display:flex;justify-content:space-between;align-items:flex-end;gap:12px")}>
-            <div style={S("display:flex;flex-direction:column;gap:2px;min-width:0")}>
-              <div className="mx-greet" style={S("font-size:clamp(9px,.95cqw,12px);font-weight:500;letter-spacing:.22em;text-transform:uppercase;opacity:.55;padding-left:2px")}>{s.greeting}</div>
-              <div style={S("display:flex;align-items:flex-end;gap:clamp(6px,.8cqw,12px);white-space:nowrap")}>
-                <div style={S("font-size:clamp(24px,4cqw,52px);font-weight:300;letter-spacing:-.04em;line-height:1")}>{s.clock}</div>
-                <div className="mx-ampm" style={S("font-size:clamp(9px,1.15cqw,15px);font-weight:500;letter-spacing:.08em;text-transform:uppercase;opacity:.7;padding-bottom:2px")}>{s.ampm}</div>
-                <div className="m-date" style={S("width:1px;height:clamp(14px,2cqw,26px);background:var(--ink-dim,rgba(255,255,255,.3));opacity:.5;margin:0 clamp(2px,.4cqw,6px) 3px")} />
-                <div className="m-date" style={S("font-size:clamp(9px,1.1cqw,14px);letter-spacing:.14em;text-transform:uppercase;opacity:.65;padding-bottom:3px")}>{s.date}</div>
-              </div>
-            </div>
-            <div className="m-pills" style={S("display:flex;gap:clamp(4px,.8cqw,10px);flex-shrink:0")}>
-              {/* The launcher's Inputs / Wi-Fi / Settings pills, as the site's own navigation. */}
-              <a href="/press" onClick={(e) => e.stopPropagation()} className="m-navpill m-navpill-press" style={S(pill)}>Press</a>
-              <a href="/faq" onClick={(e) => e.stopPropagation()} className="m-navpill" style={S(pill)}>FAQ</a>
-              <a href="/app/android" onClick={(e) => e.stopPropagation()} className="m-navpill m-navpill-app" style={S(pill)}>App</a>
-              <a href="/bot" onClick={(e) => e.stopPropagation()} className="m-navpill m-navpill-bot" aria-label="PR Bot, powered by 0G" style={S(pill + ";gap:.45em")}>PR Bot<img src="/brand/0g.svg" alt="" className="m-0g" /></a>
-              <a href={COFFEE} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()} className="m-navpill m-navpill-coffee" aria-label="Buy me a coffee" style={S(pill + ";gap:.45em")}>
-                <svg viewBox="0 0 24 24" width="1.05em" height="1.05em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9Z" /><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16" /><path d="M8 3c0 1 1 1 1 2s-1 1-1 2M12 3c0 1 1 1 1 2s-1 1-1 2" /></svg>
-                <span className="m-coffee-long">Buy me a coffee</span><span className="m-coffee-short">Coffee</span>
-              </a>
-            </div>
+          <div ref={this.r.ambient} style={S("position:absolute;inset:0;background:radial-gradient(55% 50% at 30% 42%,var(--glow,rgba(0,0,0,0)) 0%,transparent 70%);pointer-events:none")} />
+          <div style={S("position:absolute;left:4.2cqw;right:4.2cqw;top:clamp(36px,5cqw,65px);display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'VT323',monospace;font-size:clamp(14px,1.8cqw,22px);letter-spacing:.1em")}>
+            <span>MARKETPLACE / JOURNAL</span><span style={S("color:var(--brand,#cfffcf)")}>INDEPENDENT · EUROPE</span>
           </div>
           <div ref={this.r.dock} className="m-dock" style={S("position:absolute;left:50%;bottom:clamp(28px,5cqw,64px);transform:translateX(-50%);padding:clamp(8px,1.1cqw,14px);border-radius:clamp(16px,2cqw,26px);background:var(--band,#141416);box-shadow:inset 0 0 0 1px var(--band-rim,rgba(255,255,255,.12));display:flex;gap:clamp(8px,1.6cqw,22px)")}>
-            {/* The dock's four tiles are the site's main links: two pages and two channels on this page. */}
-            {DOCK.map((t, i) => (
-              <a key={t.label} href={t.href} data-tile={i} data-color={TILE_COLORS[i]} onMouseEnter={hoverTile} onClick={(e) => { e.stopPropagation(); if (!this.state.booted) { e.preventDefault(); this.skip(); return; } clickTile(e); if (t.ch !== undefined) { e.preventDefault(); this.channel(t.ch); } }} className="m-docktile" style={S(tile + TILE_COLORS[i])}>
-                {t.label}
+            {DOCK.map((t,i) => (
+              <a key={t.label} href={t.href} data-tile={i} data-color={TILE_COLORS[i]} onMouseEnter={hoverTile}
+                onClick={(e) => { e.stopPropagation(); if (!this.state.booted) { e.preventDefault(); this.skip(); return; } this.click(); if (t.ch !== undefined) { e.preventDefault(); this.channel(t.ch); } }}
+                className="m-docktile" style={S(tile + TILE_COLORS[i])}>{t.label}
                 <div data-name style={S(name)}>{t.label}</div>
               </a>
             ))}
           </div>
-          <div ref={this.r.glass} aria-hidden="true" className="m-glass" style={S("position:absolute;left:0;top:0;width:10px;height:10px;opacity:0;pointer-events:none;border-radius:clamp(10px,1.6cqw,22px);background:var(--glass-fill,linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.08)));box-shadow:inset 0 0 0 1.5px var(--glass-rim,rgba(255,255,255,.8)),0 0 0 1px rgba(255,255,255,.14),0 0 14px rgba(255,255,255,.28);will-change:transform,width,height")}>
-            <div style={S("position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 45%)")} />
-          </div>
+          <div ref={this.r.glass} aria-hidden="true" className="m-glass" style={S("position:absolute;left:0;top:0;width:10px;height:10px;opacity:0;pointer-events:none;border-radius:clamp(10px,1.6cqw,22px);background:var(--glass-fill,rgba(255,255,255,.12));box-shadow:inset 0 0 0 1.5px var(--glass-rim,rgba(255,255,255,.8)),0 0 14px rgba(255,255,255,.28);will-change:transform,width,height")} />
         </div>
-        <div ref={this.r.clutter} aria-hidden="true" className="m-clutter" style={S("position:absolute;inset:0;background:linear-gradient(180deg,#0B1220 0%,#05070C 100%);color:#fff;overflow:hidden")}>
-          <div data-row="3" style={S("display:flex;justify-content:space-between;align-items:center;padding:clamp(44px,5cqw,66px) 4.2cqw 0;transform-origin:top;font-size:clamp(10px,1.6cqw,20px)")}>
-            <div style={S("display:flex;gap:clamp(10px,2.6cqw,34px);align-items:center")}>
-              <div style={S("display:flex;gap:6px;align-items:center")}><div style={S("display:flex;gap:2px")}><div style={S("width:.7cqw;height:.7cqw;border-radius:50%;background:#4285F4")} /><div style={S("width:.7cqw;height:.7cqw;border-radius:50%;background:#EA4335")} /><div style={S("width:.7cqw;height:.7cqw;border-radius:50%;background:#FBBC04")} /></div>Search</div>
-              <div style={S("border-bottom:2px solid #fff;padding-bottom:2px")}>Home</div><div style={S("opacity:.8")}>Shop</div><div style={S("opacity:.8")}>Discover</div><div style={S("opacity:.8")}>Apps</div>
-            </div>
-            <div style={S("display:flex;gap:clamp(8px,1.6cqw,20px);align-items:center;opacity:.85")}><div style={S("width:1.4cqw;height:1.4cqw;border:1.5px solid #fff;border-radius:50%")} /><div style={S("width:1.4cqw;height:1.4cqw;border:1.5px solid #fff;border-radius:3px")} /><div style={S("width:1.4cqw;height:1.4cqw;border-radius:50%;background:#1E9E5A")} />11:54</div>
+        <div ref={this.r.clutter} aria-hidden="true" className="m-clutter" style={S("position:absolute;inset:0;background:linear-gradient(145deg,#11181d,#090c11);color:#fff;overflow:hidden")}>
+          <div data-row="3" style={S("margin:8cqw 6cqw 0;font-family:'VT323',monospace;font-size:clamp(19px,3cqw,38px);letter-spacing:.1em")}>SIGNAL FOUND / MARKETPLACE BROADCAST</div>
+          <div data-row="2" style={S("margin:3cqw 6cqw;padding:4cqw;background:repeating-linear-gradient(120deg,#1e2931 0 18px,#25323a 18px 36px);border-radius:1cqw")}>
+            <div style={S("font-size:clamp(20px,4cqw,52px);font-weight:500")}>TOO MANY MOVING PARTS?</div>
+            <div data-row="1" style={S("margin-top:2cqw;font-size:clamp(13px,2cqw,24px);opacity:.8")}>Catalogs. Operations. Markets. Content.</div>
           </div>
-          <div data-row="2" style={S("position:relative;margin:1.6cqw 4.2cqw 0;height:24cqw;border-radius:1cqw;overflow:hidden;background:repeating-linear-gradient(135deg,#1C2A4A 0 1.2cqw,#223558 1.2cqw 2.4cqw);transform-origin:top")}>
-            <div style={S("position:absolute;inset:0;background:linear-gradient(90deg,#070B14 30%,rgba(7,11,20,.2) 70%)")} />
-            <div style={S("position:absolute;left:3cqw;top:3cqw;right:40%;display:flex;flex-direction:column;gap:.8cqw")}>
-              <div style={S("font-size:clamp(9px,1.3cqw,16px);font-weight:500;opacity:.8")}>Sponsored</div>
-              <div style={S("font-size:clamp(14px,3cqw,38px);font-weight:500;line-height:1.05")}>Savings, now on your TV</div>
-              <div style={S("font-size:clamp(9px,1.3cqw,16px);opacity:.75;line-height:1.3")}>Open an account from your sofa. Terms apply. Offer ends soon, probably.</div>
-            </div>
-            <div style={S("position:absolute;right:3cqw;top:2.4cqw;font-family:'VT323',monospace;font-size:clamp(10px,1.6cqw,20px);letter-spacing:.1em;padding:.2cqw .8cqw;border:1px solid rgba(255,255,255,.5);opacity:.8")}>AD</div>
-            <div data-row="1" className="m-blur" style={S("position:absolute;left:0;right:0;bottom:0;padding:1.6cqw 3cqw;background:rgba(10,14,24,.78);backdrop-filter:blur(6px);display:flex;justify-content:space-between;align-items:center;gap:1cqw;transform-origin:top")}>
-              <div style={S("display:flex;flex-direction:column;gap:.4cqw")}><div style={S("font-size:clamp(11px,2cqw,26px);font-weight:500")}>The Discover tab is going away soon</div><div style={S("font-size:clamp(9px,1.3cqw,16px);opacity:.8")}>Your recommendations and watchlist will move to the Home tab.</div></div>
-              <div style={S("font-size:clamp(9px,1.3cqw,16px);padding:.6cqw 1.4cqw;border-radius:999px;background:rgba(255,255,255,.1);flex-shrink:0")}>Dismiss</div>
-            </div>
+          <div style={S("display:flex;gap:1.2cqw;margin:2cqw 6cqw")}>
+            {["DATA","OPS","CONTENT","EUROPE","VENDOR","SELLER"].map((t,i) => <div key={t} data-zap={i+1} style={S("padding:1.5cqw;background:#324037;border-radius:.5cqw;font-size:clamp(10px,1.7cqw,21px)")}>{t}</div>)}
           </div>
-          <div style={S("margin:2cqw 4.2cqw 0;font-size:clamp(10px,1.5cqw,18px);font-weight:500")}>Favourite apps</div>
-          <div style={S("display:flex;gap:1.2cqw;margin:1cqw 0 0 4.2cqw;overflow:hidden")}>
-            <div data-zap="1" style={S(zap + "background:#1F5BFF;font-weight:500;font-size:clamp(9px,1.5cqw,18px)")}>streamr</div>
-            <div data-zap="2" style={S(zap + "background:#1A73E8")}><div style={S("width:3cqw;height:2cqw;border:2px solid #fff;border-radius:.3cqw")} /></div>
-            <div data-zap="3" style={S(zap + "background:#F2F2F2;color:#D22;font-weight:500;font-size:clamp(9px,1.5cqw,18px)")}>Vuu</div>
-            <div data-zap="4" style={S(zap + "background:#FFFFFF;color:#333;font-weight:500;font-size:clamp(8px,1.2cqw,14px)")}>App Store</div>
-            <div data-zap="5" style={S(zap + "background:#1A1A3E;font-weight:300;font-size:clamp(12px,2.2cqw,28px)")}>Z6</div>
-            <div data-zap="6" style={S(zap + "background:linear-gradient(135deg,#2A1BB0,#C11C9C);font-weight:500;font-size:clamp(9px,1.4cqw,17px)")}>Kinoo+</div>
-            <div data-zap="7" style={S(zap + "background:#EFEFEF;color:#C8102E;font-weight:500;font-size:clamp(9px,1.5cqw,18px);letter-spacing:.06em")}>FLIXA</div>
-            <div data-zap="8" style={S(zap + "background:#FF7A1A;font-weight:500;font-size:clamp(9px,1.5cqw,18px)")}>ottr</div>
-            <div data-zap="9" style={S(zap + "background:#C8102E;font-weight:500;font-size:clamp(9px,1.5cqw,18px)")}>bingee</div>
+          <div data-row="0" style={S("margin:2cqw 6cqw;font-family:'VT323',monospace;font-size:clamp(16px,2.2cqw,28px)")}>TUNING INTO A CLEARER SIGNAL...</div>
+          <div data-popup style={S("position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(40cqw,420px);padding:2cqw;border-radius:1.2cqw;background:#141c18;box-shadow:0 20px 60px #000a;display:flex;flex-direction:column;gap:1cqw")}>
+            <strong style={S("font-size:clamp(18px,2.8cqw,32px)")}>TOO MUCH NOISE</strong>
+            <span>Switch channels. Find clarity.</span>
           </div>
-          <div data-row="0" style={S("display:flex;gap:1cqw;margin:2cqw 0 0 4.2cqw;overflow:hidden;transform-origin:top;font-size:clamp(9px,1.3cqw,16px)")}>
-            {["Play next", "Top-selling movies", "Popular movies and TV shows", "Trending", "For you"].map((t) => <div key={t} style={S(chip)}>{t}</div>)}
-          </div>
-          <div data-popup style={S("position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(36cqw,420px);padding:2cqw;border-radius:1.2cqw;background:#161B28;box-shadow:0 20px 60px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.12);display:flex;flex-direction:column;gap:1cqw")}>
-            <div style={S("font-size:clamp(12px,2cqw,24px);font-weight:500")}>Try Premium+ free</div>
-            <div style={S("font-size:clamp(9px,1.3cqw,16px);opacity:.8;line-height:1.35")}>Three months on us, then a monthly fee. Cancel any time, from a menu you will not find.</div>
-            <div style={S("display:flex;gap:.8cqw;margin-top:.4cqw;font-size:clamp(9px,1.3cqw,16px)")}><div style={S("padding:.7cqw 1.6cqw;border-radius:999px;background:#fff;color:#111;font-weight:500")}>Start trial</div><div style={S("padding:.7cqw 1.6cqw;border-radius:999px;background:rgba(255,255,255,.1)")}>Not now</div></div>
-          </div>
-          <div ref={this.r.miss} style={S("position:absolute;left:50%;bottom:4cqw;transform:translateX(-50%);font-family:'VT323',monospace;font-size:clamp(20px,3.4cqw,40px);color:#CFFFCF;text-shadow:0 0 10px rgba(140,255,140,.6);opacity:0;pointer-events:none")}>miss it?</div>
+          <div ref={this.r.miss} style={S("position:absolute;left:50%;bottom:4cqw;transform:translateX(-50%);font-family:'VT323',monospace;font-size:clamp(20px,3.4cqw,40px);color:#CFFFCF;opacity:0;pointer-events:none")}>THE SIGNAL IS CLEAR</div>
         </div>
-        <div ref={this.r.title} className="m-title" style={S("position:absolute;left:0;right:0;top:0;bottom:clamp(90px,16cqw,200px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,2cqw,28px);padding:clamp(60px,9cqw,110px) 5cqw 0;text-align:center;opacity:0;pointer-events:none;color:var(--ink,rgba(255,255,255,.95))")}>
-          <div style={S("display:flex;flex-direction:column;align-items:center;gap:clamp(6px,.8cqw,12px)")}>
-            {/* The community Android app (udhaykumarbala): a pill above the wordmark; narrow phones use the App pill instead (it takes the Press pill's place). */}
-            <a href="/app/android" onClick={(e) => e.stopPropagation()} className="m-applive no-border act-shrink" style={S("pointer-events:auto;display:inline-flex;align-items:center;margin-bottom:clamp(2px,.4cqw,6px);font-size:clamp(13px,1.2cqw,15px);font-weight:500;letter-spacing:.01em;color:var(--brand,#cfffcf);opacity:.9")}>
-              New: clean your TV from your phone →
-            </a>
-            <h1 className="m-h1" aria-label="CleanYourTV" style={S("margin:0;display:flex;align-items:center;gap:.22em;font-family:var(--font-fredoka),'Fredoka',sans-serif;font-size:clamp(40px,min(8cqw,11vh),104px);font-weight:600;letter-spacing:-.01em;line-height:1;white-space:nowrap")}>
-              <svg aria-hidden="true" viewBox="10 7 44 51" style={S("height:1.05em;width:auto;flex:none;margin-top:-.08em")}>
-                <path d="M26 20 L19 9 M38 20 L45 9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
-                <circle cx="19" cy="9" r="2.6" fill="currentColor" />
-                <circle cx="45" cy="9" r="2.6" fill="currentColor" />
-                <rect x="10" y="20" width="44" height="32" rx="8" fill="currentColor" />
-                <rect x="15" y="25" width="34" height="22" rx="4" fill="var(--brand,#cfffcf)" />
-                <rect x="15" y="25" width="34" height="22" rx="4" fill="url(#h1g)" />
-                <rect x="20" y="53" width="7" height="4" rx="2" fill="currentColor" />
-                <rect x="37" y="53" width="7" height="4" rx="2" fill="currentColor" />
-                <defs>
-                  <linearGradient id="h1g" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="#ffffff" stopOpacity=".35" />
-                    <stop offset=".45" stopColor="#ffffff" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <span>CleanYour<span style={S("color:var(--brand,#cfffcf)")}>TV</span></span>
-            </h1>
-            <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2.1cqw,26px);font-weight:300;opacity:.8")}>Your TV, minus the ads.</p>
-            <p className="m-sub" style={S("margin:0;max-width:60em;font-size:clamp(13px,1.2cqw,16px);line-height:1.45;opacity:.75;text-wrap:balance")}>For Android TV and Google TV. No root, nothing uninstalled.</p>
-          </div>
-          {/* Stars, forks and contributors as one quiet line (it used to be three gauges). */}
-          <p className="m-counters" style={S("margin:0;font-family:'VT323',monospace;font-size:clamp(18px,1.9cqw,24px);letter-spacing:.06em;opacity:.75")}>
-            {counters.map((c) => `${c.key === "contributors" ? c.display.toLocaleString("en-US") + "+" : c.display >= 1000 ? (c.display / 1000).toFixed(1) + "K" : String(c.display)} ${c.label.toLowerCase()}`).join("  ·  ")}
-          </p>
-          <div className="m-btns" style={S("display:flex;gap:10px;flex-wrap:wrap;justify-content:center")}>
-            <button onClick={() => this.channel(3)} className="act-shrink" style={S("pointer-events:auto;height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500;letter-spacing:.01em;transition:transform .2s")}>Set up your TV</button>
-            <a href={GH} target="_blank" rel="noopener" onClick={() => this.click()} className="hov-white act-shrink" style={S("pointer-events:auto;display:flex;align-items:center;gap:8px;height:44px;padding:0 20px;border-radius:22px;border:0;background:var(--pill-bg,linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08)));box-shadow:inset 0 0 0 1px var(--pill-rim,rgba(255,255,255,.22));font-size:15px;font-weight:500;letter-spacing:.01em;color:inherit;transition:background .2s,transform .2s")}>
-              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" /></svg>
-              Star on GitHub
-            </a>
-          </div>
-          {/* The press, scrolling under the buttons; hover pauses it, reduced motion keeps it still. The link after it opens the full list on /press; the duration grows with the list so the speed stays put. */}
-          <div className="m-press" style={S("pointer-events:auto;width:min(90cqw,900px);display:flex;align-items:center;gap:clamp(10px,1.4cqw,18px)")}>
-            <span style={S("flex-shrink:0;font-family:'VT323',monospace;font-size:clamp(18px,1.8cqw,22px);font-weight:700;letter-spacing:.14em;color:var(--ink,#fff)")}>FEATURED IN</span>
-            <div style={S("flex:1;min-width:0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)")}>
-              <div className="press-track" style={{ ...S("display:flex;width:max-content"), animation: this.state.mounted && this.reduced ? "none" : `tickerSlide ${PRESS.length * 3.6}s linear infinite` }}>
-                {[0, 1].map((k) => (
-                  <div key={k} aria-hidden={k === 1 ? true : undefined} style={S("display:flex;align-items:center;gap:clamp(20px,2.6cqw,34px);padding-right:clamp(20px,2.6cqw,34px)")}>
-                    {PRESS.map(([slug, name, url]) => (
-                      <a key={slug} href={url} target="_blank" rel="noopener" title={name} tabIndex={k === 1 ? -1 : undefined} className="no-border" style={S("line-height:0;flex-shrink:0")}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={cdn(`/press/${slug}.png`)} alt={k === 1 ? "" : name} width={Math.round((PRESS_LOGO_W[slug] ?? 88) * 28 / 88)} height={28} loading="lazy" style={S("height:clamp(24px,2.4cqw,32px);width:auto;display:block")} />
-                      </a>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <a href="/press" aria-label={`All ${this.props.pressTotal} articles about CleanYourTV`} className="hov-bright no-border mx-more" style={S("flex-shrink:0;font-family:'VT323',monospace;font-size:clamp(18px,1.8cqw,22px);letter-spacing:.08em;white-space:nowrap;color:var(--ink-dim,rgba(255,255,255,.8))")}>+{this.props.pressTotal - PRESS.length}<span className="press-more-word"> MORE</span> ▸</a>
+        <div ref={this.r.title} className="m-title" style={S("position:absolute;left:0;right:0;top:0;bottom:clamp(90px,16cqw,200px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,2cqw,25px);padding:clamp(65px,9cqw,110px) 5cqw 0;text-align:center;opacity:0;pointer-events:none;color:var(--ink,rgba(255,255,255,.95))")}>
+          <div style={S("font-family:'VT323',monospace;font-size:clamp(17px,2cqw,26px);letter-spacing:.16em;color:var(--brand,#cfffcf)")}>CH 00 / INDEPENDENT CONSULTANT</div>
+          <h1 className="m-h1" style={S("margin:0;font-family:Outfit,sans-serif;font-size:clamp(40px,min(7cqw,10vh),96px);font-weight:500;letter-spacing:-.065em;line-height:1.03")}>Marketplace complexity.<br/><span style={S("color:var(--brand,#cfffcf)")}>Made clear.</span></h1>
+          <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2cqw,25px);font-weight:300;opacity:.85")}>Amazon Vendor & Seller Central · European marketplaces</p>
+          <p className="m-sub" style={S("margin:0;max-width:620px;font-size:clamp(13px,1.5cqw,19px);line-height:1.5;opacity:.7")}>Hands-on marketplace operations, catalog management and content strategy for brands that want things done.</p>
+          <div className="m-btns" style={S("display:flex;gap:10px;flex-wrap:wrap;justify-content:center;pointer-events:auto")}>
+            <button onClick={(e) => {e.stopPropagation();this.channel(1)}} className="act-shrink" style={S("height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500")}>Explore expertise</button>
+            <button onClick={(e) => {e.stopPropagation();this.channel(5)}} className="hov-white act-shrink" style={S("height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--line,#555);background:var(--pill-bg,rgba(255,255,255,.1));color:inherit;font-size:15px")}>Get in touch</button>
           </div>
         </div>
         {s.mounted && !s.booted && s.power && (
-          <button onClick={(e) => { e.stopPropagation(); this.skip(); }} className="hov-white m-skip" style={S("position:absolute;left:clamp(12px,2cqw,28px);bottom:clamp(12px,2cqw,28px);z-index:3;height:44px;padding:0 18px;border-radius:22px;border:0;background:rgba(0,0,0,.55);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);color:#fff;font-family:'VT323',monospace;font-size:22px;letter-spacing:.08em")}>SKIP INTRO ▸▸</button>
+          <button onClick={(e) => {e.stopPropagation();this.skip()}} className="hov-white m-skip" style={S("position:absolute;left:clamp(12px,2cqw,28px);bottom:clamp(12px,2cqw,28px);z-index:3;height:44px;padding:0 18px;border-radius:22px;border:1px solid #777;background:#0009;color:#fff;font-family:'VT323',monospace;font-size:22px")}>SKIP INTRO ▸▸</button>
         )}
       </section>
     );
@@ -1119,7 +1011,7 @@ export default class TvSite extends React.Component<Props, State> {
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
             <button key={n} onClick={() => this.channel(n)} aria-label={`Channel ${n}`} className="hov-bright act-down" style={S(digit)}>{n}</button>
           ))}
-          <button aria-label="Menu: open GitHub" onClick={() => { this.click(); window.open(GH, "_blank", "noopener"); }} className="hov-bright act-down" style={S(btn + "font-size:6px;font-weight:500;letter-spacing:.04em;color:rgba(255,255,255,.75)")}>MENU</button>
+          <button aria-label="Menu: open portfolio expertise" onClick={() => { this.click(); this.channel(1); }} className="hov-bright act-down" style={S(btn + "font-size:6px;font-weight:500;letter-spacing:.04em;color:rgba(255,255,255,.75)")}>MENU</button>
           <button onClick={() => this.channel(0)} aria-label="Channel 0" className="hov-bright act-down" style={S(digit)}>0</button>
           <button aria-label="Mute: toggle sound" aria-pressed={s.sound} onClick={() => this.toggleSound()} className="hov-bright act-down" style={S(btn + "font-size:6px;font-weight:500;letter-spacing:.04em;color:var(--mute-ink,rgba(255,255,255,.75))")}>MUTE</button>
         </div>
