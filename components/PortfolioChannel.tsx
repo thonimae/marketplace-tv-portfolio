@@ -1,51 +1,79 @@
 "use client";
 import React from "react";
 
-type Channel = { label: string; kicker: string; headline: string; emphasis: string; intro: string; rows: { tag: string; title: string; text: string }[] };
-const channels: Record<number, Channel> = {
-  1: { label: "EXPERTISE", kicker: "OPERATIONS / CONTENT / STRATEGY", headline: "The work behind", emphasis: "the marketplace.", intro: "Practical support for Amazon brands, from daily account operations to cross-border catalog strategy.", rows: [
-    { tag: "01 / OPERATIONS", title: "Vendor & Seller Central", text: "Account operations, support cases, product availability, compliance follow-up and everyday troubleshooting." },
-    { tag: "02 / CATALOG", title: "Content & localization", text: "Catalog quality, listings, A+ content and market-specific copy for European marketplaces." },
-    { tag: "03 / PERFORMANCE", title: "Marketplace strategy", text: "Pricing, operational reporting and practical decisions informed by marketplace data." }
-  ] },
-  2: { label: "EXPERIENCE", kicker: "SELECTED PROFESSIONAL WORK", headline: "Real work.", emphasis: "Real complexity.", intro: "Experience grounded in the daily operational reality of European marketplaces, without inflated case studies.", rows: [
-    { tag: "CURRENT / INDEPENDENT", title: "Amazon & Marketplace Consultant", text: "Supporting brands with Vendor and Seller Central operations, multilingual catalog management and ongoing marketplace projects." },
-    { tag: "PREVIOUS / AGENCY", title: "Senior Marketplace Platform Specialist", text: "Hands-on marketplace account operations, content, case management, promotions and performance reporting." }
-  ] },
-  3: { label: "INSIGHTS", kicker: "A JOURNAL OF MARKETPLACE WORK", headline: "Field notes.", emphasis: "Not fluff.", intro: "Ideas for practical articles, grounded in challenges brands and operators actually face. These are placeholders, not published articles.", rows: [
-    { tag: "ARTICLE IDEA / 01", title: "Catalog quality is an operational issue", text: "Why content, data and everyday account workflows cannot be separated." },
-    { tag: "ARTICLE IDEA / 02", title: "Behind product availability", text: "The less visible work behind a product being purchasable on Amazon." },
-    { tag: "ARTICLE IDEA / 03", title: "Localization beyond translation", text: "Why European marketplaces need language-native search and content decisions." }
-  ] },
-  4: { label: "ABOUT", kicker: "BEHIND THE SCREEN", headline: "Independent.", emphasis: "Hands-on.", intro: "I work at the intersection of Amazon operations, marketplace content and international e-commerce. My approach is practical, collaborative and built around real priorities.", rows: [
-    { tag: "APPROACH", title: "Clarity over complexity", text: "Understand the issue, identify what matters, and move the right work forward." },
-    { tag: "SCOPE", title: "Europe, across marketplaces", text: "Experience working with multi-country catalog and operational requirements." }
-  ] },
-  5: { label: "CONTACT", kicker: "OPEN CHANNEL / LET'S CONNECT", headline: "Let's solve", emphasis: "what matters.", intro: "Need a partner for Vendor Central, Seller Central or European marketplace operations? Let's start a conversation.", rows: [
-    { tag: "NEXT STEP", title: "Get in touch", text: "Contact information and a booking link will be added before publication." }
-  ] }
-};
-export default function PortfolioChannel({ number }: { number: number }) {
-  const c = channels[number];
-  if (!c) return null;
-  return (
-    <section id={`ch-0${number}`} data-ch={number} aria-label={`Channel 0${number}, ${c.label}`}
-      style={{ position: "relative", minHeight: "100%", scrollSnapAlign: "start", padding: "clamp(70px,9cqw,118px) clamp(20px,6cqw,84px)", background: "var(--page,#15181e)", color: "var(--ink,#f5f3ed)", display: "flex", flexDirection: "column", gap: "clamp(20px,3cqw,44px)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", font: "clamp(13px,1.6cqw,20px) VT323,monospace", letterSpacing: ".1em", color: "var(--brand,#cfffcf)" }}>
-        <span>CH 0{number} / {c.label}</span><span>{c.kicker}</span>
-      </div>
-      <div>
-        <h2 style={{ margin: 0, maxWidth: 950, fontSize: "clamp(46px,8cqw,108px)", lineHeight: .96, letterSpacing: "-.065em", fontWeight: 500 }}>{c.headline}<br/><span style={{ color: "var(--brand,#cfffcf)" }}>{c.emphasis}</span></h2>
-        <p style={{ maxWidth: 720, fontSize: "clamp(16px,2cqw,24px)", lineHeight: 1.48, opacity: .78, marginTop: 28 }}>{c.intro}</p>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,230px),1fr))", gap: 12 }}>
-        {c.rows.map(r => <article key={r.tag} style={{ border: "1px solid var(--line,rgba(255,255,255,.2))", borderRadius: 16, padding: "clamp(18px,2.3cqw,30px)", background: "var(--pill-bg,rgba(255,255,255,.06))" }}>
-          <div style={{ font: "clamp(13px,1.5cqw,18px) VT323,monospace", letterSpacing: ".08em", color: "var(--brand,#cfffcf)" }}>{r.tag}</div>
-          <h3 style={{ fontSize: "clamp(21px,2.8cqw,34px)", letterSpacing: "-.04em", margin: "24px 0 10px", fontWeight: 500 }}>{r.title}</h3>
-          <p style={{ margin: 0, fontSize: "clamp(15px,1.6cqw,19px)", opacity: .72, lineHeight: 1.5 }}>{r.text}</p>
-        </article>)}
-      </div>
-      <div style={{ marginTop: "auto", font: "clamp(12px,1.4cqw,18px) VT323,monospace", letterSpacing: ".08em", opacity: .55 }}>MARKETPLACE JOURNAL / PORTFOLIO WORK IN PROGRESS</div>
-    </section>
-  );
+const email = "thonymaherison@gmail.com";
+const rim = "1px solid var(--line,rgba(255,255,255,.19))";
+const brand = "var(--brand,#cfffcf)";
+const mono: React.CSSProperties = { fontFamily: "'VT323',monospace", letterSpacing: ".09em", fontSize: "clamp(17px,1.75cqw,23px)" };
+const description: React.CSSProperties = { fontSize: "clamp(16px,1.7cqw,21px)", lineHeight: 1.6, opacity: .83, maxWidth: 840 };
+const card: React.CSSProperties = { background: "var(--pill-bg,rgba(255,255,255,.06))", border: rim, borderRadius: 15, padding: "clamp(18px,2.6cqw,32px)" };
+const h3: React.CSSProperties = { margin: "0 0 12px", fontWeight: 500, letterSpacing: "-.045em", fontSize: "clamp(25px,3.2cqw,40px)", lineHeight: 1.12 };
+const detail: React.CSSProperties = { marginTop: 14, borderTop: rim, paddingTop: 15, lineHeight: 1.6, fontSize: "clamp(15px,1.5cqw,19px)" };
+function Label({children}:{children:React.ReactNode}){return <div style={{...mono,color:brand,marginBottom:14}}>{children}</div>}
+function Cta({children,subject}:{children:React.ReactNode;subject:string}) {return <a href={`mailto:${email}?subject=${encodeURIComponent(subject)}`} style={{display:"inline-flex",alignItems:"center",borderRadius:999,padding:"13px 22px",background:"var(--ink,#fff)",color:"var(--bg,#111)",fontSize:15,fontWeight:500,textDecoration:"none",width:"fit-content"}}>{children} ↗</a>}
+function Intro({n,kicker,title,accent,text}:{n:number;kicker:string;title:string;accent:string;text:string}){return <>
+  <div style={{display:"flex",justifyContent:"space-between",gap:12,flexWrap:"wrap",...mono,color:brand}}><span>CH 0{n} / {kicker}</span><span>TH0NY · MARKETPLACE JOURNAL</span></div>
+  <header><h2 style={{margin:"20px 0 18px",fontSize:"clamp(43px,7cqw,96px)",lineHeight:.99,fontWeight:500,letterSpacing:"-.065em"}}>{title}<br/><span style={{color:brand}}>{accent}</span></h2><p style={description}>{text}</p></header>
+</>}
+const offers=[
+ {tag:"01 / SUIVI RÉCURRENT",name:"Gestion Amazon au quotidien",for:"Pour les marques qui souhaitent déléguer régulièrement leurs opérations Vendor ou Seller Central.",result:"Un périmètre pris en charge, des actions suivies et une visibilité claire sur les sujets ouverts.",detail:["Catalogue : création et rattachement des fiches, variations, anomalies et mises à jour en masse.","Vendor : commandes d'achat, confirmations, suivi des expéditions, facturation et litiges.","Seller / FBA : suivi des offres, inventaire, envois et alertes du compte.","Prix, promotions, disponibilité, Buy Box et dossiers Amazon dans le périmètre convenu.","Suivi écrit des actions, arbitrages et prochaines étapes."],format:"Collaboration mensuelle, volume et responsabilités définis ensemble."},
+ {tag:"02 / PROJET DÉFINI",name:"Catalogue & contenus Amazon",for:"Pour les marques qui veulent corriger, développer ou harmoniser leurs fiches produits.",result:"Des contenus prêts à soumettre, puis vérifiés sur les pages réellement publiées.",detail:["État des lieux des fiches et priorisation des corrections nécessaires.","Titres, points forts, descriptions, mots-clés et attributs.","Variations, identifiants produits, fiches bloquées ou mal rattachées.","Briefs et rédaction de contenus A+, localisation pour les marchés européens.","Propositions validées avec la marque, soumission et contrôle de l'affichage."],format:"Mission ponctuelle avec périmètre, livrables et étapes de validation."},
+ {tag:"03 / INTERVENTION CIBLÉE",name:"Problèmes & dossiers Amazon",for:"Pour les marques confrontées à un blocage ou à un incident précis.",result:"Un diagnostic compréhensible, des démarches documentées et un suivi jusqu'à la conclusion possible du dossier.",detail:["Fiches supprimées ou contenus refusés.","Anomalies catalogue, prix, variations et identifiants produits.","Documents de conformité et alertes de santé du compte.","Investigation, constitution des éléments, échanges et relances auprès d'Amazon.","Vérification du résultat ; lorsque la décision dépend d'Amazon, transparence sur les limites."],format:"Intervention ponctuelle, selon la situation et les accès disponibles."}
+];
+const steps=[
+ ["01 / OBSERVER","Je vérifie l'état réel du compte et les fiches visibles, pas seulement ce qu'indique un export."],
+ ["02 / PRIORISER","Nous définissons les actions à engager et ce qui demande votre validation."],
+ ["03 / INTERVENIR","Je traite les opérations et les échanges convenus, dans le cadre des accès accordés."],
+ ["04 / CONTRÔLER","Je vérifie ce qui a effectivement été appliqué sur Amazon et poursuis les dossiers encore ouverts."],
+ ["05 / RENDRE COMPTE","Vous savez ce qui a été fait, ce qui reste ouvert et ce dont j'ai besoin pour avancer."]
+];
+const notes=[
+ {tag:"NOTE DE TERRAIN / 01",title:"Un badge « fréquemment retourné » sur des produits importants",summary:"Les motifs de retour de 27 fiches ont orienté le travail vers la compatibilité et la clarté des informations produit, plutôt que vers une simple contestation du badge.",outcome:"Corrections des contenus et suivi des dossiers ; un produit prioritaire réglé, un autre encore suivi."},
+ {tag:"NOTE DE TERRAIN / 02",title:"Des fiches complètes en apparence, mais insuffisantes pour les clients",summary:"Les données collectées ne reflétaient pas exactement ce qui était affiché. La comparaison avec les fiches et les avis clients a révélé les vrais manques.",outcome:"Cinq fiches pilotes préparées ; impact sur la conversion encore à mesurer."},
+ {tag:"NOTE DE TERRAIN / 03",title:"Des images refusées à cause d'une petite flèche",summary:"Le refus semblait technique. L'examen du message et de l'image principale a permis de repérer un élément graphique incompatible avec les exigences Amazon.",outcome:"Élément retiré, nouvelle soumission, produit débloqué."}
+];
+function Offer({o}:{o:typeof offers[number]}){return <article style={card}><Label>{o.tag}</Label><h3 style={h3}>{o.name}</h3><p style={{...description,fontWeight:500}}>{o.for}</p><p style={{...description,opacity:.7}}>{o.result}</p><details style={detail}><summary style={{cursor:"pointer",color:brand,fontWeight:500}}>Voir les prestations et modalités</summary><ul style={{paddingLeft:22}}>{o.detail.map(x=><li key={x} style={{margin:"10px 0"}}>{x}</li>)}</ul><p style={{opacity:.75}}><strong>Format :</strong> {o.format}</p></details></article>}
+function Article({tag,title,summary,outcome}:{tag:string;title:string;summary:string;outcome:string}){return <article style={card}><Label>{tag}</Label><h3 style={h3}>{title}</h3><p style={description}>{summary}</p><div style={{borderTop:rim,marginTop:20,paddingTop:18}}><Label>CE QUI A ÉTÉ FAIT / CONSTATÉ</Label><p style={{...description,margin:0}}>{outcome}</p></div></article>}
+export default function PortfolioChannel({number}:{number:number}){
+if(number<1||number>5)return null;
+return <section id={`ch-0${number}`} data-ch={number} aria-label={`Chaîne 0${number}`} style={{position:"relative",minHeight:"100%",scrollSnapAlign:"start",padding:"clamp(70px,8cqw,110px) clamp(20px,6cqw,84px)",background:"var(--page,#15181e)",color:"var(--ink,#f5f3ed)",display:"flex",flexDirection:"column",gap:"clamp(28px,4cqw,52px)"}}>
+{number===1&&<>
+ <Intro n={1} kicker="EXPERTISE" title="Votre compte Amazon." accent="Un suivi concret." text="Trois façons de travailler ensemble, selon votre besoin. Gestion régulière, projet catalogue ou intervention ciblée : nous définissons le périmètre avant de commencer."/>
+ <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,310px),1fr))",gap:14}}>{offers.map(o=><Offer key={o.tag} o={o}/>)}</div>
+ <div style={{...card,background:"transparent"}}><Label>COMMENT JE TRAVAILLE</Label><h3 style={h3}>Observer. Agir. Vérifier. Avancer ensemble.</h3><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,210px),1fr))",gap:16}}>{steps.map(([t,d])=><div key={t}><Label>{t}</Label><p style={{fontSize:16,lineHeight:1.5,opacity:.85}}>{d}</p></div>)}</div></div>
+ <div style={{...card,background:"transparent"}}><Label>DES OUTILS ADAPTÉS À AMAZON AUJOURD'HUI</Label><h3 style={h3}>Une méthode qui évolue avec les outils.</h3><p style={description}>J'intègre les outils d'intelligence artificielle et d'automatisation à mon quotidien pour faciliter l'analyse des données, le travail sur les catalogues et le suivi des opérations. Chaque proposition reste vérifiée et les actions sensibles sont validées avec vous.</p></div>
+ <Cta subject="Discutons de mon compte Amazon">Parlons de votre compte</Cta>
+</>}
+{number===2&&<>
+ <Intro n={2} kicker="EXPÉRIENCE" title="Des opérations vécues." accent="Pas seulement décrites." text="Mon parcours s'est construit dans la gestion réelle de comptes Vendor et Seller Central, d'abord en environnement d'agence, puis auprès de marques en indépendant."/>
+ <div style={{display:"grid",gap:15}}>
+ <article style={card}><Label>AUJOURD'HUI / INDÉPENDANT</Label><h3 style={h3}>Amazon & Marketplace Consultant</h3><p style={description}>Gestion de comptes européens, maintenance de catalogues, optimisation de fiches et contenus A+, suivi des incidents et coordination avec les équipes des marques.</p><p style={{opacity:.7}}>Vendor & Seller Central · FR / DE / IT / ES / UK</p></article>
+ <article style={card}><Label>EXPÉRIENCE EN AGENCE</Label><h3 style={h3}>Amazon & Marketplaces Platform Specialist</h3><p style={description}>Interventions sur les opérations Vendor et Seller Central : contenus, support, suivi des commandes et des promotions, données de performance et problèmes de compte.</p></article>
+ </div>
+ <div><Label>EXEMPLES CONCRETS</Label><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,300px),1fr))",gap:14}}>{notes.map(x=><Article key={x.tag} {...x}/>)}</div><p style={{fontSize:15,opacity:.65,marginTop:20}}>Situations anonymisées. Les résultats présentés sont limités aux observations documentées.</p></div>
+ <Cta subject="Échanger sur une mission Amazon">Échanger sur une mission</Cta>
+</>}
+{number===3&&<>
+ <Intro n={3} kicker="INSIGHTS" title="Les vrais sujets." accent="Le travail derrière." text="Notes de terrain issues de situations rencontrées sur Amazon : ce qui bloquait, ce qu'il fallait vérifier, les actions engagées et les résultats réellement observés."/>
+ <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,300px),1fr))",gap:14}}>{notes.map(x=><Article key={x.tag} {...x}/>)}</div>
+ <div style={card}><Label>À VENIR / JOURNAL</Label><h3 style={h3}>Un blog technique, sans recettes miracles.</h3><p style={description}>Le format long permettra de développer chaque dossier, avec son contexte, les contraintes Amazon et les contrôles effectués. Les articles complets ne sont pas encore publiés.</p></div>
+ <Cta subject="Question sur mes notes de terrain">Discutons de votre situation</Cta>
+</>}
+{number===4&&<>
+ <Intro n={4} kicker="À PROPOS" title="Thony Maherison." accent="Amazon au quotidien." text="Je travaille en indépendant avec des marques qui ont besoin d'un interlocuteur impliqué dans leurs opérations Amazon, capable d'intervenir sur le terrain et de communiquer clairement."/>
+ <div style={card}><Label>MON APPROCHE</Label><p style={description}>Mon parcours m'a amené du service client et des solutions digitales à l'environnement marketplace, puis à la gestion de comptes Vendor et Seller Central en agence et en freelance. Je travaille à distance, en français et en anglais, avec des marques présentes sur les marchés européens.</p><p style={description}>Je m'engage sur ce que je maîtrise : la rigueur du travail, la clarté des échanges, la vérification des corrections et la transparence lorsque quelque chose dépend d'Amazon ou d'un autre intervenant.</p></div>
+ <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,210px),1fr))",gap:12}}>{[
+ ["UN PÉRIMÈTRE CLAIR","Nous précisons les priorités, les marchés et les responsabilités dès le départ."],
+ ["DES ACCÈS MAÎTRISÉS","Accès dédiés et droits limités aux besoins de la mission."],
+ ["UN SUIVI LISIBLE","Des comptes rendus concis, des problèmes suivis et des décisions partagées."]
+ ].map(([t,d])=><article key={t} style={card}><Label>{t}</Label><p style={description}>{d}</p></article>)}</div>
+ <Cta subject="Prendre contact avec Thony Maherison">Faisons connaissance</Cta>
+</>}
+{number===5&&<>
+ <Intro n={5} kicker="CONTACT" title="Parlons de" accent="votre compte." text="Vous avez besoin d'un suivi régulier ou d'une intervention précise ? Décrivez-moi votre situation, les marketplaces concernés et ce qui vous préoccupe."/>
+ <div style={card}><Label>PREMIER ÉCHANGE / SANS ENGAGEMENT</Label><h3 style={h3}>Commençons par votre besoin.</h3><p style={description}>Vous me présentez votre marque, votre type de compte (Vendor, Seller ou les deux) et les sujets prioritaires. Nous clarifions ensuite le périmètre et les modalités d'intervention, sur devis.</p><Cta subject="Demande de collaboration Amazon Vendor / Seller Central">Envoyer un e-mail</Cta><p style={{marginTop:18,opacity:.7,fontSize:16}}>{email}</p></div>
+ <div style={{...card,background:"transparent"}}><Label>POUR BIEN DÉMARRER</Label><p style={description}>Vous conservez la maîtrise de votre compte et de vos décisions. Si nous collaborons, les accès sont limités aux droits nécessaires et les modifications sensibles sont validées avec vous.</p></div>
+</>}
+<div style={{marginTop:"auto",paddingTop:20,borderTop:rim,...mono,opacity:.65}}>MAHERISON.COM / AMAZON VENDOR & SELLER CENTRAL · FR / EN</div>
+</section>
 }
