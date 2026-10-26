@@ -154,9 +154,9 @@ function StoryReader({story,onBack,go}:{story:Story;onBack:()=>void;go:Jump}){re
 export function InsightsBroadcast({go}:{go:Jump}){const [chosen,setChosen]=useState<string|null>(null);const story=stories.find(s=>s.id===chosen);
  return <>
  <Header number="03" label="DÉCRYPTAGES" line1="Sous la surface." line2="Les vrais mécanismes Amazon." text="Des problèmes que rencontrent les marques, expliqués à partir de cas publics et des règles d'Amazon. Ces analyses ne sont pas présentées comme mes réalisations."/>
- {story?<StoryReader story={story} onBack={()=>setChosen(null)} go={go}/>:<>
+ {story?<StoryReader story={story} onBack={()=>{setChosen(null);document.getElementById("ch-03")?.scrollIntoView({behavior:"smooth",block:"start"});}} go={go}/>:<>
   <div style={{...mono,color:lime,display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:12}}><span>GUIDE DES ÉMISSIONS / 03 DOSSIERS</span><span>CHOISISSEZ UNE HISTOIRE ↓</span></div>
-  <div style={{display:"grid",gap:16}}>{stories.map((s,i)=><button key={s.id} type="button" onClick={()=>setChosen(s.id)}
+  <div style={{display:"grid",gap:16}}>{stories.map((s,i)=><button key={s.id} type="button" onClick={()=>{setChosen(s.id);document.getElementById("ch-03")?.scrollIntoView({behavior:"smooth",block:"start"});}}
    style={{...frame,color:ink,textAlign:"left",padding:0,overflow:"hidden",cursor:"pointer",display:"grid",gridTemplateColumns:"minmax(0,1fr) auto"}}>
    <div style={{padding:"clamp(22px,3.2cqw,40px)",display:"grid",gap:15}}>
     <div style={{display:"flex",gap:12,flexWrap:"wrap"}}><Tag>ÉMISSION {s.id} / {s.category}</Tag><span style={{...mono,opacity:.6}}>ANALYSE SECTORIELLE</span></div>
