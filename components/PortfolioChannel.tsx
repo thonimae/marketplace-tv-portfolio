@@ -45,7 +45,13 @@ return <section id={`ch-0${number}`} data-ch={number} aria-label={`Chaîne 0${nu
  <article style={card}><Label>AUJOURD'HUI / INDÉPENDANT</Label><h3 style={h3}>Amazon & Marketplace Consultant</h3><p style={description}>Gestion de comptes européens, maintenance de catalogues, optimisation de fiches et contenus A+, suivi des incidents et coordination avec les équipes des marques.</p><p style={{opacity:.7}}>Vendor & Seller Central · FR / DE / IT / ES / UK</p></article>
  <article style={card}><Label>EXPÉRIENCE EN AGENCE</Label><h3 style={h3}>Amazon & Marketplaces Platform Specialist</h3><p style={description}>Interventions sur les opérations Vendor et Seller Central : contenus, support, suivi des commandes et des promotions, données de performance et problèmes de compte.</p></article>
  </div>
- <div><Label>EXEMPLES CONCRETS</Label><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,300px),1fr))",gap:14}}>{notes.map(x=><Article key={x.tag} {...x}/>)}</div><p style={{fontSize:15,opacity:.65,marginTop:20}}>Situations anonymisées. Les résultats présentés sont limités aux observations documentées.</p></div>
+ <div style={{...card,background:"transparent"}}>
+   <Label>CE QUI CARACTÉRISE MON EXPÉRIENCE</Label>
+   <h3 style={h3}>Du suivi quotidien aux sujets qui demandent une investigation.</h3>
+   <p style={description}>Fiches et variations, contenus multilingues, disponibilité, conformité, dossiers Amazon et coordination avec les équipes : j'ai appris à travailler sur ces sujets dans le contexte réel d'un compte, avec ses contraintes et ses priorités.</p>
+   <p style={description}>Je privilégie la clarté du suivi et la vérification des changements. Une demande soumise n'est pas nécessairement une correction publiée.</p>
+   <button type="button" onClick={()=>onNavigate(3)} style={{border:"1px solid var(--line,rgba(255,255,255,.2))",background:"transparent",borderRadius:999,padding:"12px 18px",color:"var(--ink,#fff)",cursor:"pointer",fontSize:15}}>Explorer les décryptages sectoriels · CH 03 ↗</button>
+ </div>
  <Cta subject="Échanger sur une mission Amazon">Échanger sur une mission</Cta>
 </>}
 {number===3&&<InsightsBroadcast go={onNavigate}/>}
