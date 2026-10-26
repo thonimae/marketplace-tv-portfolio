@@ -573,8 +573,8 @@ export default class TvSite extends React.Component<Props, State> {
             <canvas ref={this.staticRef} width={192} height={108} aria-hidden="true" style={S("position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;opacity:0;z-index:6;pointer-events:none")} />
             <div ref={this.r.flash} aria-hidden="true" style={S("position:absolute;inset:0;background:#fff;opacity:0;z-index:7;pointer-events:none;transform-origin:center")} />
             <div ref={this.r.off} style={S("position:absolute;inset:0;z-index:8;display:none;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,2cqw,24px);padding:6cqw;background:radial-gradient(80% 70% at 50% 40%,#0c0c0e,#050506);color:rgba(255,255,255,.88);text-align:center;font-size:clamp(14px,1.6cqw,19px);font-weight:400;opacity:0")}>
-              <div style={S("font-family:'VT323',monospace;font-size:clamp(25px,3cqw,40px);letter-spacing:.15em;color:var(--brand,#cfffcf)")}>MARKETPLACE JOURNAL</div>
-              <p style={S("margin:0;max-width:34em;line-height:1.45;text-wrap:pretty")}>Independent Amazon & Marketplace Consultant · Europe</p>
+              <div style={S("font-family:'VT323',monospace;font-size:clamp(25px,3cqw,40px);letter-spacing:.15em;color:var(--brand,#cfffcf)")}>MAHERISON.COM</div>
+              <p style={S("margin:0;max-width:34em;line-height:1.45;text-wrap:pretty")}>Gestion Amazon Vendor & Seller Central · Europe</p>
               <button onClick={() => this.powerOn()} className="hov-white" style={S("height:44px;padding:0 20px;border-radius:22px;border:0;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);font-family:'VT323',monospace;font-size:clamp(18px,1.8cqw,22px);letter-spacing:.08em")}>TURN IT BACK ON</button>
             </div>
             {/* The CRT layers read as texture on the boot channel and as murk over text, so they fade once you scroll. */}
@@ -616,7 +616,7 @@ export default class TvSite extends React.Component<Props, State> {
         <div ref={this.r.launcher} style={S("position:absolute;inset:0;background-color:var(--bg,#000);background-image:var(--wall,none);background-size:cover;background-position:center;color:var(--ink,rgba(255,255,255,.95))")}>
           <div ref={this.r.ambient} style={S("position:absolute;inset:0;background:radial-gradient(55% 50% at 30% 42%,var(--glow,rgba(0,0,0,0)) 0%,transparent 70%);pointer-events:none")} />
           <div style={S("position:absolute;left:4.2cqw;right:4.2cqw;top:clamp(36px,5cqw,65px);display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'VT323',monospace;font-size:clamp(14px,1.8cqw,22px);letter-spacing:.1em")}>
-            <span>MARKETPLACE / JOURNAL</span><span style={S("color:var(--brand,#cfffcf)")}>INDEPENDENT · EUROPE</span>
+            <span>MAHERISON / AMAZON OPERATIONS</span><span style={S("color:var(--brand,#cfffcf)")}>INDÉPENDANT · EUROPE</span>
           </div>
           <div ref={this.r.dock} className="m-dock" style={S("position:absolute;left:50%;bottom:clamp(28px,5cqw,64px);transform:translateX(-50%);padding:clamp(8px,1.1cqw,14px);border-radius:clamp(16px,2cqw,26px);background:var(--band,#141416);box-shadow:inset 0 0 0 1px var(--band-rim,rgba(255,255,255,.12));display:flex;gap:clamp(8px,1.6cqw,22px)")}>
             {DOCK.map((t,i) => (
@@ -632,27 +632,27 @@ export default class TvSite extends React.Component<Props, State> {
         <div ref={this.r.clutter} aria-hidden="true" className="m-clutter" style={S("position:absolute;inset:0;background:linear-gradient(145deg,#11181d,#090c11);color:#fff;overflow:hidden")}>
           <div data-row="3" style={S("margin:8cqw 6cqw 0;font-family:'VT323',monospace;font-size:clamp(19px,3cqw,38px);letter-spacing:.1em")}>SIGNAL FOUND / MARKETPLACE BROADCAST</div>
           <div data-row="2" style={S("margin:3cqw 6cqw;padding:4cqw;background:repeating-linear-gradient(120deg,#1e2931 0 18px,#25323a 18px 36px);border-radius:1cqw")}>
-            <div style={S("font-size:clamp(20px,4cqw,52px);font-weight:500")}>TOO MANY MOVING PARTS?</div>
-            <div data-row="1" style={S("margin-top:2cqw;font-size:clamp(13px,2cqw,24px);opacity:.8")}>Catalogs. Operations. Markets. Content.</div>
+            <div style={S("font-size:clamp(20px,4cqw,52px);font-weight:500")}>TROP DE SUJETS À GÉRER ?</div>
+            <div data-row="1" style={S("margin-top:2cqw;font-size:clamp(13px,2cqw,24px);opacity:.8")}>Catalogue. Opérations. Contenus. Marchés.</div>
           </div>
           <div style={S("display:flex;gap:1.2cqw;margin:2cqw 6cqw")}>
             {["DATA","OPS","CONTENT","EUROPE","VENDOR","SELLER"].map((t,i) => <div key={t} data-zap={i+1} style={S("padding:1.5cqw;background:#324037;border-radius:.5cqw;font-size:clamp(10px,1.7cqw,21px)")}>{t}</div>)}
           </div>
-          <div data-row="0" style={S("margin:2cqw 6cqw;font-family:'VT323',monospace;font-size:clamp(16px,2.2cqw,28px)")}>TUNING INTO A CLEARER SIGNAL...</div>
+          <div data-row="0" style={S("margin:2cqw 6cqw;font-family:'VT323',monospace;font-size:clamp(16px,2.2cqw,28px)")}>PLACE AUX OPÉRATIONS QUI AVANCENT...</div>
           <div data-popup style={S("position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(40cqw,420px);padding:2cqw;border-radius:1.2cqw;background:#141c18;box-shadow:0 20px 60px #000a;display:flex;flex-direction:column;gap:1cqw")}>
-            <strong style={S("font-size:clamp(18px,2.8cqw,32px)")}>TOO MUCH NOISE</strong>
-            <span>Switch channels. Find clarity.</span>
+            <strong style={S("font-size:clamp(18px,2.8cqw,32px)")}>TROP DE COMPLEXITÉ</strong>
+            <span>Un interlocuteur. Un suivi clair.</span>
           </div>
-          <div ref={this.r.miss} style={S("position:absolute;left:50%;bottom:4cqw;transform:translateX(-50%);font-family:'VT323',monospace;font-size:clamp(20px,3.4cqw,40px);color:#CFFFCF;opacity:0;pointer-events:none")}>THE SIGNAL IS CLEAR</div>
+          <div ref={this.r.miss} style={S("position:absolute;left:50%;bottom:4cqw;transform:translateX(-50%);font-family:'VT323',monospace;font-size:clamp(20px,3.4cqw,40px);color:#CFFFCF;opacity:0;pointer-events:none")}>ON AVANCE ENSEMBLE</div>
         </div>
         <div ref={this.r.title} className="m-title" style={S("position:absolute;left:0;right:0;top:0;bottom:clamp(90px,16cqw,200px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,2cqw,25px);padding:clamp(65px,9cqw,110px) 5cqw 0;text-align:center;opacity:0;pointer-events:none;color:var(--ink,rgba(255,255,255,.95))")}>
-          <div style={S("font-family:'VT323',monospace;font-size:clamp(17px,2cqw,26px);letter-spacing:.16em;color:var(--brand,#cfffcf)")}>CH 00 / INDEPENDENT CONSULTANT</div>
-          <h1 className="m-h1" style={S("margin:0;font-family:Outfit,sans-serif;font-size:clamp(40px,min(7cqw,10vh),96px);font-weight:500;letter-spacing:-.065em;line-height:1.03")}>Marketplace complexity.<br/><span style={S("color:var(--brand,#cfffcf)")}>Made clear.</span></h1>
-          <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2cqw,25px);font-weight:300;opacity:.85")}>Amazon Vendor & Seller Central · European marketplaces</p>
-          <p className="m-sub" style={S("margin:0;max-width:620px;font-size:clamp(13px,1.5cqw,19px);line-height:1.5;opacity:.7")}>Hands-on marketplace operations, catalog management and content strategy for brands that want things done.</p>
+          <div style={S("font-family:'VT323',monospace;font-size:clamp(17px,2cqw,26px);letter-spacing:.16em;color:var(--brand,#cfffcf)")}>CH 00 / SPÉCIALISTE AMAZON</div>
+          <h1 className="m-h1" style={S("margin:0;font-family:Outfit,sans-serif;font-size:clamp(40px,min(7cqw,10vh),96px);font-weight:500;letter-spacing:-.065em;line-height:1.03")}>Votre Amazon,<br/><span style={S("color:var(--brand,#cfffcf)")}>entre de bonnes mains.</span></h1>
+          <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2cqw,25px);font-weight:300;opacity:.85")}>Gestion opérationnelle Vendor & Seller Central · Marchés européens</p>
+          <p className="m-sub" style={S("margin:0;max-width:620px;font-size:clamp(13px,1.5cqw,19px);line-height:1.5;opacity:.7")}>Je prends en charge le suivi de vos opérations Amazon : catalogue, contenus, dossiers et problèmes du quotidien. Nous définissons les priorités et avançons ensemble.</p>
           <div className="m-btns" style={S("display:flex;gap:10px;flex-wrap:wrap;justify-content:center;pointer-events:auto")}>
-            <button onClick={(e) => {e.stopPropagation();this.channel(1)}} className="act-shrink" style={S("height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500")}>Explore expertise</button>
-            <button onClick={(e) => {e.stopPropagation();this.channel(5)}} className="hov-white act-shrink" style={S("height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--line,#555);background:var(--pill-bg,rgba(255,255,255,.1));color:inherit;font-size:15px")}>Get in touch</button>
+            <button onClick={(e) => {e.stopPropagation();this.channel(1)}} className="act-shrink" style={S("height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500")}>Découvrir mes services</button>
+            <button onClick={(e) => {e.stopPropagation();this.channel(5)}} className="hov-white act-shrink" style={S("height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--line,#555);background:var(--pill-bg,rgba(255,255,255,.1));color:inherit;font-size:15px")}>Parlons de votre compte</button>
           </div>
         </div>
         {s.mounted && !s.booted && s.power && (
