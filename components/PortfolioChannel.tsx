@@ -48,11 +48,11 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
  .port-motion-card{position:absolute;left:60%;top:40%;width:27%;height:21%;background:#caf6d715;border:1px solid #b7f2bd7a;border-radius:18px;transform:rotate(-8deg);animation:portFloat 5s ease-in-out infinite;padding:15px;display:flex;flex-direction:column;gap:11px}
  .port-motion-card i{height:9px;border-radius:9px;background:#d5ffdf7d}.port-motion-card i:nth-child(2){width:75%}.port-motion-card i:nth-child(3){width:52%}
  .port-motion-track{position:absolute;right:8%;top:20%;display:flex;gap:13px}.port-motion-track i{width:10px;height:10px;background:#c1efcd77;border-radius:50%;animation:portPulse 2s ease-in-out infinite}.port-motion-track i:nth-child(2){animation-delay:.4s}.port-motion-track i:nth-child(3){animation-delay:.8s}.port-motion-track i:nth-child(4){animation-delay:1.2s}
- .port-broadcast{position:relative;min-height:100%;display:flex;flex-direction:column;padding:clamp(20px,3cqw,42px);gap:14px}
+ .port-broadcast{position:relative;min-height:100%;display:flex;flex-direction:column;padding:clamp(20px,3cqw,42px) clamp(20px,3cqw,42px) clamp(10px,1.5cqw,22px);gap:10px}
  .port-broadcast .port-headline{flex:1;display:flex;align-items:center;font-size:clamp(40px,5.4cqw,78px);font-weight:500;letter-spacing:-.07em;line-height:1.02;text-shadow:0 5px 30px #000b}
- .port-epg{border:1px solid #afd6b055;background:#101f19e6;backdrop-filter:blur(10px);border-radius:12px;overflow:hidden}
+ .port-epg{border:1px solid #afd6b055;background:#101f19e6;backdrop-filter:blur(10px);border-radius:12px;overflow:hidden;margin-top:auto;transform:translateY(18px)}
  .port-epg-top{padding:10px 17px;border-bottom:1px solid #afd6b033;display:flex;justify-content:space-between;color:var(--port-mint);font:clamp(14px,1.4cqw,18px) 'VT323',monospace;letter-spacing:.12em}
- .port-epg-body{padding:14px 17px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+ .port-epg-body{padding:11px 17px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
  .port-epg h3{margin:0 0 6px;font-size:clamp(22px,2.6cqw,35px);font-weight:500}.port-epg p{margin:0;max-width:670px;line-height:1.44;font-size:clamp(14px,1.35cqw,18px)}
  .port-offer-nav{display:flex;gap:7px;flex-wrap:wrap}.port-offer-nav button{border:1px solid #79967c;background:transparent;color:#f2f6f0;border-radius:7px;padding:8px 10px;cursor:pointer}.port-offer-nav button[aria-pressed=true]{background:var(--port-mint);color:#102019}
  .port-progress{height:3px;background:#49644e}.port-progress i{display:block;height:100%;background:var(--port-mint)}
