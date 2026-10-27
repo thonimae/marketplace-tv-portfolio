@@ -35,22 +35,28 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
  .port-about h2,.port-how h2,.port-contact h2{font-size:clamp(35px,5.5cqw,75px);line-height:1.01;letter-spacing:-.065em;font-weight:500;margin:0 0 22px}
  .port-about p{font-size:clamp(16px,1.68cqw,22px);line-height:1.48;max-width:750px;margin:0 0 17px}
  
- .port-ch-1{background:radial-gradient(ellipse at 82% 40%,#24413355,transparent 43%),linear-gradient(145deg,#11191b,#0e1317);gap:clamp(12px,1.7cqw,22px);padding-top:clamp(20px,3cqw,38px);padding-bottom:clamp(20px,3cqw,36px)}
- .port-ch-1 .port-about{grid-template-columns:minmax(0,2.3fr) minmax(150px,.8fr);gap:clamp(18px,3cqw,40px);align-items:center}
+ .port-ch-1{background:linear-gradient(90deg,transparent 0%,rgba(166,217,179,.035) 67%,rgba(166,217,179,.055) 100%),linear-gradient(150deg,#11191b,#101618);gap:clamp(13px,1.75cqw,22px);padding-top:clamp(20px,3cqw,38px);padding-bottom:clamp(20px,3cqw,36px)}
+ .port-ch-1 .port-about{grid-template-columns:minmax(0,2.35fr) minmax(150px,.8fr);gap:clamp(22px,4cqw,55px);align-items:center}
  .port-ch-1 .port-about h2{font-size:clamp(27px,3.3cqw,48px);line-height:1.08;margin:9px 0 clamp(11px,1.5cqw,20px)}
- .port-cinema-eyebrow{font-family:'VT323',monospace;letter-spacing:.14em;font-size:clamp(15px,1.45cqw,19px);color:#a8d2aa}
+ .port-cinema-eyebrow{font-family:'VT323',monospace;letter-spacing:.17em;font-size:clamp(15px,1.45cqw,19px);color:#a8d2aa;display:flex;justify-content:space-between;border-bottom:1px solid rgba(198,235,163,.23);padding-bottom:12px;max-width:740px}
  .port-cinema-story{display:flex;flex-direction:column;gap:clamp(7px,1cqw,12px)}
- .port-ch-1 .port-cinema-story p{font-size:clamp(15px,1.27cqw,18px);line-height:1.44;max-width:790px;margin:0;color:#d7dfd9;font-weight:400}
- .port-cinema-story strong{font-weight:600;color:var(--port-mint);text-decoration:none}
- .port-cinema-portrait{align-self:center}
- .port-cinema-enter{animation:portCinemaAppear .75s ease-out both}
+ .port-ch-1 .port-cinema-story p{font-size:clamp(15px,1.27cqw,18px);line-height:1.47;max-width:790px;margin:0;color:#d7dfd9;font-weight:400}
+ .port-cinema-story strong{font-weight:600;color:#c3e8b4;text-decoration:none}
+ .port-cinema-portrait{align-self:center;min-width:0}
+ .port-photo-frame{position:relative;padding:10px;border:1px solid rgba(200,243,174,.33);background:linear-gradient(135deg,#263c30,#111d19);box-shadow:0 20px 50px #0005}
+ .port-photo-frame .port-portrait{border-radius:3px;aspect-ratio:4/5;max-width:100%;width:100%;border:0;box-shadow:none}
+ .port-photo-corner{position:absolute;top:17px;right:16px;font:14px 'VT323',monospace;letter-spacing:.14em;color:#d4edca;background:#102219bd;padding:5px 7px}
+ .port-credential{display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(200,243,174,.4);margin-top:17px;padding-top:12px;font:clamp(16px,1.6cqw,23px) 'VT323',monospace;color:#bad8bd;letter-spacing:.08em}
+ .port-credential>span:first-child{font-size:clamp(27px,3.5cqw,47px);color:var(--port-mint);line-height:1}
+ .port-credential small{font-size:clamp(12px,1.3cqw,18px);font-weight:400;color:#c7d6c9}
+ .port-cinema-enter{animation:portCinemaAppear .7s ease-out both}
  .port-cinema-story p:nth-child(1){animation-delay:.06s}
  .port-cinema-story p:nth-child(2){animation-delay:.16s}
  .port-cinema-story p:nth-child(3){animation-delay:.26s}
  .port-cinema-story p:nth-child(4){animation-delay:.36s}
  .port-cinema-story p:nth-child(5){animation-delay:.46s}
  @keyframes portCinemaAppear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
- @media(max-width:780px){.port-ch-1 .port-about{grid-template-columns:1fr}.port-cinema-portrait{order:-1;justify-self:start;display:flex;align-items:center;gap:16px}.port-cinema-portrait .port-portrait{width:100px;height:100px}.port-ch-1 .port-cinema-story p{font-size:15px;line-height:1.46}.port-ch-1 .port-about h2{font-size:34px}.port-ch-1{padding:22px 20px}}
+ @media(max-width:780px){.port-ch-1 .port-about{grid-template-columns:1fr}.port-cinema-portrait{order:-1;justify-self:start;display:flex;align-items:center;gap:18px}.port-photo-frame{width:105px;flex:none;padding:5px}.port-photo-frame .port-portrait{height:115px}.port-credential{margin-top:0}.port-ch-1 .port-cinema-story p{font-size:15px;line-height:1.5}.port-ch-1 .port-about h2{font-size:34px}.port-ch-1{padding:22px 20px}}
  @media(prefers-reduced-motion:reduce){.port-cinema-enter{animation:none!important}}
  .port-portrait{width:100%;max-width:290px;aspect-ratio:1/1;border-radius:50%;border:4px solid #a7ce9c;box-shadow:0 0 0 12px #b5e4a714,0 0 60px #b7f6c521;overflow:hidden;margin:auto;background:#25372c}
  .port-portrait img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.83) contrast(1.06)}
@@ -84,7 +90,7 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
  {number===1&&<>
  <div className="port-about">
   <div className="port-cinema-copy">
-    <div className="port-cinema-eyebrow">THE PERSON BEHIND THE SCREEN <span aria-hidden="true">/ 01</span></div>
+    <div className="port-cinema-eyebrow">CHAPTER 01 <span aria-hidden="true">/ THE STORY SO FAR</span></div>
     <h2 className={active?"port-cinema-enter":""}>{t.aboutTitle}</h2>
     {lang==="fr"?<div className="port-cinema-story" key="fr">
       <p className={active?"port-cinema-enter":""}>Cela fait <strong>plus de cinq ans</strong> que je travaille dans l'univers <strong>Amazon</strong>, principalement sur <strong>Vendor et Seller Central</strong>.</p>
@@ -100,7 +106,7 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
       <p className={active?"port-cinema-enter":""}>I work with brands looking for someone <strong>independent and hands-on</strong> who knows the platform and keeps communication simple.</p>
     </div>}
   </div>
-  <div className="port-cinema-portrait"><Portrait/><div style={{...mono,textAlign:"center",fontSize:14,color:mint,marginTop:14}}>{t.portraitLabel}</div></div>
+  <div className="port-cinema-portrait"><div className="port-photo-frame"><Portrait/><span className="port-photo-corner" aria-hidden="true">REC ●</span></div><div className="port-credential"><span>5+ <small>{lang==="fr"?"ANS D’EXPÉRIENCE":"YEARS OF EXPERIENCE"}</small></span><span>VENDOR / SELLER CENTRAL</span></div></div>
  </div>
  <div className="port-foot"><span>THONY MAHERISON / FR · EN</span><button onClick={()=>onNavigate(2)}>{t.aboutNext} →</button></div>
  </>}
