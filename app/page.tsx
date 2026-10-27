@@ -3,8 +3,8 @@ import { loadSiteData } from "@/lib/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Marketplace Journal | Amazon & Marketplace Consultant",
-  description: "Independent Amazon & Marketplace Consultant. Vendor and Seller Central operations, catalog strategy and European marketplace management.",
+  title: "Thony Maherison | Amazon & Marketplace Specialist",
+  description: "Thony Maherison accompagne les marques sur Amazon Vendor et Seller Central : gestion opérationnelle, catalogue, contenus et marchés européens.",
 };
 
 export default async function Page() {
