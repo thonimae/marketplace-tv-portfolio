@@ -609,16 +609,16 @@ export default class TvSite extends React.Component<Props, State> {
   renderBoot() {
     const s = this.state;
     const tile = "position:relative;width:100%;height:clamp(44px,6cqw,70px);border-radius:9px;display:flex;align-items:center;padding:0 14px;font-weight:500;font-size:clamp(14px,1.6cqw,21px);color:#fff;opacity:0;transition:transform .25s;cursor:pointer;background:";
-    const name = "position:absolute;top:calc(100% + clamp(10px,1.4cqw,18px));left:0;right:0;text-align:center;font-size:clamp(9px,1.1cqw,14px);font-weight:500;opacity:0;transition:opacity .25s";
+    const name = "display:none";
     const hoverTile = (e: React.MouseEvent<HTMLElement>) => { if (this.state.booted) this.focusTile(Number(e.currentTarget.dataset.tile)); };
     return (
       <section id="ch-00" data-ch="0" aria-label="Channel 00, Home" className="m-hero" onClick={() => this.skip()} style={S("position:relative;height:100%;scroll-snap-align:start;overflow:hidden")}>
         <div ref={this.r.launcher} style={S("position:absolute;inset:0;background-color:var(--bg,#000);background-image:var(--wall,none);background-size:cover;background-position:center;color:var(--ink,rgba(255,255,255,.95))")}>
           <div ref={this.r.ambient} style={S("position:absolute;inset:0;background:radial-gradient(55% 50% at 30% 42%,var(--glow,rgba(0,0,0,0)) 0%,transparent 70%);pointer-events:none")} />
           <div style={S("position:absolute;left:4.2cqw;right:4.2cqw;top:clamp(36px,5cqw,65px);display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'VT323',monospace;font-size:clamp(14px,1.8cqw,22px);letter-spacing:.1em")}>
-            <span>MAHERISON / AMAZON OPERATIONS</span><span style={S("color:var(--brand,#cfffcf)")}>INDÉPENDANT · EUROPE</span>
+            <span>MAHERISON / AMAZON OPERATIONS</span><span style={S("color:var(--brand,#cfffcf)")}>{s.lang==="fr"?"INDÉPENDANT · EUROPE":"INDEPENDENT · EUROPE"}</span>
           </div>
-          <div ref={this.r.dock} className="m-dock" style={S("position:absolute;right:clamp(22px,6cqw,78px);top:25%;bottom:auto;width:min(38%,440px);transform:none;padding:8px;border-radius:14px;background:#19251edd;box-shadow:inset 0 0 0 1px #4d7154;display:flex;flex-direction:column;gap:5px;z-index:2")}>
+          <div ref={this.r.dock} className="m-dock" style={{...S("position:absolute;right:clamp(22px,6cqw,78px);top:25%;bottom:auto;width:min(38%,440px);transform:none;padding:8px;border-radius:14px;background:#19251edd;box-shadow:inset 0 0 0 1px #4d7154;display:flex;flex-direction:column;gap:5px;z-index:2"),visibility:s.booted?"visible":"hidden"}}>
             {DOCK.map((t,i) => (
               <a key={t.label} href={t.href} data-tile={i} data-color={TILE_COLORS[i]} onMouseEnter={hoverTile}
                 onClick={(e) => { e.stopPropagation(); if (!this.state.booted) { e.preventDefault(); this.skip(); return; } this.click(); if (t.ch !== undefined) { e.preventDefault(); this.channel(t.ch); } }}
@@ -627,7 +627,7 @@ export default class TvSite extends React.Component<Props, State> {
               </a>
             ))}
           </div>
-          <div ref={this.r.glass} aria-hidden="true" className="m-glass" style={S("position:absolute;left:0;top:0;width:10px;height:10px;opacity:0;pointer-events:none;border-radius:clamp(10px,1.6cqw,22px);background:var(--glass-fill,rgba(255,255,255,.12));box-shadow:inset 0 0 0 1.5px var(--glass-rim,rgba(255,255,255,.8)),0 0 14px rgba(255,255,255,.28);will-change:transform,width,height")} />
+          <div ref={this.r.glass} aria-hidden="true" className="m-glass" style={S("position:absolute;left:0;top:0;width:10px;height:10px;opacity:0;pointer-events:none;border-radius:clamp(10px,1.6cqw,22px);z-index:3;background:rgba(200,255,210,.09);box-shadow:inset 0 0 0 2px var(--glass-rim,rgba(255,255,255,.8)),0 0 18px rgba(170,255,175,.13);will-change:transform,width,height")} />
         </div>
         <div ref={this.r.clutter} aria-hidden="true" className="m-clutter" style={S("position:absolute;inset:0;background:linear-gradient(145deg,#11181d,#090c11);color:#fff;overflow:hidden")}>
           <div data-row="3" style={S("margin:8cqw 6cqw 0;font-family:'VT323',monospace;font-size:clamp(19px,3cqw,38px);letter-spacing:.1em")}>SIGNAL FOUND / MARKETPLACE BROADCAST</div>
@@ -650,10 +650,6 @@ export default class TvSite extends React.Component<Props, State> {
           <h1 className="m-h1" style={S("margin:0;font-family:Outfit,sans-serif;font-size:clamp(34px,min(5cqw,8vh),72px);font-weight:500;letter-spacing:-.065em;line-height:1.03")}><span style={S("font-size:clamp(16px,2cqw,25px);font-weight:400;letter-spacing:0")}>Hello, I’m Thony.</span><br/><span style={S("color:var(--brand,#cfffcf)")}>THONY MAHERISON</span></h1>
           <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2cqw,25px);font-weight:300;opacity:.85")}>Amazon & Marketplace Specialist</p>
           <p className="m-sub" style={S("margin:0;max-width:620px;font-size:clamp(13px,1.5cqw,19px);line-height:1.5;opacity:.7")}>{s.lang==="fr"?"J’accompagne les marques dans la gestion quotidienne de leurs opérations Amazon Vendor et Seller Central, sur les marchés européens.":"I help brands manage their day-to-day Amazon Vendor and Seller Central operations across European marketplaces."}</p>
-          <div className="m-btns" style={S("display:flex;gap:10px;flex-wrap:wrap;justify-content:center;pointer-events:auto")}>
-            <button onClick={(e) => {e.stopPropagation();this.channel(2)}} className="act-shrink" style={S("height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500")}>CH 02 · Services</button>
-            <button onClick={(e) => {e.stopPropagation();this.channel(4)}} className="hov-white act-shrink" style={S("height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--line,#555);background:var(--pill-bg,rgba(255,255,255,.1));color:inherit;font-size:15px")}>CH 04 · Contact</button>
-          </div>
         </div>
         {s.mounted && !s.booted && s.power && (
           <button onClick={(e) => {e.stopPropagation();this.skip()}} className="hov-white m-skip" style={S("position:absolute;left:clamp(12px,2cqw,28px);bottom:clamp(12px,2cqw,28px);z-index:3;height:44px;padding:0 18px;border-radius:22px;border:1px solid #777;background:#0009;color:#fff;font-family:'VT323',monospace;font-size:22px")}>SKIP INTRO ▸▸</button>
