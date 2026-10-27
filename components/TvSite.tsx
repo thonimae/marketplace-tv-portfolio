@@ -10,11 +10,7 @@ import { GROUPS, KONAMI, NAMES, ORDER, PRESS, PRESS_LOGO_W, S, SHOWCASE_IMAGES, 
 // Home dock: TV list and Add-ons are pages; Get started (How to) and Showcase (Built on it) are channels 3 and 4 here.
 // The TV list comes first: "which TVs does it work on" is what people ask most. The app moved to the pills.
 const DOCK: { label: string; href: string; ch?: number }[] = [
-  {label:"Qui je suis",href:"#ch-00",ch:0},
-  {label:"Ce que je fais",href:"#ch-01",ch:1},
-  {label:"Contact",href:"#ch-02",ch:2},
-  {label:"M'écrire",href:"#ch-02",ch:2},
-];
+{label:"About Me",href:"#ch-01",ch:1},{label:"What I Do",href:"#ch-02",ch:2},{label:"How I Work",href:"#ch-03",ch:3},{label:"Contact",href:"#ch-04",ch:4}];
 import type { ThemeName } from "@/lib/site";
 
 const TWEET = "https://x.com/gathint/status/2111379569030939102";
@@ -23,7 +19,7 @@ const BOOT_DELAY = 700;
 const PH = "https://www.producthunt.com/products/cleanyourtv";
 const FEAT_SECS = 6;
 /** The phone channel bar's short labels, in channel order. */
-const TABS = ["Moi", "Services", "Contact"];
+const TABS = ["Welcome", "About", "Services", "How", "Contact"];
 
 type Counter = { key: string; label: string; value: number; max: number; display: number };
 type Slide = { kind: "show" | "theme"; name: string; what: string; meta: string; by: string; byUrl: string; url: string; wall: "aurora" | "black"; tiles: number; site?: ThemeName; kicker: string; image?: string; group: string };
@@ -34,6 +30,7 @@ type Axis = "x" | "y" | "w" | "h";
 
 type Props = { data: SiteData; pressTotal: number };
 type State = {
+  lang:"fr"|"en"; languageMenu:boolean;
   nudge: boolean; osd: string; theme: ThemeName; sound: boolean; power: boolean; booted: boolean; mobile: boolean; mounted: boolean; focus: number;
   clock: string; ampm: string; date: string; greeting: string;
   counters: Counter[];
@@ -79,7 +76,7 @@ export default class TvSite extends React.Component<Props, State> {
       })
       .concat(d.themes.map<Slide>((t) => ({ kind: "theme", name: t.name + "/", what: t.what, meta: "In themes/" + t.name + "/", by: "cleanyourtv", byUrl: GH, url: GH + "/tree/main/themes/" + t.name, wall: t.name === "aurora" ? "aurora" : "black", tiles: t.name === "six-columns" ? 6 : 4, site: t.name === "aurora" ? "aurora" : "black", kicker: "THEME", image: t.image, group: "Themes" })));
     this.state = {
-      nudge: false, osd: "CH 00", theme: "black", sound: false, power: true, booted: false, mobile: false, mounted: false, focus: 0,
+      lang:"fr", languageMenu:false, nudge: false, osd: "CH 00", theme: "black", sound: false, power: true, booted: false, mobile: false, mounted: false, focus: 0,
       clock: "", ampm: "", date: "", greeting: "",
       counters: [
         { key: "stars", label: "STARS", value: d.stars, max: Math.max(5000, d.stars * 1.4), display: 0 },
@@ -92,15 +89,16 @@ export default class TvSite extends React.Component<Props, State> {
 
   componentDidMount() {
     let theme: string | null = null, sound = false;
+    try{const v=localStorage.getItem("maherison-tv-lang");if(v==="fr"||v==="en")this.setState({lang:v})}catch{}
     try { theme = localStorage.getItem("cyt-theme"); sound = localStorage.getItem("cyt-sound") === "1"; } catch { /* private mode */ }
     // A refresh lands back on the channel that was showing, without the boot sequence.
-    try { const n = Number(sessionStorage.getItem("cyt-ch")); if (n >= 1 && n <= 2) this.resumeCh = n; } catch { /* ignore */ }
+    try { const n = Number(sessionStorage.getItem("cyt-ch")); if (n >= 1 && n <= 4) this.resumeCh = n; } catch { /* ignore */ }
     // Deep links win over the remembered channel: #ch-03 or ?ch=3 opens that channel; ?boot=0 skips the boot sequence.
     try {
       const q = new URLSearchParams(location.search);
       const m = /^#ch-0?([0-5])$/.exec(location.hash);
       const n = m ? Number(m[1]) : q.has("ch") ? Number(q.get("ch")) : NaN;
-      if (n >= 1 && n <= 2) this.resumeCh = n; else if (n === 0) { this.resumeCh = 0; this.instant = true; }
+      if (n >= 1 && n <= 4) this.resumeCh = n; else if (n === 0) { this.resumeCh = 0; this.instant = true; }
       if (q.get("boot") === "0") this.instant = true;
     } catch { /* ignore */ }
     this.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -283,7 +281,7 @@ export default class TvSite extends React.Component<Props, State> {
   // ---- oscilloscope
   drawScope(p: number) {
     const c = this.scopeRef.current; if (!c) return; this.scopeP = p;
-    const dpr = Math.min(2, window.devicePixelRatio || 1); const w = c.clientWidth, h = c.clientHeight; if (!w || !h) return;
+    const dpr = Math.min(4, window.devicePixelRatio || 1); const w = c.clientWidth, h = c.clientHeight; if (!w || !h) return;
     if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
     const x = c.getContext("2d"); if (!x) return; x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h);
     x.strokeStyle = "rgba(140,255,140,.12)"; x.lineWidth = 1; x.shadowBlur = 0;
@@ -344,7 +342,7 @@ export default class TvSite extends React.Component<Props, State> {
   channel(n: number) {
     this.click(); if (!this.state.power || n < 0) return;
     if (!this.state.booted) this.finalize(++this.bootId);
-    if (n > 2) { this.showOsd(`CH 0${n}  NO SIGNAL`); this.cut(250); return; }
+    if (n > 4) { this.showOsd(`CH 0${n}  NO SIGNAL`); this.cut(250); return; }
     const sc = this.r.scroll.current!, target = sc.querySelector<HTMLElement>(`#ch-0${n}`); if (!target) return;
     this.quietUntil = performance.now() + 900; this.showOsd(`CH 0${n}`);
     if (this.reduced) { sc.animate([{ opacity: 1 }, { opacity: 0, offset: 0.5 }, { opacity: 1 }], { duration: 500 }); setTimeout(() => { sc.scrollTop = target.offsetTop; }, 250); }
@@ -479,20 +477,24 @@ export default class TvSite extends React.Component<Props, State> {
       this.showOsd(sound ? "SOUND ON" : "MUTE", 1200);
     });
   }
-  wizGo(i: number) { i = Math.max(0, Math.min(2, i)); if (i === this.state.wiz) return; this.click(); this.setState({ wiz: i }); }
+  wizGo(i: number) { i = Math.max(0, Math.min(4, i)); if (i === this.state.wiz) return; this.click(); this.setState({ wiz: i }); }
   slideGo(i: number) { const n = this.slides.length; if (!n) return; this.click(); this.setState({ slide: ((i % n) + n) % n }); }
-  side(d: number) { if (this.state.ch === 0) return this.move(d); this.channel(Math.max(0,Math.min(2,this.state.ch+d))); }
+  side(d: number) { if (this.state.ch === 0) return this.move(d); this.channel(Math.max(0,Math.min(4,this.state.ch+d))); }
+  setLanguage(lang:"fr"|"en"){this.setState({lang,languageMenu:false});try{localStorage.setItem("maherison-tv-lang",lang)}catch{}}
+  toggleLanguageMenu(){this.click();this.setState(q=>({languageMenu:!q.languageMenu}))}
   key(e: KeyboardEvent) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const tag = ((e.target as HTMLElement | null)?.tagName) || ""; if (tag === "INPUT" || tag === "TEXTAREA") return;
+    if(e.key==="m"||e.key==="M"){e.preventDefault();this.toggleLanguageMenu();return}
+    if(this.state.languageMenu){if(e.key==="Escape"){this.setState({languageMenu:false});return}if(e.key==="ArrowLeft"||e.key==="ArrowRight"){this.setLanguage(this.state.lang==="fr"?"en":"fr");return}if(e.key==="Enter"){this.setState({languageMenu:false});return}return}
     this.konami.push(e.key); this.konami = this.konami.slice(-10); if (this.konami.join() === KONAMI.join()) { this.konami = []; return this.missIt(); }
     if (/^[0-9]$/.test(e.key)) return this.channel(+e.key);
     if (e.key === "ArrowLeft") { e.preventDefault(); return this.side(-1); }
     if (e.key === "ArrowRight") { e.preventDefault(); return this.side(1); }
     if (e.key === "ArrowUp") { e.preventDefault(); return this.channel(this.state.ch - 1); }
-    if (e.key === "ArrowDown") { e.preventDefault(); return this.channel(Math.min(2, this.state.ch + 1)); }
+    if (e.key === "ArrowDown") { e.preventDefault(); return this.channel(Math.min(4, this.state.ch + 1)); }
     if (e.key === "Enter" && tag !== "BUTTON" && tag !== "A") return this.ok();
-    if (e.key === "m" || e.key === "M") return this.toggleSound();
+
     if (e.key === "i" || e.key === "I") return this.cycleTheme();
     if (e.key === "p" || e.key === "P") return this.state.power ? this.powerOff() : this.powerOn();
   }
@@ -501,7 +503,7 @@ export default class TvSite extends React.Component<Props, State> {
     if (!this.state.power) return this.powerOn(); if (!this.state.booted) return this.skip();
     const ch = this.state.ch;
     if (ch === 0) { const target = DOCK[this.state.focus]; return this.channel(target?.ch ?? 1); }
-    this.channel(Math.min(2,ch + 1));
+    this.channel(Math.min(4,ch + 1));
   }
   async missIt() {
     if (!this.state.booted) return; const cl = this.r.clutter.current!, miss = this.r.miss.current!;
@@ -552,7 +554,7 @@ export default class TvSite extends React.Component<Props, State> {
           <div ref={this.r.screen} className="m-screen" style={S("position:relative;height:100%;border-radius:clamp(8px,1.5vw,22px);background:#000;overflow:hidden;container-type:inline-size;box-shadow:0 0 0 2px #000,0 0 0 3px #232326,inset 0 0 60px rgba(0,0,0,.9)")}>
             <div ref={this.r.scroll} className="m-scroll" style={S("position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y proximity;scrollbar-width:none")}>
               {this.renderBoot()}
-              {[1, 2].map(n => <PortfolioChannel key={n} number={n} onNavigate={(target) => this.channel(target)} />)}
+              {[1, 2, 3, 4].map(n => <PortfolioChannel key={n} number={n} lang={s.lang} active={s.ch===n} onNavigate={(target) => this.channel(target)} />)}
               <section id="ch-end" aria-label="End of transmission" className="m-end" style={S("position:relative;min-height:70%;scroll-snap-align:none;background:var(--page,#15181e);color:var(--ink,rgba(255,255,255,.95));display:grid;place-items:center;border-top:1px solid var(--line,rgba(255,255,255,.12))")}>
                 <div ref={this.r.end} style={S("display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:24px")}>
                   <div style={S("font-family:'VT323',monospace;font-size:28px;letter-spacing:.14em;color:var(--ink-dim,rgba(255,255,255,.6))")}>END OF TRANSMISSION</div>
@@ -567,7 +569,7 @@ export default class TvSite extends React.Component<Props, State> {
               </section>
             </div>
             <div ref={this.r.osd} aria-live="polite" style={S("position:absolute;top:clamp(6px,1cqw,14px);right:clamp(10px,1.6cqw,22px);z-index:5;font-family:'VT323',monospace;font-size:clamp(22px,3.2cqw,40px);line-height:1;letter-spacing:.06em;color:var(--osd,#CFFFCF);text-shadow:0 0 10px var(--osd-glow,rgba(140,255,140,.6)),1px 0 0 rgba(255,0,0,.25),-1px 0 0 rgba(0,160,255,.25);opacity:0;transition:opacity .3s;pointer-events:none")}>{s.osd}</div>
-            {s.nudge && !s.mobile && this.renderNudge()}
+            {s.languageMenu && <div role="dialog" aria-label="Language settings" style={S("position:absolute;right:clamp(15px,3cqw,35px);top:clamp(38px,5cqw,65px);z-index:22;width:min(290px,86%);padding:20px;border:1px solid #8cbf8f;border-radius:14px;background:#193022f5;box-shadow:0 18px 50px #0009;color:#f7f7f3")}><div style={S("font-family:VT323,monospace;font-size:24px;color:#c8f3ae;letter-spacing:.1em;margin-bottom:14px")}>TV SETTINGS / LANGUAGE</div><div style={S("display:flex;gap:10px")}><button onClick={()=>this.setLanguage("fr")} aria-pressed={s.lang==="fr"} style={{flex:1,padding:12,border:"1px solid #83b48e",borderRadius:8,background:s.lang==="fr"?"#c8f3ae":"transparent",color:s.lang==="fr"?"#142018":"#f5f5ef"}}>FR</button><button onClick={()=>this.setLanguage("en")} aria-pressed={s.lang==="en"} style={{flex:1,padding:12,border:"1px solid #83b48e",borderRadius:8,background:s.lang==="en"?"#c8f3ae":"transparent",color:s.lang==="en"?"#142018":"#f5f5ef"}}>EN</button></div><button onClick={()=>this.setState({languageMenu:false})} style={S("margin-top:12px;border:0;background:none;color:#bfd5c2")}>× Close</button></div>}
             <canvas ref={this.staticRef} width={192} height={108} aria-hidden="true" style={S("position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;opacity:0;z-index:6;pointer-events:none")} />
             <div ref={this.r.flash} aria-hidden="true" style={S("position:absolute;inset:0;background:#fff;opacity:0;z-index:7;pointer-events:none;transform-origin:center")} />
             <div ref={this.r.off} style={S("position:absolute;inset:0;z-index:8;display:none;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,2cqw,24px);padding:6cqw;background:radial-gradient(80% 70% at 50% 40%,#0c0c0e,#050506);color:rgba(255,255,255,.88);text-align:center;font-size:clamp(14px,1.6cqw,19px);font-weight:400;opacity:0")}>
@@ -606,7 +608,7 @@ export default class TvSite extends React.Component<Props, State> {
 
   renderBoot() {
     const s = this.state;
-    const tile = "position:relative;width:clamp(64px,14cqw,180px);aspect-ratio:16/9;border-radius:clamp(8px,1.25cqw,16px);display:grid;place-items:center;font-weight:500;font-size:clamp(10px,1.4cqw,18px);letter-spacing:.02em;color:#fff;opacity:0;transition:transform .25s;cursor:pointer;background:";
+    const tile = "position:relative;width:100%;height:clamp(44px,6cqw,70px);border-radius:9px;display:flex;align-items:center;padding:0 14px;font-weight:500;font-size:clamp(14px,1.6cqw,21px);color:#fff;opacity:0;transition:transform .25s;cursor:pointer;background:";
     const name = "position:absolute;top:calc(100% + clamp(10px,1.4cqw,18px));left:0;right:0;text-align:center;font-size:clamp(9px,1.1cqw,14px);font-weight:500;opacity:0;transition:opacity .25s";
     const hoverTile = (e: React.MouseEvent<HTMLElement>) => { if (this.state.booted) this.focusTile(Number(e.currentTarget.dataset.tile)); };
     return (
@@ -616,11 +618,11 @@ export default class TvSite extends React.Component<Props, State> {
           <div style={S("position:absolute;left:4.2cqw;right:4.2cqw;top:clamp(36px,5cqw,65px);display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'VT323',monospace;font-size:clamp(14px,1.8cqw,22px);letter-spacing:.1em")}>
             <span>MAHERISON / AMAZON OPERATIONS</span><span style={S("color:var(--brand,#cfffcf)")}>INDÉPENDANT · EUROPE</span>
           </div>
-          <div ref={this.r.dock} className="m-dock" style={S("position:absolute;left:50%;bottom:clamp(28px,5cqw,64px);transform:translateX(-50%);padding:clamp(8px,1.1cqw,14px);border-radius:clamp(16px,2cqw,26px);background:var(--band,#141416);box-shadow:inset 0 0 0 1px var(--band-rim,rgba(255,255,255,.12));display:flex;gap:clamp(8px,1.6cqw,22px)")}>
+          <div ref={this.r.dock} className="m-dock" style={S("position:absolute;right:clamp(22px,6cqw,78px);top:25%;bottom:auto;width:min(38%,440px);transform:none;padding:8px;border-radius:14px;background:#19251edd;box-shadow:inset 0 0 0 1px #4d7154;display:flex;flex-direction:column;gap:5px;z-index:2")}>
             {DOCK.map((t,i) => (
               <a key={t.label} href={t.href} data-tile={i} data-color={TILE_COLORS[i]} onMouseEnter={hoverTile}
                 onClick={(e) => { e.stopPropagation(); if (!this.state.booted) { e.preventDefault(); this.skip(); return; } this.click(); if (t.ch !== undefined) { e.preventDefault(); this.channel(t.ch); } }}
-                className="m-docktile" style={S(tile + TILE_COLORS[i])}>{t.label}
+                className="m-docktile" style={S(tile + "linear-gradient(120deg,#263e2f,#17281f)")}>{"0"+(i+1)+" / "+(s.lang==="fr"?["Qui je suis","Ce que je fais","Comment je travaille","Contact"][i]:t.label)}
                 <div data-name style={S(name)}>{t.label}</div>
               </a>
             ))}
@@ -643,14 +645,14 @@ export default class TvSite extends React.Component<Props, State> {
           </div>
           <div ref={this.r.miss} style={S("position:absolute;left:50%;bottom:4cqw;transform:translateX(-50%);font-family:'VT323',monospace;font-size:clamp(20px,3.4cqw,40px);color:#CFFFCF;opacity:0;pointer-events:none")}>ON AVANCE ENSEMBLE</div>
         </div>
-        <div ref={this.r.title} className="m-title" style={S("position:absolute;left:0;right:0;top:0;bottom:clamp(90px,16cqw,200px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,2cqw,25px);padding:clamp(65px,9cqw,110px) 5cqw 0;text-align:center;opacity:0;pointer-events:none;color:var(--ink,rgba(255,255,255,.95))")}>
-          <div style={S("font-family:'VT323',monospace;font-size:clamp(17px,2cqw,26px);letter-spacing:.16em;color:var(--brand,#cfffcf)")}>CH 00 / WHO I AM</div>
-          <h1 className="m-h1" style={S("margin:0;font-family:Outfit,sans-serif;font-size:clamp(40px,min(7cqw,10vh),96px);font-weight:500;letter-spacing:-.065em;line-height:1.03")}>Hello, moi c’est Thony.<br/><span style={S("color:var(--brand,#cfffcf)")}>Amazon & Marketplace Specialist.</span></h1>
-          <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2cqw,25px);font-weight:300;opacity:.85")}>Vendor Central · Seller Central · Marketplaces européens</p>
-          <p className="m-sub" style={S("margin:0;max-width:620px;font-size:clamp(13px,1.5cqw,19px);line-height:1.5;opacity:.7")}>J'aide les marques à gérer leurs opérations Amazon au quotidien. Un interlocuteur impliqué, des actions concrètes et un suivi clair.</p>
+        <div ref={this.r.title} className="m-title" style={S("position:absolute;left:clamp(20px,5cqw,65px);right:52%;top:15%;bottom:10%;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:clamp(10px,1.6cqw,20px);padding:0;text-align:left;opacity:0;pointer-events:none;color:var(--ink,#fff)")}>
+          <div style={S("font-family:'VT323',monospace;font-size:clamp(17px,2cqw,26px);letter-spacing:.16em;color:var(--brand,#cfffcf)")}>CH 00 / WELCOME</div>
+          <h1 className="m-h1" style={S("margin:0;font-family:Outfit,sans-serif;font-size:clamp(34px,min(5cqw,8vh),72px);font-weight:500;letter-spacing:-.065em;line-height:1.03")}><span style={S("font-size:clamp(16px,2cqw,25px);font-weight:400;letter-spacing:0")}>Hello, I’m Thony.</span><br/><span style={S("color:var(--brand,#cfffcf)")}>THONY MAHERISON</span></h1>
+          <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2cqw,25px);font-weight:300;opacity:.85")}>Amazon & Marketplace Specialist</p>
+          <p className="m-sub" style={S("margin:0;max-width:620px;font-size:clamp(13px,1.5cqw,19px);line-height:1.5;opacity:.7")}>{s.lang==="fr"?"J’accompagne les marques dans la gestion quotidienne de leurs opérations Amazon Vendor et Seller Central, sur les marchés européens.":"I help brands manage their day-to-day Amazon Vendor and Seller Central operations across European marketplaces."}</p>
           <div className="m-btns" style={S("display:flex;gap:10px;flex-wrap:wrap;justify-content:center;pointer-events:auto")}>
-            <button onClick={(e) => {e.stopPropagation();this.channel(1)}} className="act-shrink" style={S("height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500")}>Ce que je fais</button>
-            <button onClick={(e) => {e.stopPropagation();this.channel(2)}} className="hov-white act-shrink" style={S("height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--line,#555);background:var(--pill-bg,rgba(255,255,255,.1));color:inherit;font-size:15px")}>Me contacter</button>
+            <button onClick={(e) => {e.stopPropagation();this.channel(2)}} className="act-shrink" style={S("height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500")}>CH 02 · Services</button>
+            <button onClick={(e) => {e.stopPropagation();this.channel(4)}} className="hov-white act-shrink" style={S("height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--line,#555);background:var(--pill-bg,rgba(255,255,255,.1));color:inherit;font-size:15px")}>CH 04 · Contact</button>
           </div>
         </div>
         {s.mounted && !s.booted && s.power && (
@@ -1000,16 +1002,16 @@ export default class TvSite extends React.Component<Props, State> {
         </div>
         <div style={S("position:relative;width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2b2b2f,#161618);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 4px rgba(0,0,0,.6)")}>
           <button aria-label="Up" onClick={() => this.channel(s.ch - 1)} style={S(arrow + "left:50%;top:4px;transform:translateX(-50%);width:22px;height:16px")}>▲</button>
-          <button aria-label="Down" onClick={() => this.channel(Math.min(2, s.ch + 1))} style={S(arrow + "left:50%;bottom:4px;transform:translateX(-50%);width:22px;height:16px")}>▼</button>
+          <button aria-label="Down" onClick={() => this.channel(Math.min(4, s.ch + 1))} style={S(arrow + "left:50%;bottom:4px;transform:translateX(-50%);width:22px;height:16px")}>▼</button>
           <button aria-label="Left" onClick={() => this.side(-1)} style={S(arrow + "top:50%;left:4px;transform:translateY(-50%);width:16px;height:22px")}>◀</button>
           <button aria-label="Right" onClick={() => this.side(1)} style={S(arrow + "top:50%;right:4px;transform:translateY(-50%);width:16px;height:22px")}>▶</button>
           <button aria-label="OK" onClick={() => this.ok()} className="hov-bright act-ok" style={S("position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:linear-gradient(180deg,#333338,#1b1b1e);box-shadow:0 2px 3px rgba(0,0,0,.6);font-size:8px;font-weight:500;color:rgba(255,255,255,.85);padding:0")}>OK</button>
         </div>
         <div style={S("display:grid;grid-template-columns:repeat(3,22px);gap:6px")}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-            <button key={n} onClick={() => this.channel(n)} disabled={n>2} aria-label={`Channel ${n}`} className="hov-bright act-down" style={S(digit)}>{n}</button>
+            <button key={n} onClick={() => this.channel(n)} disabled={n>4} aria-label={`Channel ${n}`} className="hov-bright act-down" style={S(digit)}>{n}</button>
           ))}
-          <button aria-label="Menu: open portfolio expertise" onClick={() => { this.click(); this.channel(1); }} className="hov-bright act-down" style={S(btn + "font-size:6px;font-weight:500;letter-spacing:.04em;color:rgba(255,255,255,.75)")}>MENU</button>
+          <button aria-label="MENU: change language" onClick={() => this.toggleLanguageMenu()} className="hov-bright act-down" style={S(btn + "font-size:6px;font-weight:500;letter-spacing:.04em;color:rgba(255,255,255,.75)")}>MENU</button>
           <button onClick={() => this.channel(0)} aria-label="Channel 0" className="hov-bright act-down" style={S(digit)}>0</button>
           <button aria-label="Mute: toggle sound" aria-pressed={s.sound} onClick={() => this.toggleSound()} className="hov-bright act-down" style={S(btn + "font-size:6px;font-weight:500;letter-spacing:.04em;color:var(--mute-ink,rgba(255,255,255,.75))")}>MUTE</button>
         </div>
@@ -1022,7 +1024,7 @@ export default class TvSite extends React.Component<Props, State> {
     const s = this.state;
     return (
       <div role="group" aria-label="Channels" className="m-bar" style={S("position:absolute;left:0;right:0;bottom:0;height:60px;padding:0 0 0 6px;background:#0d0d0e;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:2px;z-index:20")}>
-        <button aria-label={`Switch site theme (now ${THEMES[s.theme].label.toLowerCase()})`} onClick={() => this.cycleTheme()} className="m-theme">
+        <button aria-label="MENU: change language" onClick={() => this.toggleLanguageMenu()} className="m-theme">
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M10 2a8 8 0 0 1 0 16z" fill="currentColor" /></svg>
         </button>
         <div ref={this.tabsRef} className="m-tabs">
