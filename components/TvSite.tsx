@@ -10,10 +10,10 @@ import { GROUPS, KONAMI, NAMES, ORDER, PRESS, PRESS_LOGO_W, S, SHOWCASE_IMAGES, 
 // Home dock: TV list and Add-ons are pages; Get started (How to) and Showcase (Built on it) are channels 3 and 4 here.
 // The TV list comes first: "which TVs does it work on" is what people ask most. The app moved to the pills.
 const DOCK: { label: string; href: string; ch?: number }[] = [
-  { label: "Expertise", href: "#ch-01", ch: 1 },
-  { label: "Experience", href: "#ch-02", ch: 2 },
-  { label: "Insights", href: "#ch-03", ch: 3 },
-  { label: "Contact", href: "#ch-05", ch: 5 },
+  {label:"Qui je suis",href:"#ch-00",ch:0},
+  {label:"Ce que je fais",href:"#ch-01",ch:1},
+  {label:"Contact",href:"#ch-02",ch:2},
+  {label:"M'écrire",href:"#ch-02",ch:2},
 ];
 import type { ThemeName } from "@/lib/site";
 
@@ -23,7 +23,7 @@ const BOOT_DELAY = 700;
 const PH = "https://www.producthunt.com/products/cleanyourtv";
 const FEAT_SECS = 6;
 /** The phone channel bar's short labels, in channel order. */
-const TABS = ["Home", "Expertise", "Experience", "Insights", "About", "Contact"];
+const TABS = ["Moi", "Services", "Contact"];
 
 type Counter = { key: string; label: string; value: number; max: number; display: number };
 type Slide = { kind: "show" | "theme"; name: string; what: string; meta: string; by: string; byUrl: string; url: string; wall: "aurora" | "black"; tiles: number; site?: ThemeName; kicker: string; image?: string; group: string };
@@ -327,7 +327,7 @@ export default class TvSite extends React.Component<Props, State> {
   onSection(e: IntersectionObserverEntry) {
     if (!e.isIntersecting) return; const n = Number((e.target as HTMLElement).dataset.ch); if (n === this.state.ch) return;
     this.setState({ ch: n }); this.remember(n);
-    if (n === 1) this.maybeNudge();
+    // Simple TV showcase: no promotional popups.
     // Scrolling between channels only updates the corner label; static is kept for the remote and number keys.
     if (performance.now() > this.quietUntil && this.state.booted) this.showOsd(`CH 0${n}`, 1200, false);
     this.enter(n);
@@ -340,11 +340,11 @@ export default class TvSite extends React.Component<Props, State> {
     const phone = this.mq.matches; this.nudgeY = this.r.scroll.current?.scrollTop ?? 0;
     this.setState({ nudge: true }); clearTimeout(this.nudgeT); this.nudgeT = window.setTimeout(() => this.setState({ nudge: false }), phone ? 6000 : 14000);
   }
-  enter(n: number) { if (n === 1) this.animateScope(); if (n === 2) { this.featT = 0; this.preload(this.state.feat + 1); } if (n === 3 && !this.typingStarted) this.startTyping(); }
+  enter(_n: number) { /* Channels use simple portfolio panels, no legacy demos. */ }
   channel(n: number) {
     this.click(); if (!this.state.power || n < 0) return;
     if (!this.state.booted) this.finalize(++this.bootId);
-    if (n > 5) { this.showOsd(`CH 0${n}  NO SIGNAL`); this.cut(250); return; }
+    if (n > 2) { this.showOsd(`CH 0${n}  NO SIGNAL`); this.cut(250); return; }
     const sc = this.r.scroll.current!, target = sc.querySelector<HTMLElement>(`#ch-0${n}`); if (!target) return;
     this.quietUntil = performance.now() + 900; this.showOsd(`CH 0${n}`);
     if (this.reduced) { sc.animate([{ opacity: 1 }, { opacity: 0, offset: 0.5 }, { opacity: 1 }], { duration: 500 }); setTimeout(() => { sc.scrollTop = target.offsetTop; }, 250); }
@@ -467,8 +467,7 @@ export default class TvSite extends React.Component<Props, State> {
   // ---- remote
   cycleTheme() {
     this.click();
-    const sl = this.slides[this.state.slide];
-    if (this.state.ch === 4 && sl && sl.kind === "theme" && sl.site && sl.site !== this.state.theme) return this.setTheme(sl.site);
+    
     this.setTheme(ORDER[(ORDER.indexOf(this.state.theme) + 1) % ORDER.length]);
   }
   toggleSound() {
@@ -482,7 +481,7 @@ export default class TvSite extends React.Component<Props, State> {
   }
   wizGo(i: number) { i = Math.max(0, Math.min(2, i)); if (i === this.state.wiz) return; this.click(); this.setState({ wiz: i }); }
   slideGo(i: number) { const n = this.slides.length; if (!n) return; this.click(); this.setState({ slide: ((i % n) + n) % n }); }
-  side(d: number) { const ch = this.state.ch; if (ch === 0) return this.move(d); if (ch === 2) return this.featGo(this.state.feat + d); if (ch === 3) return this.wizGo(this.state.wiz + d); if (ch === 4) return this.slideGo(this.state.slide + d); }
+  side(d: number) { if (this.state.ch === 0) return this.move(d); this.channel(Math.max(0,Math.min(2,this.state.ch+d))); }
   key(e: KeyboardEvent) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const tag = ((e.target as HTMLElement | null)?.tagName) || ""; if (tag === "INPUT" || tag === "TEXTAREA") return;
@@ -491,7 +490,7 @@ export default class TvSite extends React.Component<Props, State> {
     if (e.key === "ArrowLeft") { e.preventDefault(); return this.side(-1); }
     if (e.key === "ArrowRight") { e.preventDefault(); return this.side(1); }
     if (e.key === "ArrowUp") { e.preventDefault(); return this.channel(this.state.ch - 1); }
-    if (e.key === "ArrowDown") { e.preventDefault(); return this.channel(Math.min(5, this.state.ch + 1)); }
+    if (e.key === "ArrowDown") { e.preventDefault(); return this.channel(Math.min(2, this.state.ch + 1)); }
     if (e.key === "Enter" && tag !== "BUTTON" && tag !== "A") return this.ok();
     if (e.key === "m" || e.key === "M") return this.toggleSound();
     if (e.key === "i" || e.key === "I") return this.cycleTheme();
@@ -503,7 +502,7 @@ export default class TvSite extends React.Component<Props, State> {
     const ch = this.state.ch;
     if (ch === 3) return this.wizGo(this.state.wiz + 1);
     if (ch === 4) return this.slideGo(this.state.slide + 1);
-    this.channel(ch + 1);
+    this.channel(Math.min(2,ch + 1));
   }
   async missIt() {
     if (!this.state.booted) return; const cl = this.r.clutter.current!, miss = this.r.miss.current!;
@@ -554,7 +553,7 @@ export default class TvSite extends React.Component<Props, State> {
           <div ref={this.r.screen} className="m-screen" style={S("position:relative;height:100%;border-radius:clamp(8px,1.5vw,22px);background:#000;overflow:hidden;container-type:inline-size;box-shadow:0 0 0 2px #000,0 0 0 3px #232326,inset 0 0 60px rgba(0,0,0,.9)")}>
             <div ref={this.r.scroll} className="m-scroll" style={S("position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y proximity;scrollbar-width:none")}>
               {this.renderBoot()}
-              {[1, 2, 3, 4, 5].map(n => <PortfolioChannel key={n} number={n} onNavigate={(target) => this.channel(target)} />)}
+              {[1, 2].map(n => <PortfolioChannel key={n} number={n} onNavigate={(target) => this.channel(target)} />)}
               <section id="ch-end" aria-label="End of transmission" className="m-end" style={S("position:relative;min-height:70%;scroll-snap-align:none;background:var(--page,#15181e);color:var(--ink,rgba(255,255,255,.95));display:grid;place-items:center;border-top:1px solid var(--line,rgba(255,255,255,.12))")}>
                 <div ref={this.r.end} style={S("display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:24px")}>
                   <div style={S("font-family:'VT323',monospace;font-size:28px;letter-spacing:.14em;color:var(--ink-dim,rgba(255,255,255,.6))")}>END OF TRANSMISSION</div>
@@ -646,13 +645,13 @@ export default class TvSite extends React.Component<Props, State> {
           <div ref={this.r.miss} style={S("position:absolute;left:50%;bottom:4cqw;transform:translateX(-50%);font-family:'VT323',monospace;font-size:clamp(20px,3.4cqw,40px);color:#CFFFCF;opacity:0;pointer-events:none")}>ON AVANCE ENSEMBLE</div>
         </div>
         <div ref={this.r.title} className="m-title" style={S("position:absolute;left:0;right:0;top:0;bottom:clamp(90px,16cqw,200px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,2cqw,25px);padding:clamp(65px,9cqw,110px) 5cqw 0;text-align:center;opacity:0;pointer-events:none;color:var(--ink,rgba(255,255,255,.95))")}>
-          <div style={S("font-family:'VT323',monospace;font-size:clamp(17px,2cqw,26px);letter-spacing:.16em;color:var(--brand,#cfffcf)")}>CH 00 / SPÉCIALISTE AMAZON</div>
-          <h1 className="m-h1" style={S("margin:0;font-family:Outfit,sans-serif;font-size:clamp(40px,min(7cqw,10vh),96px);font-weight:500;letter-spacing:-.065em;line-height:1.03")}>Votre Amazon,<br/><span style={S("color:var(--brand,#cfffcf)")}>entre de bonnes mains.</span></h1>
-          <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2cqw,25px);font-weight:300;opacity:.85")}>Gestion opérationnelle Vendor & Seller Central · Marchés européens</p>
-          <p className="m-sub" style={S("margin:0;max-width:620px;font-size:clamp(13px,1.5cqw,19px);line-height:1.5;opacity:.7")}>Je prends en charge le suivi de vos opérations Amazon : catalogue, contenus, dossiers et problèmes du quotidien. Nous définissons les priorités et avançons ensemble.</p>
+          <div style={S("font-family:'VT323',monospace;font-size:clamp(17px,2cqw,26px);letter-spacing:.16em;color:var(--brand,#cfffcf)")}>CH 00 / WHO I AM</div>
+          <h1 className="m-h1" style={S("margin:0;font-family:Outfit,sans-serif;font-size:clamp(40px,min(7cqw,10vh),96px);font-weight:500;letter-spacing:-.065em;line-height:1.03")}>Hello, moi c’est Thony.<br/><span style={S("color:var(--brand,#cfffcf)")}>Amazon & Marketplace Specialist.</span></h1>
+          <p className="m-tag" style={S("margin:0;font-size:clamp(15px,2cqw,25px);font-weight:300;opacity:.85")}>Vendor Central · Seller Central · Marketplaces européens</p>
+          <p className="m-sub" style={S("margin:0;max-width:620px;font-size:clamp(13px,1.5cqw,19px);line-height:1.5;opacity:.7")}>J'aide les marques à gérer leurs opérations Amazon au quotidien. Un interlocuteur impliqué, des actions concrètes et un suivi clair.</p>
           <div className="m-btns" style={S("display:flex;gap:10px;flex-wrap:wrap;justify-content:center;pointer-events:auto")}>
-            <button onClick={(e) => {e.stopPropagation();this.channel(1)}} className="act-shrink" style={S("height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500")}>Découvrir mes services</button>
-            <button onClick={(e) => {e.stopPropagation();this.channel(5)}} className="hov-white act-shrink" style={S("height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--line,#555);background:var(--pill-bg,rgba(255,255,255,.1));color:inherit;font-size:15px")}>Parlons de votre compte</button>
+            <button onClick={(e) => {e.stopPropagation();this.channel(1)}} className="act-shrink" style={S("height:44px;padding:0 24px;border-radius:22px;border:0;background:var(--ink,#fff);color:var(--bg,#000);font-size:15px;font-weight:500")}>Ce que je fais</button>
+            <button onClick={(e) => {e.stopPropagation();this.channel(2)}} className="hov-white act-shrink" style={S("height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--line,#555);background:var(--pill-bg,rgba(255,255,255,.1));color:inherit;font-size:15px")}>Me contacter</button>
           </div>
         </div>
         {s.mounted && !s.booted && s.power && (
@@ -1002,14 +1001,14 @@ export default class TvSite extends React.Component<Props, State> {
         </div>
         <div style={S("position:relative;width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2b2b2f,#161618);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 4px rgba(0,0,0,.6)")}>
           <button aria-label="Up" onClick={() => this.channel(s.ch - 1)} style={S(arrow + "left:50%;top:4px;transform:translateX(-50%);width:22px;height:16px")}>▲</button>
-          <button aria-label="Down" onClick={() => this.channel(Math.min(5, s.ch + 1))} style={S(arrow + "left:50%;bottom:4px;transform:translateX(-50%);width:22px;height:16px")}>▼</button>
+          <button aria-label="Down" onClick={() => this.channel(Math.min(2, s.ch + 1))} style={S(arrow + "left:50%;bottom:4px;transform:translateX(-50%);width:22px;height:16px")}>▼</button>
           <button aria-label="Left" onClick={() => this.side(-1)} style={S(arrow + "top:50%;left:4px;transform:translateY(-50%);width:16px;height:22px")}>◀</button>
           <button aria-label="Right" onClick={() => this.side(1)} style={S(arrow + "top:50%;right:4px;transform:translateY(-50%);width:16px;height:22px")}>▶</button>
           <button aria-label="OK" onClick={() => this.ok()} className="hov-bright act-ok" style={S("position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:linear-gradient(180deg,#333338,#1b1b1e);box-shadow:0 2px 3px rgba(0,0,0,.6);font-size:8px;font-weight:500;color:rgba(255,255,255,.85);padding:0")}>OK</button>
         </div>
         <div style={S("display:grid;grid-template-columns:repeat(3,22px);gap:6px")}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-            <button key={n} onClick={() => this.channel(n)} aria-label={`Channel ${n}`} className="hov-bright act-down" style={S(digit)}>{n}</button>
+            <button key={n} onClick={() => this.channel(n)} disabled={n>2} aria-label={`Channel ${n}`} className="hov-bright act-down" style={S(digit)}>{n}</button>
           ))}
           <button aria-label="Menu: open portfolio expertise" onClick={() => { this.click(); this.channel(1); }} className="hov-bright act-down" style={S(btn + "font-size:6px;font-weight:500;letter-spacing:.04em;color:rgba(255,255,255,.75)")}>MENU</button>
           <button onClick={() => this.channel(0)} aria-label="Channel 0" className="hov-bright act-down" style={S(digit)}>0</button>
