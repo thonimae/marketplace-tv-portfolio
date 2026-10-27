@@ -34,6 +34,24 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
  .port-about{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(140px,.85fr);gap:clamp(20px,5cqw,65px);align-items:center;flex:1}
  .port-about h2,.port-how h2,.port-contact h2{font-size:clamp(35px,5.5cqw,75px);line-height:1.01;letter-spacing:-.065em;font-weight:500;margin:0 0 22px}
  .port-about p{font-size:clamp(16px,1.68cqw,22px);line-height:1.48;max-width:750px;margin:0 0 17px}
+ 
+ .port-ch-1{background:radial-gradient(ellipse at 82% 40%,#24413355,transparent 43%),linear-gradient(145deg,#11191b,#0e1317);gap:clamp(12px,1.7cqw,22px);padding-top:clamp(20px,3cqw,38px);padding-bottom:clamp(20px,3cqw,36px)}
+ .port-ch-1 .port-about{grid-template-columns:minmax(0,2.3fr) minmax(150px,.8fr);gap:clamp(18px,3cqw,40px);align-items:center}
+ .port-ch-1 .port-about h2{font-size:clamp(27px,3.3cqw,48px);line-height:1.08;margin:9px 0 clamp(11px,1.5cqw,20px)}
+ .port-cinema-eyebrow{font-family:'VT323',monospace;letter-spacing:.14em;font-size:clamp(15px,1.45cqw,19px);color:#a8d2aa}
+ .port-cinema-story{display:flex;flex-direction:column;gap:clamp(7px,1cqw,12px)}
+ .port-ch-1 .port-cinema-story p{font-size:clamp(15px,1.27cqw,18px);line-height:1.44;max-width:790px;margin:0;color:#d7dfd9;font-weight:400}
+ .port-cinema-story strong{font-weight:600;color:var(--port-mint);text-decoration:none}
+ .port-cinema-portrait{align-self:center}
+ .port-cinema-enter{animation:portCinemaAppear .75s ease-out both}
+ .port-cinema-story p:nth-child(1){animation-delay:.06s}
+ .port-cinema-story p:nth-child(2){animation-delay:.16s}
+ .port-cinema-story p:nth-child(3){animation-delay:.26s}
+ .port-cinema-story p:nth-child(4){animation-delay:.36s}
+ .port-cinema-story p:nth-child(5){animation-delay:.46s}
+ @keyframes portCinemaAppear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+ @media(max-width:780px){.port-ch-1 .port-about{grid-template-columns:1fr}.port-cinema-portrait{order:-1;justify-self:start;display:flex;align-items:center;gap:16px}.port-cinema-portrait .port-portrait{width:100px;height:100px}.port-ch-1 .port-cinema-story p{font-size:15px;line-height:1.46}.port-ch-1 .port-about h2{font-size:34px}.port-ch-1{padding:22px 20px}}
+ @media(prefers-reduced-motion:reduce){.port-cinema-enter{animation:none!important}}
  .port-portrait{width:100%;max-width:290px;aspect-ratio:1/1;border-radius:50%;border:4px solid #a7ce9c;box-shadow:0 0 0 12px #b5e4a714,0 0 60px #b7f6c521;overflow:hidden;margin:auto;background:#25372c}
  .port-portrait img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.83) contrast(1.06)}
  .port-fallback{height:100%;display:grid;place-items:center;font-size:48px;font-weight:700;letter-spacing:-.08em}.port-fallback span{color:var(--port-mint)}
@@ -64,7 +82,26 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
  `}</style>
  <Top n={number} label={["","ABOUT ME","WHAT I DO","HOW I WORK","CONTACT"][number]}/>
  {number===1&&<>
- <div className="port-about"><div><h2>{t.aboutTitle}</h2><p>{t.aboutA}</p><p>{t.aboutB}</p></div><div><Portrait/><div style={{...mono,textAlign:"center",fontSize:14,color:mint,marginTop:14}}>{t.portraitLabel}</div></div></div>
+ <div className="port-about">
+  <div className="port-cinema-copy">
+    <div className="port-cinema-eyebrow">THE PERSON BEHIND THE SCREEN <span aria-hidden="true">/ 01</span></div>
+    <h2 className={active?"port-cinema-enter":""}>{t.aboutTitle}</h2>
+    {lang==="fr"?<div className="port-cinema-story" key="fr">
+      <p className={active?"port-cinema-enter":""}>Cela fait <strong>plus de cinq ans</strong> que je travaille dans l'univers <strong>Amazon</strong>, principalement sur <strong>Vendor et Seller Central</strong>.</p>
+      <p className={active?"port-cinema-enter":""}>Au fil des années, j'ai touché à beaucoup de choses : <strong>gestion des comptes, catalogues produits, contenus, commandes et conformité</strong>, sans oublier les problèmes techniques et les dossiers parfois interminables avec Amazon.</p>
+      <p className={active?"port-cinema-enter":""}>J'ai commencé dans le support avant d'évoluer vers les <strong>opérations marketplace</strong>, puis vers un poste de <strong>spécialiste senior en agence</strong>. Aujourd'hui, je travaille à mon compte.</p>
+      <p className={active?"port-cinema-enter":""}>Ce parcours m'a appris à connaître Amazon au-delà des interfaces : ses particularités, ses contraintes et les complications du quotidien. Ce que j'aime, c'est <strong>comprendre ce qui bloque et trouver des solutions concrètes</strong>.</p>
+      <p className={active?"port-cinema-enter":""}>Je travaille avec des marques qui ont besoin de quelqu'un d'<strong>autonome</strong>, qui connaît son sujet et avec qui les échanges restent simples.</p>
+    </div>:<div className="port-cinema-story" key="en">
+      <p className={active?"port-cinema-enter":""}>I've spent <strong>over five years working with Amazon</strong>, mainly across <strong>Vendor and Seller Central</strong>.</p>
+      <p className={active?"port-cinema-enter":""}>Along the way I've worked on <strong>account operations, product catalogs, content, orders and compliance</strong> — and my share of technical problems and long-running Amazon cases.</p>
+      <p className={active?"port-cinema-enter":""}>I started in support, moved into <strong>marketplace operations</strong>, then became a <strong>senior Amazon specialist at an agency</strong>. Today I work independently.</p>
+      <p className={active?"port-cinema-enter":""}>That journey taught me how Amazon works beyond the interface: its quirks, constraints and everyday complications. What I enjoy most is <strong>figuring out what's stuck and finding practical solutions</strong>.</p>
+      <p className={active?"port-cinema-enter":""}>I work with brands looking for someone <strong>independent and hands-on</strong> who knows the platform and keeps communication simple.</p>
+    </div>}
+  </div>
+  <div className="port-cinema-portrait"><Portrait/><div style={{...mono,textAlign:"center",fontSize:14,color:mint,marginTop:14}}>{t.portraitLabel}</div></div>
+ </div>
  <div className="port-foot"><span>THONY MAHERISON / FR · EN</span><button onClick={()=>onNavigate(2)}>{t.aboutNext} →</button></div>
  </>}
  {number===2&&<div className="port-broadcast">
