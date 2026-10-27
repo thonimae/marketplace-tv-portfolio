@@ -62,7 +62,7 @@ export const THEMES: Record<ThemeName, Record<string, string>> = {
 };
 
 export const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
-export const NAMES = ["WHO I AM", "WHAT I DO", "CONTACT"];
+export const NAMES = ["WELCOME", "ABOUT ME", "WHAT I DO", "HOW I WORK", "CONTACT"];
 export const TILE_COLORS = ["#D13B3B", "#2256D9", "#1E9E5A", "#6B3FD1", "#C98A1B", "#2A8C9E"];
 
 export type TermLine = [kind: "cmd" | "out" | "note", text: string] | [kind: "img", name: string, src: string, alt: string];
