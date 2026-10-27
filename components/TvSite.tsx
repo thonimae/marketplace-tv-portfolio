@@ -158,6 +158,19 @@ export default class TvSite extends React.Component<Props, State> {
   applyTheme(name: ThemeName) {
     const t = THEMES[name]; Object.keys(t).forEach((k) => { if (k.startsWith("--")) this.setVar(k, t[k]); });
     const paper = name === "paper";
+    // EPG guide has its own theme-aware palette so the paper theme stays readable.
+    const guide = name === "paper"
+      ? { bg:"rgba(255,248,232,.86)", ink:"#16251c", border:"rgba(34,99,57,.25)", selected:"rgba(30,138,69,.10)", glass:"rgba(30,138,69,.085)", glassRim:"rgba(30,138,69,.58)", glow:"rgba(30,138,69,.11)" }
+      : name === "aurora"
+      ? { bg:"rgba(20,29,52,.88)", ink:"#eef1ff", border:"rgba(188,202,255,.25)", selected:"rgba(154,180,255,.12)", glass:"rgba(160,190,255,.08)", glassRim:"rgba(188,206,255,.6)", glow:"rgba(148,174,255,.13)" }
+      : { bg:"rgba(19,32,26,.88)", ink:"#f3f8f1", border:"rgba(190,243,187,.22)", selected:"rgba(201,255,206,.075)", glass:"rgba(200,255,210,.055)", glassRim:"rgba(200,255,210,.50)", glow:"rgba(170,255,175,.08)" };
+    this.setVar("--guide-bg",guide.bg);
+    this.setVar("--guide-ink",guide.ink);
+    this.setVar("--guide-border",guide.border);
+    this.setVar("--guide-selected",guide.selected);
+    this.setVar("--guide-glass",guide.glass);
+    this.setVar("--guide-glass-rim",guide.glassRim);
+    this.setVar("--guide-glow",guide.glow);
     this.setVar("--osd", paper ? "#0B3D1E" : "#CFFFCF"); this.setVar("--osd-glow", paper ? "rgba(11,61,30,.25)" : "rgba(140,255,140,.6)");
   }
   setTheme(name: ThemeName) { this.setState({ theme: name }); this.applyTheme(name); try { localStorage.setItem("cyt-theme", name); } catch { /* ignore */ } this.showOsd(THEMES[name].label, 1400); }
@@ -245,7 +258,7 @@ export default class TvSite extends React.Component<Props, State> {
     i = (i + DOCK.length) % DOCK.length; const rect = this.tileRect(i); if (!rect) return;
     this.setState({ focus: i });
     const dock = this.r.dock.current!;
-    dock.querySelectorAll<HTMLElement>("[data-tile]").forEach((t) => { const on = Number(t.dataset.tile) === i; t.style.transform = "none"; t.style.background = on ? "rgba(201,255,206,.075)" : "transparent"; const n = t.querySelector<HTMLElement>("[data-name]"); if (n) n.style.opacity = on ? "1" : "0"; });
+    dock.querySelectorAll<HTMLElement>("[data-tile]").forEach((t) => { const on = Number(t.dataset.tile) === i; t.style.transform = "none"; t.style.background = on ? "var(--guide-selected,rgba(201,255,206,.075))" : "transparent"; const n = t.querySelector<HTMLElement>("[data-name]"); if (n) n.style.opacity = on ? "1" : "0"; });
     this.setVar("--glow", "rgba(174,241,185,.12)");
     const s = this.spring; s.x.t = rect.x; s.y.t = rect.y; s.w.t = rect.w; s.h.t = rect.h;
     const g = this.r.glass.current!; g.style.opacity = "1";
@@ -608,7 +621,7 @@ export default class TvSite extends React.Component<Props, State> {
 
   renderBoot() {
     const s = this.state;
-    const tile = "position:relative;width:100%;height:clamp(46px,6cqw,70px);border-radius:5px;display:flex;align-items:center;padding:0 clamp(12px,1.6cqw,22px);font-weight:500;font-size:clamp(14px,1.5cqw,20px);letter-spacing:.01em;color:var(--ink,#fff);opacity:0;transition:opacity .25s,background .25s;cursor:pointer;background:";
+    const tile = "position:relative;width:100%;height:clamp(46px,6cqw,70px);border-radius:5px;display:flex;align-items:center;padding:0 clamp(12px,1.6cqw,22px);font-weight:500;font-size:clamp(14px,1.5cqw,20px);letter-spacing:.01em;color:var(--guide-ink,var(--ink,#fff));opacity:0;transition:opacity .25s,background .25s;cursor:pointer;background:";
     const name = "display:none";
     const hoverTile = (e: React.MouseEvent<HTMLElement>) => { if (this.state.booted) this.focusTile(Number(e.currentTarget.dataset.tile)); };
     return (
@@ -618,7 +631,7 @@ export default class TvSite extends React.Component<Props, State> {
           <div style={S("position:absolute;left:4.2cqw;right:4.2cqw;top:clamp(36px,5cqw,65px);display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'VT323',monospace;font-size:clamp(14px,1.8cqw,22px);letter-spacing:.1em")}>
             <span>MAHERISON / AMAZON OPERATIONS</span><span style={S("color:var(--brand,#cfffcf)")}>{s.lang==="fr"?"INDÉPENDANT · EUROPE":"INDEPENDENT · EUROPE"}</span>
           </div>
-          <div ref={this.r.dock} className="m-dock" style={{...S("position:absolute;right:clamp(22px,5cqw,66px);top:24%;bottom:auto;width:min(40%,450px);transform:none;padding:clamp(12px,1.9cqw,23px);border-radius:5px;background:linear-gradient(165deg,rgba(19,32,26,.9),rgba(18,25,23,.86));box-shadow:inset 0 0 0 1px rgba(190,243,187,.20),0 16px 70px rgba(0,0,0,.24);display:flex;flex-direction:column;gap:3px;z-index:2"),visibility:s.booted?"visible":"hidden"}}>
+          <div ref={this.r.dock} className="m-dock" style={{...S("position:absolute;right:clamp(22px,5cqw,66px);top:24%;bottom:auto;width:min(40%,450px);transform:none;padding:clamp(12px,1.9cqw,23px);border-radius:5px;background:var(--guide-bg,rgba(19,32,26,.88));box-shadow:inset 0 0 0 1px var(--guide-border,rgba(190,243,187,.20)),0 16px 70px rgba(0,0,0,.12);display:flex;flex-direction:column;gap:3px;z-index:2"),visibility:s.booted?"visible":"hidden"}}>
             {DOCK.map((t,i) => (
               <a key={t.label} href={t.href} data-tile={i} data-color={TILE_COLORS[i]} onMouseEnter={hoverTile}
                 onClick={(e) => { e.stopPropagation(); if (!this.state.booted) { e.preventDefault(); this.skip(); return; } this.click(); if (t.ch !== undefined) { e.preventDefault(); this.channel(t.ch); } }}
@@ -627,7 +640,7 @@ export default class TvSite extends React.Component<Props, State> {
               </a>
             ))}
           </div>
-          <div ref={this.r.glass} aria-hidden="true" className="m-glass" style={S("position:absolute;left:0;top:0;width:10px;height:10px;opacity:0;pointer-events:none;border-radius:4px;z-index:3;background:rgba(200,255,210,.055);box-shadow:inset 3px 0 0 var(--brand,#cfffcf),inset 0 0 0 1px rgba(200,255,210,.50),0 0 15px rgba(170,255,175,.08);will-change:transform,width,height")} />
+          <div ref={this.r.glass} aria-hidden="true" className="m-glass" style={S("position:absolute;left:0;top:0;width:10px;height:10px;opacity:0;pointer-events:none;border-radius:4px;z-index:3;background:var(--guide-glass,rgba(200,255,210,.055));box-shadow:inset 3px 0 0 var(--brand,#cfffcf),inset 0 0 0 1px var(--guide-glass-rim,rgba(200,255,210,.50)),0 0 15px var(--guide-glow,rgba(170,255,175,.08));will-change:transform,width,height")} />
         </div>
         <div ref={this.r.clutter} aria-hidden="true" className="m-clutter" style={S("position:absolute;inset:0;background:linear-gradient(145deg,#11181d,#090c11);color:#fff;overflow:hidden")}>
           <div data-row="3" style={S("margin:8cqw 6cqw 0;font-family:'VT323',monospace;font-size:clamp(19px,3cqw,38px);letter-spacing:.1em")}>SIGNAL FOUND / MARKETPLACE BROADCAST</div>
