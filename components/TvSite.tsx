@@ -94,13 +94,13 @@ export default class TvSite extends React.Component<Props, State> {
     let theme: string | null = null, sound = false;
     try { theme = localStorage.getItem("cyt-theme"); sound = localStorage.getItem("cyt-sound") === "1"; } catch { /* private mode */ }
     // A refresh lands back on the channel that was showing, without the boot sequence.
-    try { const n = Number(sessionStorage.getItem("cyt-ch")); if (n >= 1 && n <= 5) this.resumeCh = n; } catch { /* ignore */ }
+    try { const n = Number(sessionStorage.getItem("cyt-ch")); if (n >= 1 && n <= 2) this.resumeCh = n; } catch { /* ignore */ }
     // Deep links win over the remembered channel: #ch-03 or ?ch=3 opens that channel; ?boot=0 skips the boot sequence.
     try {
       const q = new URLSearchParams(location.search);
       const m = /^#ch-0?([0-5])$/.exec(location.hash);
       const n = m ? Number(m[1]) : q.has("ch") ? Number(q.get("ch")) : NaN;
-      if (n >= 1 && n <= 5) this.resumeCh = n; else if (n === 0) { this.resumeCh = 0; this.instant = true; }
+      if (n >= 1 && n <= 2) this.resumeCh = n; else if (n === 0) { this.resumeCh = 0; this.instant = true; }
       if (q.get("boot") === "0") this.instant = true;
     } catch { /* ignore */ }
     this.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -500,8 +500,7 @@ export default class TvSite extends React.Component<Props, State> {
   ok() {
     if (!this.state.power) return this.powerOn(); if (!this.state.booted) return this.skip();
     const ch = this.state.ch;
-    if (ch === 3) return this.wizGo(this.state.wiz + 1);
-    if (ch === 4) return this.slideGo(this.state.slide + 1);
+    if (ch === 0) { const target = DOCK[this.state.focus]; return this.channel(target?.ch ?? 1); }
     this.channel(Math.min(2,ch + 1));
   }
   async missIt() {
