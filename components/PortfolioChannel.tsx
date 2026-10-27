@@ -6,18 +6,18 @@ const accent="var(--brand,#cfffcf)";
 const fg="var(--ink,#f3f3ed)";
 const mono:React.CSSProperties={fontFamily:"'VT323',monospace",letterSpacing:".12em",fontSize:"clamp(17px,1.75cqw,24px)",color:accent};
 const link:React.CSSProperties={display:"inline-flex",alignItems:"center",justifyContent:"center",padding:"13px 24px",borderRadius:40,textDecoration:"none",fontSize:16,fontWeight:500,background:fg,color:"var(--bg,#111)",width:"fit-content"};
-const panel:React.CSSProperties={border:"1px solid var(--line,rgba(255,255,255,.2))",borderRadius:18,padding:"clamp(20px,3cqw,38px)",background:"var(--pill-bg,rgba(255,255,255,.045))"};
-const cardTitle:React.CSSProperties={fontSize:"clamp(23px,2.9cqw,39px)",fontWeight:500,letterSpacing:"-.045em",margin:"0 0 13px"};
+const panel:React.CSSProperties={border:"1px solid var(--line,rgba(255,255,255,.2))",borderRadius:18,padding:"clamp(16px,2.3cqw,28px)",background:"var(--pill-bg,rgba(255,255,255,.045))"};
+const cardTitle:React.CSSProperties={fontSize:"clamp(21px,2.4cqw,32px)",fontWeight:500,letterSpacing:"-.045em",margin:"0 0 13px"};
 function Label({children}:{children:React.ReactNode}){return <span style={mono}>{children}</span>}
 function Header({n,kicker,title,highlight,subtitle}:{n:number;kicker:string;title:string;highlight:string;subtitle:string}){return <header style={{display:"flex",flexDirection:"column",gap:12}}>
  <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:10}}><Label>CH 0{n} / {kicker}</Label><Label>● ON AIR</Label></div>
- <h2 style={{fontWeight:500,fontSize:"clamp(44px,7cqw,96px)",letterSpacing:"-.065em",lineHeight:1.02,margin:"18px 0 4px"}}>{title}<br/><span style={{color:accent}}>{highlight}</span></h2>
+ <h2 style={{fontWeight:500,fontSize:"clamp(34px,5.4cqw,72px)",letterSpacing:"-.065em",lineHeight:1.02,margin:"10px 0 4px"}}>{title}<br/><span style={{color:accent}}>{highlight}</span></h2>
  <p style={{margin:0,opacity:.8,fontSize:"clamp(17px,1.85cqw,24px)",lineHeight:1.5,maxWidth:740}}>{subtitle}</p>
  </header>}
 export default function PortfolioChannel({number,onNavigate}:{number:number;onNavigate:(n:number)=>void}) {
  if(number!==1&&number!==2)return null;
  return <section id={`ch-0${number}`} data-ch={number} aria-label={number===1?"Ce que je fais":"Contact"}
- style={{position:"relative",height:"100%",minHeight:0,scrollSnapAlign:"start",overflowY:"auto",background:"var(--page,#15181e)",color:fg,padding:"clamp(55px,6cqw,90px) clamp(18px,6cqw,84px)",display:"flex",flexDirection:"column",gap:"clamp(20px,3cqw,38px)",justifyContent:"center"}}>
+ style={{position:"relative",minHeight:"100%",height:"auto",boxSizing:"border-box",scrollSnapAlign:"start",background:"var(--page,#15181e)",color:fg,padding:"clamp(28px,4cqw,54px) clamp(18px,5cqw,70px) clamp(46px,6cqw,82px)",display:"flex",flexDirection:"column",gap:"clamp(16px,2.4cqw,28px)",justifyContent:"flex-start"}}>
  {number===1&&<>
   <Header n={1} kicker="WHAT I DO" title="Amazon, au quotidien." highlight="Je m'en occupe." subtitle="J'accompagne les marques sur Vendor et Seller Central, de la gestion du compte aux projets catalogue."/>
   <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,205px),1fr))",gap:12}}>
