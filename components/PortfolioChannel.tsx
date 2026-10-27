@@ -1,7 +1,7 @@
 "use client";
 import React,{useEffect,useState} from "react";
 type Lang="fr"|"en";
-type Props={number:number;lang:Lang;active:boolean;onNavigate:(n:number)=>void};
+type Props={number:number;lang:Lang;active:boolean;theme:"black"|"aurora"|"paper";onNavigate:(n:number)=>void};
 const copy={
 fr:{
 welcome:"Bonjour, moi c'est Thony.",intro:"J'accompagne les marques dans la gestion quotidienne de leurs opérations Amazon Vendor et Seller Central, sur les marchés européens.",
@@ -22,12 +22,12 @@ const action:React.CSSProperties={border:"1px solid #6a936e",borderRadius:24,pad
 function Top({n,label}:{n:number;label:string}){return <div className="port-top"><span>CH 0{n} / {label}</span><span>● ON AIR</span></div>}
 function Portrait(){const [broken,setBroken]=useState(false);return <div className="port-portrait">{!broken?<img src="/images/thony-portrait.jpg" alt="Portrait de Thony Maherison" onError={()=>setBroken(true)}/>:<div className="port-fallback">TH<span>O</span>NY</div>}</div>}
 function Motion({mode}:{mode:number}){return <div className={"port-motion mode-"+mode} aria-hidden="true"><div className="port-orb a"/><div className="port-orb b"/><div className="port-motion-card"><i/><i/><i/></div><div className="port-motion-track"><i/><i/><i/><i/></div></div>}
-export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
+export default function PortfolioChannel({number,lang,active,theme,onNavigate}:Props){
  const t=copy[lang];
- const [offer,setOffer]=useState(0),[paused,setPaused]=useState(false),[progress,setProgress]=useState(0),[question,setQuestion]=useState(0);
+ const [offer,setOffer]=useState(0),[paused,setPaused]=useState(false),[progress,setProgress]=useState(0);
  useEffect(()=>{if(number!==2||!active||paused)return;const id=window.setInterval(()=>setProgress(p=>{if(p>=98){setOffer(x=>(x+1)%3);return 0}return p+2}),180);return()=>window.clearInterval(id)},[number,active,paused]);
  if(number<1||number>4)return null;
- return <section id={`ch-0${number}`} data-ch={number} className={"port-channel port-ch-"+number} aria-label={["","About Me","What I Do","How I Work","Contact"][number]}>
+ return <section id={`ch-0${number}`} data-ch={number} className={"port-channel port-ch-"+number} data-theme={theme} aria-label={["","About Me","What I Do","How I Work","Contact"][number]}>
  <style>{`
  .port-channel{--port-mint:#c8f3ae;position:relative;box-sizing:border-box;min-height:100%;height:auto;scroll-snap-align:start;background:#11191b;color:#f2f6f0;padding:clamp(27px,4cqw,52px) clamp(24px,5cqw,65px);display:flex;flex-direction:column;gap:clamp(16px,2.4cqw,30px);overflow:hidden}
  .port-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font:clamp(16px,1.8cqw,23px)/1.1 'VT323',monospace;letter-spacing:.13em;color:var(--port-mint)}
@@ -150,6 +150,63 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
   .port-linkedin-pending{width:100%}
  }
  @media(prefers-reduced-motion:reduce){.port-q-answer{animation:none}}
+ 
+ /* TV studio — all four answers readable immediately, with no buttons or EPG panel */
+ .port-ch-3{gap:clamp(12px,1.5cqw,20px);padding:clamp(20px,2.6cqw,34px) clamp(24px,4.1cqw,56px)}
+ .port-interview-stage{flex:1;min-height:0;max-width:1250px;width:100%;margin:auto;display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,2.2cqw,30px);position:relative}
+ .port-interview-stage:before{content:"";position:absolute;right:4%;top:8%;height:60%;aspect-ratio:1;border:1px solid var(--port-stage-line,rgba(210,245,200,.12));border-radius:50%;pointer-events:none;filter:blur(.5px)}
+ .port-interview-intro{display:flex;justify-content:space-between;gap:16px;font:clamp(14px,1.5cqw,19px) 'VT323',monospace;letter-spacing:.15em;color:var(--port-accent,#c8f3ae);border-bottom:1px solid var(--port-rule,rgba(203,245,196,.25));padding-bottom:clamp(9px,1.4cqw,17px)}
+ .port-interview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(26px,4.3cqw,65px);row-gap:clamp(22px,3.4cqw,44px);position:relative}
+ .port-interview-item{min-width:0;padding:0 0 0 clamp(12px,1.4cqw,20px);border-left:2px solid var(--port-rule,rgba(203,245,196,.3));animation:portCinemaAppear .55s ease-out both}
+ .port-interview-item:nth-child(2){animation-delay:.08s}.port-interview-item:nth-child(3){animation-delay:.16s}.port-interview-item:nth-child(4){animation-delay:.24s}
+ .port-interview-index{font:clamp(15px,1.6cqw,21px) 'VT323',monospace;letter-spacing:.15em;color:var(--port-accent,#c8f3ae);margin-bottom:clamp(7px,.9cqw,11px)}
+ .port-interview-item h2{font-size:clamp(21px,2.35cqw,34px);line-height:1.15;font-weight:550;letter-spacing:-.04em;margin:0 0 clamp(8px,1cqw,14px);color:var(--port-ink,#f2f6f0)}
+ .port-interview-item p{font-size:clamp(14px,1.42cqw,19px);line-height:1.46;max-width:49ch;margin:0;color:var(--port-muted,#c4d4ca)}
+ .port-interview-summary{border-top:1px solid var(--port-rule,rgba(203,245,196,.25));padding-top:clamp(10px,1.3cqw,17px);font-size:clamp(13px,1.3cqw,17px);color:var(--port-muted,#c4d4ca);text-align:center}
+ @media(max-width:780px){.port-ch-3{padding:26px 20px}.port-interview-grid{grid-template-columns:1fr;gap:20px}.port-interview-stage{justify-content:flex-start}.port-interview-intro{font-size:14px}.port-interview-intro span:last-child{display:none}.port-interview-item h2{font-size:23px}.port-interview-item p{font-size:15px}.port-interview-summary{text-align:left}}
+ @media(prefers-reduced-motion:reduce){.port-interview-item{animation:none}}
+ /* Central theme mapping: the TV controller sets the same theme for every channel */
+ .port-channel{--port-bg:var(--page,#15181e);--port-ink:var(--ink,#f2f6f0);--port-accent:var(--brand,#c8f3ae);--port-muted:var(--ink-dim,#c4d4ca);--port-rule:var(--line,rgba(203,245,196,.25));--port-panel:var(--panel,#1e222a);background:var(--port-bg);color:var(--port-ink);transition:background-color .3s,color .3s}
+ .port-channel[data-theme="black"]{--port-bg:#15181e;--port-panel:#202a2b;--port-muted:#c4d4ca;--port-rule:rgba(203,245,196,.25)}
+ .port-channel[data-theme="aurora"]{--port-bg:#111626;--port-panel:#1a2036;--port-muted:#ced8e9;--port-rule:rgba(174,192,248,.28)}
+ .port-channel[data-theme="paper"]{--port-bg:#f7ebd2;--port-ink:#18221c;--port-accent:#1e8a45;--port-muted:#47574b;--port-panel:#fff8e8;--port-rule:rgba(24,77,41,.23);--port-stage-line:rgba(30,138,69,.14)}
+ .port-channel .port-top,.port-channel .port-cinema-eyebrow,.port-channel .port-credential>span:first-child,.port-channel .port-cinema-story strong,.port-channel .port-contact-kicker,.port-channel .port-contact-mark,.port-channel .port-contact-address,.port-channel .port-epg-top,.port-channel .port-broadcast-index{color:var(--port-accent)}
+ .port-ch-1,.port-ch-3,.port-ch-4{background:var(--port-bg);color:var(--port-ink)}
+ .port-ch-1{background-image:radial-gradient(ellipse at 85% 35%,var(--port-glow,rgba(163,221,174,.10)),transparent 56%)}
+ .port-ch-3{background-image:radial-gradient(ellipse at 90% 25%,var(--port-glow,rgba(163,221,174,.11)),transparent 53%)}
+ .port-ch-4{background-image:radial-gradient(circle at 50% 45%,var(--port-glow,rgba(163,221,174,.13)),transparent 47%)}
+ .port-channel[data-theme="aurora"]{--port-glow:rgba(139,143,237,.19)}
+ .port-channel[data-theme="paper"]{--port-glow:rgba(30,138,69,.12)}
+ .port-channel .port-about h2,.port-channel .port-interview-item h2,.port-channel .port-contact h2{color:var(--port-ink)}
+ .port-channel .port-cinema-story p,.port-channel .port-interview-item p,.port-channel .port-contact p,.port-channel .port-contact-meta,.port-channel .port-contact-address,.port-channel .port-foot,.port-channel .port-credential small{color:var(--port-muted)}
+ .port-channel .port-foot{border-color:var(--port-rule)}
+ .port-channel .port-foot button{color:var(--port-accent)}
+ .port-channel .port-photo-frame{border-color:var(--port-rule);background:var(--port-panel)}
+ .port-channel .port-cinema-eyebrow,.port-channel .port-credential,.port-channel .port-contact-address{border-color:var(--port-rule)}
+ .port-channel .port-credential{color:var(--port-muted)}
+ .port-channel .port-cinema-story strong{color:var(--port-accent)}
+ .port-ch-2{background:var(--port-bg)}
+ .port-channel[data-theme="aurora"] .port-motion{background:radial-gradient(ellipse at 70% 35%,rgba(122,134,243,.32),transparent 55%),linear-gradient(115deg,#10152c,#1a2950,#0e1223)}
+ .port-channel[data-theme="paper"] .port-motion{background:radial-gradient(ellipse at 70% 35%,rgba(36,123,65,.23),transparent 60%),linear-gradient(115deg,#f7ebd2,#e4dfc5,#f6eddb)}
+ .port-channel[data-theme="paper"] .port-motion:after{background:linear-gradient(90deg,rgba(255,248,232,.35),transparent 70%)}
+ .port-channel[data-theme="paper"] .port-orb{border-color:rgba(30,138,69,.28)}
+ .port-ch-2 .port-broadcast-bottom,.port-ch-2 .port-broadcast-index{color:var(--port-ink)}
+ .port-ch-2 .port-epg{background:var(--port-panel);border-color:var(--port-rule);color:var(--port-ink)}
+ .port-ch-2 .port-epg h3,.port-ch-2 .port-epg p{color:var(--port-ink)}
+ .port-ch-2 .port-epg-top{border-color:var(--port-rule)}
+ .port-ch-2 .port-offer-nav button{color:var(--port-ink);border-color:var(--port-rule)}
+ .port-ch-2 .port-offer-nav button span:first-child{color:var(--port-accent)}
+ .port-ch-2 .port-offer-nav button[aria-pressed=true]{background:var(--port-accent);color:var(--port-bg)}
+ .port-ch-2 .port-offer-nav button[aria-pressed=true] span:first-child{color:var(--port-bg)}
+ .port-ch-2 .port-progress i{background:var(--port-accent)}
+ .port-ch-2 .port-progress{background:var(--port-rule)}
+ .port-ch-2 .port-broadcast-bottom button{border-color:var(--port-rule);color:var(--port-ink)}
+ .port-channel[data-theme="paper"] .port-motion-card{border-color:rgba(30,138,69,.3);background:rgba(30,138,69,.08)}
+ .port-channel[data-theme="paper"] .port-motion-card i{background:rgba(30,138,69,.25)}
+ .port-channel[data-theme="paper"] .port-broadcast .port-headline{text-shadow:none;color:var(--port-ink)}
+ .port-channel .port-contact-actions a{background:var(--port-accent);color:var(--port-bg);border-color:var(--port-accent)}
+ .port-channel .port-linkedin-pending{border-color:var(--port-rule);color:var(--port-muted)}
+ .port-channel[data-theme="paper"] .port-interview-item{border-color:var(--port-rule)}
   @keyframes portSpin{to{transform:rotate(360deg)}}@keyframes portFloat{50%{translate:0 -20px}}@keyframes portPulse{50%{opacity:.2;scale:.7}}
  @media(max-width:780px){.port-channel{padding:35px 22px}.port-about{grid-template-columns:minmax(0,1fr);gap:20px}.port-portrait{max-width:175px}.port-about h2,.port-how h2,.port-contact h2{font-size:clamp(33px,9vw,53px)}.port-about p{font-size:16px}.port-ch-2{padding:0}.port-broadcast{padding:25px 18px}.port-broadcast .port-headline{font-size:clamp(38px,9vw,56px)}.port-epg-body{grid-template-columns:1fr}.port-offer-nav{justify-content:flex-start}.port-contact p{font-size:16px}}
  @media(prefers-reduced-motion:reduce){.port-motion *{animation:none!important}.port-motion{background:#172a27}}
@@ -186,11 +243,17 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
  </div><div className="port-progress"><i style={{width:progress+"%"}}/></div></div>
  <div className="port-broadcast-bottom"><span>{t.serviceIntro}</span><button style={action} onClick={()=>onNavigate(4)}>{t.serviceContact} ↗</button></div>
  </div>}
- {number===3&&<><div className="port-how"><div className="port-interview-heading"><div className="port-interview-eyebrow">MAHERISON TV / THE INTERVIEW</div><h2>{t.howTitle}</h2><p>{t.howIntro}</p></div><div className="port-q">
- <div className="port-q-question"><span style={{...mono,color:mint}}>{t.howAsk}</span><strong>{t.q[question]}</strong></div>
- <div className="port-q-answer" key={`${lang}-${question}`}><div className="port-answer-label">{t.howReply}<span aria-hidden="true"> / 0{question+1}</span></div><div>{t.a[question]}</div></div></div>
- <div className="port-q-menu" role="group" aria-label={lang==="fr"?"Choisir une question":"Choose a question"}>{t.qShort.map((label,i)=><button type="button" key={i} aria-pressed={question===i} onClick={()=>setQuestion(i)}><span>0{i+1}</span>{label}</button>)}</div>
- <p className="port-how-summary">{t.howFooter}</p></div></>}
+ {number===3&&<div className="port-interview-stage">
+ <div className="port-interview-intro"><span>MAHERISON TV / THE INTERVIEW</span><span>{lang==="fr"?"04 QUESTIONS · 04 RÉPONSES":"04 QUESTIONS · 04 ANSWERS"}</span></div>
+ <div className="port-interview-grid">
+ {t.q.map((q,i)=><article className="port-interview-item" key={i}>
+   <div className="port-interview-index">Q / 0{i+1}</div>
+   <h2>{q}</h2>
+   <p>{t.a[i]}</p>
+ </article>)}
+ </div>
+ <div className="port-interview-summary">{t.howFooter}</div>
+ </div>}
  {number===4&&<div className="port-contact"><div className="port-contact-mark" aria-hidden="true">✳</div><div className="port-contact-kicker">MAHERISON TV / OPEN CHANNEL</div><h2>{t.contactTitle}</h2><p>{t.contactDesc}</p><div className="port-contact-actions"><a href="mailto:thony@maherison.com?subject=Projet%20Amazon">✉ {t.contactEmail}</a><span aria-label={t.linkedinPending} title={t.linkedinPending} className="port-linkedin-pending">in · {t.contactLinkedin}</span></div><a className="port-contact-address" href="mailto:thony@maherison.com">thony@maherison.com</a><span className="port-contact-meta">{t.contactMeta}</span></div>}
  {number===4&&<div className="port-foot"><span>THANKS FOR WATCHING</span><span>END OF TRANSMISSION</span></div>}
  </section>;
