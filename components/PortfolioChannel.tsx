@@ -1,46 +1,86 @@
 "use client";
-import React from "react";
-
-const email="thonymaherison@gmail.com";
-const accent="var(--brand,#cfffcf)";
-const fg="var(--ink,#f3f3ed)";
-const mono:React.CSSProperties={fontFamily:"'VT323',monospace",letterSpacing:".12em",fontSize:"clamp(17px,1.75cqw,24px)",color:accent};
-const link:React.CSSProperties={display:"inline-flex",alignItems:"center",justifyContent:"center",padding:"13px 24px",borderRadius:40,textDecoration:"none",fontSize:16,fontWeight:500,background:fg,color:"var(--bg,#111)",width:"fit-content"};
-const panel:React.CSSProperties={border:"1px solid var(--line,rgba(255,255,255,.2))",borderRadius:18,padding:"clamp(16px,2.3cqw,28px)",background:"var(--pill-bg,rgba(255,255,255,.045))"};
-const cardTitle:React.CSSProperties={fontSize:"clamp(21px,2.4cqw,32px)",fontWeight:500,letterSpacing:"-.045em",margin:"0 0 13px"};
-function Label({children}:{children:React.ReactNode}){return <span style={mono}>{children}</span>}
-function Header({n,kicker,title,highlight,subtitle}:{n:number;kicker:string;title:string;highlight:string;subtitle:string}){return <header style={{display:"flex",flexDirection:"column",gap:12}}>
- <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:10}}><Label>CH 0{n} / {kicker}</Label><Label>● ON AIR</Label></div>
- <h2 style={{fontWeight:500,fontSize:"clamp(34px,5.4cqw,72px)",letterSpacing:"-.065em",lineHeight:1.02,margin:"10px 0 4px"}}>{title}<br/><span style={{color:accent}}>{highlight}</span></h2>
- <p style={{margin:0,opacity:.8,fontSize:"clamp(17px,1.85cqw,24px)",lineHeight:1.5,maxWidth:740}}>{subtitle}</p>
- </header>}
-export default function PortfolioChannel({number,onNavigate}:{number:number;onNavigate:(n:number)=>void}) {
- if(number!==1&&number!==2)return null;
- return <section id={`ch-0${number}`} data-ch={number} aria-label={number===1?"Ce que je fais":"Contact"}
- style={{position:"relative",minHeight:"100%",height:"auto",boxSizing:"border-box",scrollSnapAlign:"start",background:"var(--page,#15181e)",color:fg,padding:"clamp(28px,4cqw,54px) clamp(18px,5cqw,70px) clamp(46px,6cqw,82px)",display:"flex",flexDirection:"column",gap:"clamp(16px,2.4cqw,28px)",justifyContent:"flex-start"}}>
+import React,{useEffect,useState} from "react";
+type Lang="fr"|"en";
+type Props={number:number;lang:Lang;active:boolean;onNavigate:(n:number)=>void};
+const copy={
+fr:{
+welcome:"Bonjour, moi c'est Thony.",intro:"J'accompagne les marques dans la gestion quotidienne de leurs opérations Amazon Vendor et Seller Central, sur les marchés européens.",
+aboutTitle:"Bonjour, moi c'est Thony.",aboutA:"J'ai commencé dans le service client avant de me spécialiser dans les opérations Amazon. Après plusieurs années en agence, je travaille aujourd'hui en indépendant.",aboutB:"Ce que j'aime ? Comprendre ce qui bloque, trouver des solutions et faire avancer les choses.",aboutNext:"Découvrir ce que je fais",
+serviceHeadline:"Amazon, au quotidien.",serviceIntro:"Un accompagnement régulier ou un coup de main sur un sujet précis.",offerNames:["Gestion opérationnelle","Catalogue & contenus","Résolution de problèmes"],offerDesc:["Offres, commandes, disponibilité, dossiers Amazon et suivi quotidien de votre compte.","Fiches produits, variations, contenus A+, corrections et adaptations aux marchés européens.","Un problème sur Amazon ? Je cherche la cause, engage les démarches possibles et assure le suivi."],servicePlay:"À L'ANTENNE",servicePause:"Pause",serviceResume:"Reprendre",serviceContact:"Parlons de votre compte",
+howTitle:"Et concrètement, on travaille comment ?",howIntro:"Quelques réponses, sans grand discours.",q:["Comment on commence ?","Et une fois le travail lancé ?","Comment je suis l'avancement ?","Vous utilisez l'IA ?"],a:["Vous me parlez de votre activité et de ce dont vous avez besoin. Je regarde ensuite votre compte Amazon et on définit ensemble les priorités.","Je prends en charge les actions convenues et je vérifie ce qui a réellement changé. Une modification soumise n'est pas forcément publiée.","Comme ça vous arrange : vos outils habituels, un e-mail ou un petit message. Je vous informe de ce qui avance et de ce qui bloque.","Oui, régulièrement. Pour analyser, organiser et gagner du temps. Mais je contrôle les informations et les changements avant de les appliquer."],qShort:["Démarrer","Actions","Échanges","L'IA"],howFooter:"On fixe les priorités ensemble. Je m'occupe du suivi et vous savez où on en est.",howAsk:"VOUS DEMANDEZ",howReply:"THONY RÉPOND",
+contactTitle:"On en discute ?",contactDesc:"Besoin d'un coup de main sur Amazon ou d'un suivi régulier ? Écrivez-moi quelques mots sur votre projet. On verra ensemble comment je peux vous aider.",contactEmail:"M'envoyer un e-mail",contactLinkedin:"Me retrouver sur LinkedIn",contactMeta:"À distance · Marchés européens · FR / EN",portraitLabel:"PORTRAIT / THONY MAHERISON",back:"Retour à l'accueil",next:"CH 02 / MES SERVICES",linkedinPending:"Lien LinkedIn à confirmer"
+},en:{
+welcome:"Hello, I'm Thony.",intro:"I help brands manage their day-to-day Amazon Vendor and Seller Central operations across European marketplaces.",
+aboutTitle:"Hi, I'm Thony.",aboutA:"I started in customer support before moving into Amazon operations. After several years at an agency, I now work independently.",aboutB:"What I enjoy most? Figuring out what's wrong, finding practical solutions, and moving things forward.",aboutNext:"See what I do",
+serviceHeadline:"Amazon, day by day.",serviceIntro:"Ongoing support or an extra pair of hands when you need one.",offerNames:["Account operations","Catalog & content","Troubleshooting"],offerDesc:["Offers, orders, availability, Amazon cases and the day-to-day work that keeps your account running.","Listings, variations, A+ content, fixes and adaptations across European marketplaces.","Something stuck on Amazon? I investigate, take the steps available and keep you updated."],servicePlay:"NOW PLAYING",servicePause:"Pause",serviceResume:"Resume",serviceContact:"Let's talk about your account",
+howTitle:"So, how do we work together?",howIntro:"A few answers, no sales pitch.",q:["How do we get started?","What happens next?","How do I stay updated?","Do you use AI?"],a:["Tell me about your business and what you need. I'll look at your Amazon account and we'll agree on the priorities.","I handle the agreed tasks and check what has actually changed. A submitted update isn't necessarily a live update.","Your usual tools, email or a quick message — whatever works for you. You'll know what's moving and what's blocked.","Yes, regularly. It helps me analyze, organize and save time, but I check the information and changes before using them."],qShort:["Getting started","Actions","Updates","AI"],howFooter:"We set priorities together. I handle the follow-up, and you know where things stand.",howAsk:"YOU ASK",howReply:"THONY ANSWERS",
+contactTitle:"Let's talk.",contactDesc:"Need an extra pair of hands on Amazon, or ongoing operational support? Tell me a little about your brand and what you're working on. We'll see how I can help.",contactEmail:"Send me an email",contactLinkedin:"Find me on LinkedIn",contactMeta:"Remote · European marketplaces · FR / EN",portraitLabel:"PORTRAIT / THONY MAHERISON",back:"Back to welcome",next:"CH 02 / WHAT I DO",linkedinPending:"LinkedIn link pending"
+}};
+const mono:React.CSSProperties={fontFamily:"'VT323',monospace",fontSize:"clamp(16px,2cqw,25px)",letterSpacing:".12em"};
+const ink="#f2f6f0",mint="#c8f3ae";
+const action:React.CSSProperties={border:"1px solid #6a936e",borderRadius:24,padding:"10px 17px",fontSize:"clamp(13px,1.3cqw,16px)",background:"transparent",color:ink,cursor:"pointer"};
+function Top({n,label}:{n:number;label:string}){return <div className="port-top"><span>CH 0{n} / {label}</span><span>● ON AIR</span></div>}
+function Portrait(){const [broken,setBroken]=useState(false);return <div className="port-portrait">{!broken?<img src="/images/thony-portrait.jpg" alt="Portrait de Thony Maherison" onError={()=>setBroken(true)}/>:<div className="port-fallback">TH<span>O</span>NY</div>}</div>}
+function Motion({mode}:{mode:number}){return <div className={"port-motion mode-"+mode} aria-hidden="true"><div className="port-orb a"/><div className="port-orb b"/><div className="port-motion-card"><i/><i/><i/></div><div className="port-motion-track"><i/><i/><i/><i/></div></div>}
+export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
+ const t=copy[lang];
+ const [offer,setOffer]=useState(0),[paused,setPaused]=useState(false),[progress,setProgress]=useState(0),[question,setQuestion]=useState(0);
+ useEffect(()=>{if(number!==2||!active||paused)return;const id=window.setInterval(()=>setProgress(p=>{if(p>=98){setOffer(x=>(x+1)%3);return 0}return p+2}),180);return()=>window.clearInterval(id)},[number,active,paused]);
+ if(number<1||number>4)return null;
+ return <section id={`ch-0${number}`} data-ch={number} className={"port-channel port-ch-"+number} aria-label={["","About Me","What I Do","How I Work","Contact"][number]}>
+ <style>{`
+ .port-channel{--port-mint:#c8f3ae;position:relative;box-sizing:border-box;min-height:100%;height:auto;scroll-snap-align:start;background:#11191b;color:#f2f6f0;padding:clamp(27px,4cqw,52px) clamp(24px,5cqw,65px);display:flex;flex-direction:column;gap:clamp(16px,2.4cqw,30px);overflow:hidden}
+ .port-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font:clamp(16px,1.8cqw,23px)/1.1 'VT323',monospace;letter-spacing:.13em;color:var(--port-mint)}
+ .port-about{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(140px,.85fr);gap:clamp(20px,5cqw,65px);align-items:center;flex:1}
+ .port-about h2,.port-how h2,.port-contact h2{font-size:clamp(35px,5.5cqw,75px);line-height:1.01;letter-spacing:-.065em;font-weight:500;margin:0 0 22px}
+ .port-about p{font-size:clamp(16px,1.68cqw,22px);line-height:1.48;max-width:750px;margin:0 0 17px}
+ .port-portrait{width:100%;max-width:290px;aspect-ratio:1/1;border-radius:50%;border:4px solid #a7ce9c;box-shadow:0 0 0 12px #b5e4a714,0 0 60px #b7f6c521;overflow:hidden;margin:auto;background:#25372c}
+ .port-portrait img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.83) contrast(1.06)}
+ .port-fallback{height:100%;display:grid;place-items:center;font-size:48px;font-weight:700;letter-spacing:-.08em}.port-fallback span{color:var(--port-mint)}
+ .port-foot{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-top:auto;padding-top:12px;border-top:1px solid #47624b;font:clamp(14px,1.5cqw,19px) 'VT323',monospace;letter-spacing:.1em;color:#bed6c1}
+ .port-foot button{border:0;background:none;color:var(--port-mint);cursor:pointer;font:inherit}
+ .port-ch-2{padding:0;background:#112024;min-height:100%;isolation:isolate;justify-content:space-between}
+ .port-motion{position:absolute;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(circle at 67% 42%,#245447 0,transparent 40%),linear-gradient(120deg,#0e2025,#122b2a,#0a141b)}
+ .port-orb{position:absolute;border:2px solid #c0f5bd55;border-radius:50%;width:36cqw;height:36cqw;top:13%;left:56%;animation:portSpin 14s linear infinite}
+ .port-orb.b{width:20cqw;height:20cqw;left:63%;top:26%;animation-direction:reverse;animation-duration:9s}
+ .port-motion.mode-1 .port-orb{border-radius:24%;transform:rotate(20deg);border-color:#9bd5ff66}
+ .port-motion.mode-2 .port-orb{border-style:dashed;border-color:#efc79b77}
+ .port-motion-card{position:absolute;left:60%;top:40%;width:27%;height:21%;background:#caf6d715;border:1px solid #b7f2bd7a;border-radius:18px;transform:rotate(-8deg);animation:portFloat 5s ease-in-out infinite;padding:15px;display:flex;flex-direction:column;gap:11px}
+ .port-motion-card i{height:9px;border-radius:9px;background:#d5ffdf7d}.port-motion-card i:nth-child(2){width:75%}.port-motion-card i:nth-child(3){width:52%}
+ .port-motion-track{position:absolute;right:8%;top:20%;display:flex;gap:13px}.port-motion-track i{width:10px;height:10px;background:#c1efcd77;border-radius:50%;animation:portPulse 2s ease-in-out infinite}.port-motion-track i:nth-child(2){animation-delay:.4s}.port-motion-track i:nth-child(3){animation-delay:.8s}.port-motion-track i:nth-child(4){animation-delay:1.2s}
+ .port-broadcast{position:relative;min-height:100%;display:flex;flex-direction:column;padding:clamp(20px,3cqw,42px);gap:14px}
+ .port-broadcast .port-headline{flex:1;display:flex;align-items:center;font-size:clamp(40px,5.4cqw,78px);font-weight:500;letter-spacing:-.07em;line-height:1.02;text-shadow:0 5px 30px #000b}
+ .port-epg{border:1px solid #afd6b055;background:#101f19e6;backdrop-filter:blur(10px);border-radius:12px;overflow:hidden}
+ .port-epg-top{padding:10px 17px;border-bottom:1px solid #afd6b033;display:flex;justify-content:space-between;color:var(--port-mint);font:clamp(14px,1.4cqw,18px) 'VT323',monospace;letter-spacing:.12em}
+ .port-epg-body{padding:14px 17px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+ .port-epg h3{margin:0 0 6px;font-size:clamp(22px,2.6cqw,35px);font-weight:500}.port-epg p{margin:0;max-width:670px;line-height:1.44;font-size:clamp(14px,1.35cqw,18px)}
+ .port-offer-nav{display:flex;gap:7px;flex-wrap:wrap}.port-offer-nav button{border:1px solid #79967c;background:transparent;color:#f2f6f0;border-radius:7px;padding:8px 10px;cursor:pointer}.port-offer-nav button[aria-pressed=true]{background:var(--port-mint);color:#102019}
+ .port-progress{height:3px;background:#49644e}.port-progress i{display:block;height:100%;background:var(--port-mint)}
+ .port-how{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px}.port-how h2{margin-bottom:0}.port-q{border:1px solid #4f7053;border-radius:12px;overflow:hidden}.port-q-question{background:#2b4434;padding:14px 20px}.port-q-question strong{display:block;margin-top:8px;font-weight:500;font-size:clamp(21px,2.4cqw,34px)}.port-q-answer{background:#1d2e23;padding:16px 20px;font-size:clamp(16px,1.7cqw,21px);line-height:1.54;min-height:80px}.port-q-menu{display:flex;gap:8px;flex-wrap:wrap}.port-q-menu button{background:#213426;border:1px solid #527758;border-radius:22px;padding:10px 14px;color:#f2f6f0;cursor:pointer}.port-q-menu button[aria-pressed=true]{background:var(--port-mint);color:#0a1a10}
+ .port-contact{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:19px;text-align:center}.port-contact h2{margin:0}.port-contact p{max-width:660px;line-height:1.55;font-size:clamp(17px,1.9cqw,24px);margin:0}.port-contact-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}.port-contact-actions a{display:inline-flex;text-decoration:none;align-items:center;justify-content:center;padding:13px 22px;border-radius:28px;background:var(--port-mint);color:#112019;font-weight:600;border:1px solid #b5eaa9}.port-contact-actions a.secondary{background:transparent;color:#eaf4ea}.port-contact-actions a[aria-disabled=true]{opacity:.5;cursor:not-allowed}
+ @keyframes portSpin{to{transform:rotate(360deg)}}@keyframes portFloat{50%{translate:0 -20px}}@keyframes portPulse{50%{opacity:.2;scale:.7}}
+ @media(max-width:780px){.port-channel{padding:35px 22px}.port-about{grid-template-columns:minmax(0,1fr);gap:20px}.port-portrait{max-width:175px}.port-about h2,.port-how h2,.port-contact h2{font-size:clamp(33px,9vw,53px)}.port-about p{font-size:16px}.port-ch-2{padding:0}.port-broadcast{padding:25px 18px}.port-broadcast .port-headline{font-size:clamp(38px,9vw,56px)}.port-epg-body{grid-template-columns:1fr}.port-offer-nav{justify-content:flex-start}.port-contact p{font-size:16px}}
+ @media(prefers-reduced-motion:reduce){.port-motion *{animation:none!important}.port-motion{background:#172a27}}
+ `}</style>
+ <Top n={number} label={["","ABOUT ME","WHAT I DO","HOW I WORK","CONTACT"][number]}/>
  {number===1&&<>
-  <Header n={1} kicker="WHAT I DO" title="Amazon, au quotidien." highlight="Je m'en occupe." subtitle="J'accompagne les marques sur Vendor et Seller Central, de la gestion du compte aux projets catalogue."/>
-  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,205px),1fr))",gap:12}}>
-   {[["01 / ACCOUNT OPERATIONS","Gestion quotidienne","Dossiers Amazon, disponibilité, offres, commandes et suivi du compte."],
-   ["02 / CATALOG & CONTENT","Catalogue & contenus","Fiches, variations, optimisation A+, localisation et mises à jour."],
-   ["03 / TROUBLESHOOTING","Problèmes Amazon","Diagnostic, corrections, échanges avec Amazon et vérification."]].map(([k,t,d])=>
-   <div key={k} style={panel}><Label>{k}</Label><h3 style={{...cardTitle,marginTop:20}}>{t}</h3><p style={{lineHeight:1.55,opacity:.76,margin:0,fontSize:"clamp(15px,1.5cqw,19px)"}}>{d}</p></div>)}
-  </div>
-  <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
-   <button type="button" onClick={()=>onNavigate(2)} style={{...link,border:0,cursor:"pointer"}}>Parlons de votre compte ↗</button>
-   <span style={{...mono,opacity:.78}}>VENDOR · SELLER · EUROPE</span>
-  </div>
+ <div className="port-about"><div><h2>{t.aboutTitle}</h2><p>{t.aboutA}</p><p>{t.aboutB}</p></div><div><Portrait/><div style={{...mono,textAlign:"center",fontSize:14,color:mint,marginTop:14}}>{t.portraitLabel}</div></div></div>
+ <div className="port-foot"><span>THONY MAHERISON / FR · EN</span><button onClick={()=>onNavigate(2)}>{t.aboutNext} →</button></div>
  </>}
- {number===2&&<>
-  <Header n={2} kicker="GET IN TOUCH" title="Un projet Amazon ?" highlight="Parlons-en." subtitle="Besoin d'un suivi régulier ou d'un coup de main sur un sujet précis ? Écrivez-moi, on regarde ça ensemble."/>
-  <div style={{...panel,maxWidth:770,display:"flex",flexDirection:"column",gap:18}}>
-   <Label>CONTACT DIRECT / OPEN CHANNEL</Label>
-   <a href={`mailto:${email}?subject=${encodeURIComponent("Parlons de mon compte Amazon")}`} style={link}>M'envoyer un e-mail ↗</a>
-   <a href={`mailto:${email}`} style={{color:fg,opacity:.85,fontSize:"clamp(16px,2cqw,26px)",overflowWrap:"anywhere"}}>{email}</a>
-   <p style={{fontSize:16,opacity:.65,lineHeight:1.5,margin:0}}>En français ou en anglais. Collaboration à distance, marchés européens.</p>
-  </div>
-  <button type="button" onClick={()=>onNavigate(0)} style={{border:0,background:"transparent",color:accent,cursor:"pointer",textAlign:"left",fontSize:16,width:"fit-content"}}>← Retour à l'accueil</button>
- </>}
- <div style={{...mono,opacity:.5,marginTop:12,fontSize:16}}>TH0NY MAHERISON / AMAZON & MARKETPLACE SPECIALIST</div>
+ {number===2&&<div className="port-broadcast">
+ <Motion mode={offer}/><div className="port-headline">{t.serviceHeadline}</div>
+ <div className="port-epg"><div className="port-epg-top"><span>{t.servicePlay} / 0{offer+1}—03</span><span>EPG · AMAZON OPERATIONS</span></div><div className="port-epg-body">
+ <div><h3>{t.offerNames[offer]}</h3><p>{t.offerDesc[offer]}</p></div>
+ <div className="port-offer-nav">{[0,1,2].map(i=><button type="button" key={i} aria-label={t.offerNames[i]} title={t.offerNames[i]} aria-pressed={offer===i} onClick={()=>{setOffer(i);setProgress(0)}}>0{i+1}</button>)}<button type="button" aria-label={paused?t.serviceResume:t.servicePause} onClick={()=>setPaused(x=>!x)}>{paused?"▶":"Ⅱ"}</button></div>
+ </div><div className="port-progress"><i style={{width:progress+"%"}}/></div></div>
+ <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,color:"#c3dbc8",fontSize:13}}><span>{t.serviceIntro}</span><button style={{...action,whiteSpace:"nowrap"}} onClick={()=>onNavigate(4)}>{t.serviceContact} ↗</button></div>
+ </div>}
+ {number===3&&<><div className="port-how"><h2>{t.howTitle}</h2><p style={{margin:0,opacity:.75}}>{t.howIntro}</p><div className="port-q">
+ <div className="port-q-question"><span style={{...mono,color:mint}}>{t.howAsk}</span><strong>{t.q[question]}</strong></div>
+ <div className="port-q-answer"><div style={{...mono,color:mint,marginBottom:8}}>{t.howReply}</div>{t.a[question]}</div></div>
+ <div className="port-q-menu">{t.qShort.map((label,i)=><button type="button" key={i} aria-pressed={question===i} onClick={()=>setQuestion(i)}>{i+1}. {label}</button>)}</div>
+ <p style={{margin:0,color:"#bcd6c2",fontSize:16}}>{t.howFooter}</p></div></>}
+ {number===4&&<div className="port-contact"><div style={{...mono,color:mint,fontSize:20}}>MAHERISON TV / DIRECT LINE</div><h2>{t.contactTitle}</h2><p>{t.contactDesc}</p><div className="port-contact-actions"><a href="mailto:thony@maherison.com?subject=Projet%20Amazon">✉ {t.contactEmail}</a><span title={t.linkedinPending} style={{...action,opacity:.65}}>in · {t.contactLinkedin} (URL à confirmer)</span></div><a href="mailto:thony@maherison.com" style={{color:mint}}>thony@maherison.com</a><span style={{color:"#b3c9b6",fontSize:15}}>{t.contactMeta}</span></div>}
+ {number===4&&<div className="port-foot"><span>THANKS FOR WATCHING</span><span>END OF TRANSMISSION</span></div>}
  </section>;
 }
