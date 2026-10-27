@@ -554,7 +554,7 @@ export default class TvSite extends React.Component<Props, State> {
           <div ref={this.r.screen} className="m-screen" style={S("position:relative;height:100%;border-radius:clamp(8px,1.5vw,22px);background:#000;overflow:hidden;container-type:inline-size;box-shadow:0 0 0 2px #000,0 0 0 3px #232326,inset 0 0 60px rgba(0,0,0,.9)")}>
             <div ref={this.r.scroll} className="m-scroll" style={S("position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y proximity;scrollbar-width:none")}>
               {this.renderBoot()}
-              {[1, 2, 3, 4].map(n => <PortfolioChannel key={n} number={n} lang={s.lang} active={s.ch===n} onNavigate={(target) => this.channel(target)} />)}
+              {[1, 2, 3, 4].map(n => <PortfolioChannel key={n} number={n} lang={s.lang} theme={s.theme} active={s.ch===n} onNavigate={(target) => this.channel(target)} />)}
               <section id="ch-end" aria-label="End of transmission" className="m-end" style={S("position:relative;min-height:70%;scroll-snap-align:none;background:var(--page,#15181e);color:var(--ink,rgba(255,255,255,.95));display:grid;place-items:center;border-top:1px solid var(--line,rgba(255,255,255,.12))")}>
                 <div ref={this.r.end} style={S("display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:24px")}>
                   <div style={S("font-family:'VT323',monospace;font-size:28px;letter-spacing:.14em;color:var(--ink-dim,rgba(255,255,255,.6))")}>END OF TRANSMISSION</div>
