@@ -16,11 +16,9 @@ export default async function Page() {
         <h2 id="portfolio-about">Independent Amazon & Marketplace Consultant</h2>
         <p>Supporting brands with Amazon Vendor Central, Seller Central, marketplace operations, catalog content, localization and European marketplace management.</p>
         <nav aria-label="Portfolio sections"><ul>
-          <li><a href="#ch-01">Expertise</a></li>
-          <li><a href="#ch-02">Experience</a></li>
-          <li><a href="#ch-03">Insights</a></li>
-          <li><a href="#ch-04">About</a></li>
-          <li><a href="#ch-05">Contact</a></li>
+          <li><a href="#ch-00">Qui je suis</a></li>
+          <li><a href="#ch-01">Ce que je fais</a></li>
+          <li><a href="#ch-02">Contact</a></li>
         </ul></nav>
       </section>
     </>
