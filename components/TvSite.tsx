@@ -238,15 +238,15 @@ export default class TvSite extends React.Component<Props, State> {
   tileRect(i: number) {
     const dock = this.r.dock.current, L = this.r.launcher.current; if (!dock || !L) return null;
     const t = dock.querySelector<HTMLElement>(`[data-tile="${i}"]`); if (!t) return null;
-    const a = t.getBoundingClientRect(), b = L.getBoundingClientRect(); const pad = 6;
+    const a = t.getBoundingClientRect(), b = L.getBoundingClientRect(); const pad = 2;
     return { x: a.left - b.left - pad, y: a.top - b.top - pad, w: a.width + pad * 2, h: a.height + pad * 2, color: t.dataset.color || "#fff" };
   }
   focusTile(i: number, snap = false) {
-    i = (i + 4) % 4; const rect = this.tileRect(i); if (!rect) return;
+    i = (i + DOCK.length) % DOCK.length; const rect = this.tileRect(i); if (!rect) return;
     this.setState({ focus: i });
     const dock = this.r.dock.current!;
-    dock.querySelectorAll<HTMLElement>("[data-tile]").forEach((t) => { const on = Number(t.dataset.tile) === i; t.style.transform = on ? "scale(1.06)" : "scale(1)"; const n = t.querySelector<HTMLElement>("[data-name]"); if (n) n.style.opacity = on ? "1" : "0"; });
-    this.setVar("--glow", rect.color + "66");
+    dock.querySelectorAll<HTMLElement>("[data-tile]").forEach((t) => { const on = Number(t.dataset.tile) === i; t.style.transform = "none"; t.style.background = on ? "rgba(201,255,206,.075)" : "transparent"; const n = t.querySelector<HTMLElement>("[data-name]"); if (n) n.style.opacity = on ? "1" : "0"; });
+    this.setVar("--glow", "rgba(174,241,185,.12)");
     const s = this.spring; s.x.t = rect.x; s.y.t = rect.y; s.w.t = rect.w; s.h.t = rect.h;
     const g = this.r.glass.current!; g.style.opacity = "1";
     if (snap || this.reduced) { (["x", "y", "w", "h"] as Axis[]).forEach((k) => { s[k].p = s[k].t; s[k].v = 0; }); this.paintGlass(); return; }
@@ -608,7 +608,7 @@ export default class TvSite extends React.Component<Props, State> {
 
   renderBoot() {
     const s = this.state;
-    const tile = "position:relative;width:100%;height:clamp(44px,6cqw,70px);border-radius:9px;display:flex;align-items:center;padding:0 14px;font-weight:500;font-size:clamp(14px,1.6cqw,21px);color:#fff;opacity:0;transition:transform .25s;cursor:pointer;background:";
+    const tile = "position:relative;width:100%;height:clamp(46px,6cqw,70px);border-radius:5px;display:flex;align-items:center;padding:0 clamp(12px,1.6cqw,22px);font-weight:500;font-size:clamp(14px,1.5cqw,20px);letter-spacing:.01em;color:var(--ink,#fff);opacity:0;transition:opacity .25s,background .25s;cursor:pointer;background:";
     const name = "display:none";
     const hoverTile = (e: React.MouseEvent<HTMLElement>) => { if (this.state.booted) this.focusTile(Number(e.currentTarget.dataset.tile)); };
     return (
@@ -618,16 +618,16 @@ export default class TvSite extends React.Component<Props, State> {
           <div style={S("position:absolute;left:4.2cqw;right:4.2cqw;top:clamp(36px,5cqw,65px);display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'VT323',monospace;font-size:clamp(14px,1.8cqw,22px);letter-spacing:.1em")}>
             <span>MAHERISON / AMAZON OPERATIONS</span><span style={S("color:var(--brand,#cfffcf)")}>{s.lang==="fr"?"INDÉPENDANT · EUROPE":"INDEPENDENT · EUROPE"}</span>
           </div>
-          <div ref={this.r.dock} className="m-dock" style={{...S("position:absolute;right:clamp(22px,6cqw,78px);top:25%;bottom:auto;width:min(38%,440px);transform:none;padding:8px;border-radius:14px;background:#19251edd;box-shadow:inset 0 0 0 1px #4d7154;display:flex;flex-direction:column;gap:5px;z-index:2"),visibility:s.booted?"visible":"hidden"}}>
+          <div ref={this.r.dock} className="m-dock" style={{...S("position:absolute;right:clamp(22px,5cqw,66px);top:24%;bottom:auto;width:min(40%,450px);transform:none;padding:clamp(12px,1.9cqw,23px);border-radius:5px;background:linear-gradient(165deg,rgba(19,32,26,.9),rgba(18,25,23,.86));box-shadow:inset 0 0 0 1px rgba(190,243,187,.20),0 16px 70px rgba(0,0,0,.24);display:flex;flex-direction:column;gap:3px;z-index:2"),visibility:s.booted?"visible":"hidden"}}>
             {DOCK.map((t,i) => (
               <a key={t.label} href={t.href} data-tile={i} data-color={TILE_COLORS[i]} onMouseEnter={hoverTile}
                 onClick={(e) => { e.stopPropagation(); if (!this.state.booted) { e.preventDefault(); this.skip(); return; } this.click(); if (t.ch !== undefined) { e.preventDefault(); this.channel(t.ch); } }}
-                className="m-docktile" style={S(tile + "linear-gradient(120deg,#263e2f,#17281f)")}>{"0"+(i+1)+" / "+(s.lang==="fr"?["Qui je suis","Ce que je fais","Comment je travaille","Contact"][i]:t.label)}
+                className="m-docktile" style={S(tile + "transparent")}>{"0"+(i+1)+" / "+(s.lang==="fr"?["Qui je suis","Ce que je fais","Comment je travaille","Contact"][i]:t.label)}
                 <div data-name style={S(name)}>{t.label}</div>
               </a>
             ))}
           </div>
-          <div ref={this.r.glass} aria-hidden="true" className="m-glass" style={S("position:absolute;left:0;top:0;width:10px;height:10px;opacity:0;pointer-events:none;border-radius:clamp(10px,1.6cqw,22px);z-index:3;background:rgba(200,255,210,.09);box-shadow:inset 0 0 0 2px var(--glass-rim,rgba(255,255,255,.8)),0 0 18px rgba(170,255,175,.13);will-change:transform,width,height")} />
+          <div ref={this.r.glass} aria-hidden="true" className="m-glass" style={S("position:absolute;left:0;top:0;width:10px;height:10px;opacity:0;pointer-events:none;border-radius:4px;z-index:3;background:rgba(200,255,210,.055);box-shadow:inset 3px 0 0 var(--brand,#cfffcf),inset 0 0 0 1px rgba(200,255,210,.50),0 0 15px rgba(170,255,175,.08);will-change:transform,width,height")} />
         </div>
         <div ref={this.r.clutter} aria-hidden="true" className="m-clutter" style={S("position:absolute;inset:0;background:linear-gradient(145deg,#11181d,#090c11);color:#fff;overflow:hidden")}>
           <div data-row="3" style={S("margin:8cqw 6cqw 0;font-family:'VT323',monospace;font-size:clamp(19px,3cqw,38px);letter-spacing:.1em")}>SIGNAL FOUND / MARKETPLACE BROADCAST</div>
