@@ -82,7 +82,75 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
  .port-progress{height:3px;background:#49644e}.port-progress i{display:block;height:100%;background:var(--port-mint)}
  .port-how{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px}.port-how h2{margin-bottom:0}.port-q{border:1px solid #4f7053;border-radius:12px;overflow:hidden}.port-q-question{background:#2b4434;padding:14px 20px}.port-q-question strong{display:block;margin-top:8px;font-weight:500;font-size:clamp(21px,2.4cqw,34px)}.port-q-answer{background:#1d2e23;padding:16px 20px;font-size:clamp(16px,1.7cqw,21px);line-height:1.54;min-height:80px}.port-q-menu{display:flex;gap:8px;flex-wrap:wrap}.port-q-menu button{background:#213426;border:1px solid #527758;border-radius:22px;padding:10px 14px;color:#f2f6f0;cursor:pointer}.port-q-menu button[aria-pressed=true]{background:var(--port-mint);color:#0a1a10}
  .port-contact{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:19px;text-align:center}.port-contact h2{margin:0}.port-contact p{max-width:660px;line-height:1.55;font-size:clamp(17px,1.9cqw,24px);margin:0}.port-contact-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}.port-contact-actions a{display:inline-flex;text-decoration:none;align-items:center;justify-content:center;padding:13px 22px;border-radius:28px;background:var(--port-mint);color:#112019;font-weight:600;border:1px solid #b5eaa9}.port-contact-actions a.secondary{background:transparent;color:#eaf4ea}.port-contact-actions a[aria-disabled=true]{opacity:.5;cursor:not-allowed}
- @keyframes portSpin{to{transform:rotate(360deg)}}@keyframes portFloat{50%{translate:0 -20px}}@keyframes portPulse{50%{opacity:.2;scale:.7}}
+
+ /* CH 02 — a broadcast, not a collection of service cards */
+ .port-ch-2{background:#0b171a}
+ .port-ch-2>.port-top{padding:clamp(19px,2.6cqw,31px) clamp(22px,3cqw,43px) 0;z-index:1}
+ .port-broadcast{flex:1;min-height:0;height:auto;padding-top:clamp(14px,2.5cqw,32px);padding-bottom:clamp(20px,3cqw,40px);justify-content:space-between}
+ .port-broadcast-heading{display:flex;flex-direction:column;gap:clamp(14px,2cqw,26px);flex:1;justify-content:center;min-height:115px}
+ .port-broadcast-index{font:clamp(15px,1.7cqw,21px) 'VT323',monospace;letter-spacing:.16em;color:#b9dabc;text-shadow:0 1px 15px #000b}
+ .port-broadcast .port-headline{flex:none;max-width:680px;font-size:clamp(37px,5.1cqw,75px)}
+ .port-epg{margin-top:auto;transform:none;border-radius:5px;background:linear-gradient(120deg,rgba(15,27,25,.95),rgba(12,23,21,.91));border-color:rgba(203,245,196,.32);box-shadow:0 16px 50px #0007}
+ .port-epg-top{padding:9px 17px;border-bottom-color:#c1e4b83d}
+ .port-epg-body{grid-template-columns:1fr;gap:12px;padding:14px 17px}
+ .port-epg h3{font-size:clamp(23px,2.55cqw,34px);letter-spacing:-.035em}
+ .port-epg p{max-width:900px}
+ .port-offer-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 44px;gap:6px}
+ .port-offer-nav button{border-radius:3px;text-align:left;min-width:0;min-height:42px;padding:8px 11px;display:flex;align-items:center;gap:9px;font-size:clamp(12px,1.2cqw,15px);line-height:1.2;color:#dce9da}
+ .port-offer-nav button span:first-child{font:clamp(17px,1.6cqw,22px) 'VT323',monospace;color:#add8aa}
+ .port-offer-nav button[aria-pressed=true]{background:#c8f3ae;color:#0c2018}
+ .port-offer-nav button[aria-pressed=true] span:first-child{color:#31573e}
+ .port-offer-nav .port-broadcast-toggle{justify-content:center;font-size:18px;padding:7px}
+ .port-broadcast-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px;color:#c3dbc8;font-size:clamp(12px,1.3cqw,15px);margin-top:8px}
+ .port-broadcast-bottom button{flex:none;white-space:nowrap}
+ .port-motion{background:radial-gradient(ellipse at 75% 40%,#184b4966,transparent 55%),linear-gradient(125deg,#091719,#112c2b,#081419)}
+ .port-motion:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,15,16,.57),transparent 66%),linear-gradient(0deg,rgba(5,13,13,.85),transparent 50%);pointer-events:none}
+ /* CH 03 — editorial interview: questions are always one click away */
+ .port-ch-3{background:radial-gradient(ellipse at 90% 20%,rgba(105,157,114,.13),transparent 45%),linear-gradient(145deg,#121b1c,#0f1718)}
+ .port-how{gap:clamp(16px,2.5cqw,30px);max-width:1040px;width:100%;margin:0 auto}
+ .port-interview-heading{display:flex;flex-direction:column;gap:9px}
+ .port-interview-eyebrow,.port-answer-label{font:clamp(16px,1.7cqw,22px) 'VT323',monospace;letter-spacing:.13em;color:#bfe6b7}
+ .port-how .port-interview-heading h2{font-size:clamp(35px,4.8cqw,62px);letter-spacing:-.055em;max-width:850px}
+ .port-interview-heading p{margin:0;color:#cad8cc;font-size:clamp(15px,1.5cqw,18px)}
+ .port-q{border:0;border-left:3px solid #bee9b1;border-radius:0;background:rgba(20,39,31,.7)}
+ .port-q-question{background:transparent;padding:18px clamp(17px,2.8cqw,32px) 10px}
+ .port-q-question strong{font-size:clamp(22px,2.6cqw,36px);font-weight:500;margin-top:7px}
+ .port-q-answer{background:transparent;padding:12px clamp(17px,2.8cqw,32px) 22px;font-size:clamp(16px,1.65cqw,22px);line-height:1.48;min-height:100px;animation:portCinemaAppear .32s ease-out both}
+ .port-answer-label{margin-bottom:10px;color:#a9c9ab}
+ .port-answer-label span{opacity:.6}
+ .port-q-menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+ .port-q-menu button{display:flex;align-items:center;justify-content:flex-start;gap:10px;min-width:0;border-radius:4px;background:#23322966;border-color:#61796899;padding:11px 12px;font-size:clamp(12px,1.35cqw,16px);text-align:left}
+ .port-q-menu button span{font:clamp(18px,1.8cqw,23px) 'VT323',monospace;letter-spacing:.05em;opacity:.75}
+ .port-q-menu button[aria-pressed=true]{background:#c8f3ae;border-color:#c8f3ae;color:#13231a}
+ .port-how-summary{margin:0;color:#bdd5c0;font-size:clamp(13px,1.4cqw,17px);border-top:1px solid #a3cca544;padding-top:14px}
+ /* CH 04 — end-credit composition, one primary action */
+ .port-ch-4{background:radial-gradient(circle at 50% 45%,rgba(76,126,84,.16),transparent 43%),linear-gradient(135deg,#10191a,#0b1114)}
+ .port-contact{gap:clamp(13px,1.9cqw,23px)}
+ .port-contact-mark{font-size:clamp(35px,5cqw,70px);line-height:1;color:#c6edb3;opacity:.86}
+ .port-contact-kicker{font:clamp(17px,1.7cqw,23px) 'VT323',monospace;letter-spacing:.18em;color:#b5d6b6}
+ .port-contact h2{font-size:clamp(49px,7cqw,92px);letter-spacing:-.07em}
+ .port-contact p{font-size:clamp(17px,1.9cqw,23px);max-width:630px;color:#d9e3dc}
+ .port-contact-actions{margin-top:clamp(7px,1.5cqw,17px);gap:11px}
+ .port-contact-actions a{border-radius:4px;padding:14px 22px;box-shadow:0 6px 24px #0003}
+ .port-linkedin-pending{display:inline-flex;justify-content:center;align-items:center;padding:14px 22px;border:1px solid #849c89;border-radius:4px;color:#b8ccba;opacity:.7;cursor:default;font-weight:500}
+ .port-contact-address{color:#c8f3ae;text-decoration:none;border-bottom:1px solid #c8f3ae55;font-size:clamp(16px,1.6cqw,21px)}
+ .port-contact-meta{color:#b3c9b6;font-size:clamp(13px,1.3cqw,16px)}
+ @media(max-width:780px){
+  .port-ch-2>.port-top{padding:20px 18px 0}
+  .port-broadcast{padding:15px 18px 24px;gap:14px;min-height:450px}
+  .port-broadcast-heading{min-height:100px}
+  .port-epg-body{grid-template-columns:1fr}
+  .port-offer-nav{grid-template-columns:repeat(3,minmax(0,1fr)) 38px}
+  .port-offer-nav button{justify-content:center;padding:8px 5px}
+  .port-offer-nav button span:nth-child(2){display:none}
+  .port-broadcast-bottom{flex-wrap:wrap}
+  .port-q-menu{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .port-how{gap:16px}
+  .port-contact-actions{flex-direction:column;width:min(100%,350px)}
+  .port-linkedin-pending{width:100%}
+ }
+ @media(prefers-reduced-motion:reduce){.port-q-answer{animation:none}}
+  @keyframes portSpin{to{transform:rotate(360deg)}}@keyframes portFloat{50%{translate:0 -20px}}@keyframes portPulse{50%{opacity:.2;scale:.7}}
  @media(max-width:780px){.port-channel{padding:35px 22px}.port-about{grid-template-columns:minmax(0,1fr);gap:20px}.port-portrait{max-width:175px}.port-about h2,.port-how h2,.port-contact h2{font-size:clamp(33px,9vw,53px)}.port-about p{font-size:16px}.port-ch-2{padding:0}.port-broadcast{padding:25px 18px}.port-broadcast .port-headline{font-size:clamp(38px,9vw,56px)}.port-epg-body{grid-template-columns:1fr}.port-offer-nav{justify-content:flex-start}.port-contact p{font-size:16px}}
  @media(prefers-reduced-motion:reduce){.port-motion *{animation:none!important}.port-motion{background:#172a27}}
  `}</style>
@@ -111,19 +179,19 @@ export default function PortfolioChannel({number,lang,active,onNavigate}:Props){
  <div className="port-foot"><span>THONY MAHERISON / FR · EN</span><button onClick={()=>onNavigate(2)}>{t.aboutNext} →</button></div>
  </>}
  {number===2&&<div className="port-broadcast">
- <Motion mode={offer}/><div className="port-headline">{t.serviceHeadline}</div>
+ <Motion mode={offer}/><div className="port-broadcast-heading"><span className="port-broadcast-index">MAHERISON / FIELD NOTES — 0{offer+1}</span><div className="port-headline">{t.serviceHeadline}</div></div>
  <div className="port-epg"><div className="port-epg-top"><span>{t.servicePlay} / 0{offer+1}—03</span><span>EPG · AMAZON OPERATIONS</span></div><div className="port-epg-body">
  <div><h3>{t.offerNames[offer]}</h3><p>{t.offerDesc[offer]}</p></div>
- <div className="port-offer-nav">{[0,1,2].map(i=><button type="button" key={i} aria-label={t.offerNames[i]} title={t.offerNames[i]} aria-pressed={offer===i} onClick={()=>{setOffer(i);setProgress(0)}}>0{i+1}</button>)}<button type="button" aria-label={paused?t.serviceResume:t.servicePause} onClick={()=>setPaused(x=>!x)}>{paused?"▶":"Ⅱ"}</button></div>
+ <div className="port-offer-nav">{[0,1,2].map(i=><button type="button" key={i} aria-label={t.offerNames[i]} aria-pressed={offer===i} onClick={()=>{setOffer(i);setProgress(0)}}><span>0{i+1}</span><span>{t.offerNames[i]}</span></button>)}<button className="port-broadcast-toggle" type="button" aria-label={paused?t.serviceResume:t.servicePause} onClick={()=>setPaused(x=>!x)}>{paused?"▶":"Ⅱ"}</button></div>
  </div><div className="port-progress"><i style={{width:progress+"%"}}/></div></div>
- <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,color:"#c3dbc8",fontSize:13}}><span>{t.serviceIntro}</span><button style={{...action,whiteSpace:"nowrap"}} onClick={()=>onNavigate(4)}>{t.serviceContact} ↗</button></div>
+ <div className="port-broadcast-bottom"><span>{t.serviceIntro}</span><button style={action} onClick={()=>onNavigate(4)}>{t.serviceContact} ↗</button></div>
  </div>}
- {number===3&&<><div className="port-how"><h2>{t.howTitle}</h2><p style={{margin:0,opacity:.75}}>{t.howIntro}</p><div className="port-q">
+ {number===3&&<><div className="port-how"><div className="port-interview-heading"><div className="port-interview-eyebrow">MAHERISON TV / THE INTERVIEW</div><h2>{t.howTitle}</h2><p>{t.howIntro}</p></div><div className="port-q">
  <div className="port-q-question"><span style={{...mono,color:mint}}>{t.howAsk}</span><strong>{t.q[question]}</strong></div>
- <div className="port-q-answer"><div style={{...mono,color:mint,marginBottom:8}}>{t.howReply}</div>{t.a[question]}</div></div>
- <div className="port-q-menu">{t.qShort.map((label,i)=><button type="button" key={i} aria-pressed={question===i} onClick={()=>setQuestion(i)}>{i+1}. {label}</button>)}</div>
- <p style={{margin:0,color:"#bcd6c2",fontSize:16}}>{t.howFooter}</p></div></>}
- {number===4&&<div className="port-contact"><div style={{...mono,color:mint,fontSize:20}}>MAHERISON TV / DIRECT LINE</div><h2>{t.contactTitle}</h2><p>{t.contactDesc}</p><div className="port-contact-actions"><a href="mailto:thony@maherison.com?subject=Projet%20Amazon">✉ {t.contactEmail}</a><span title={t.linkedinPending} style={{...action,opacity:.65}}>in · {t.contactLinkedin} (URL à confirmer)</span></div><a href="mailto:thony@maherison.com" style={{color:mint}}>thony@maherison.com</a><span style={{color:"#b3c9b6",fontSize:15}}>{t.contactMeta}</span></div>}
+ <div className="port-q-answer" key={`${lang}-${question}`}><div className="port-answer-label">{t.howReply}<span aria-hidden="true"> / 0{question+1}</span></div><div>{t.a[question]}</div></div></div>
+ <div className="port-q-menu" role="group" aria-label={lang==="fr"?"Choisir une question":"Choose a question"}>{t.qShort.map((label,i)=><button type="button" key={i} aria-pressed={question===i} onClick={()=>setQuestion(i)}><span>0{i+1}</span>{label}</button>)}</div>
+ <p className="port-how-summary">{t.howFooter}</p></div></>}
+ {number===4&&<div className="port-contact"><div className="port-contact-mark" aria-hidden="true">✳</div><div className="port-contact-kicker">MAHERISON TV / OPEN CHANNEL</div><h2>{t.contactTitle}</h2><p>{t.contactDesc}</p><div className="port-contact-actions"><a href="mailto:thony@maherison.com?subject=Projet%20Amazon">✉ {t.contactEmail}</a><span aria-label={t.linkedinPending} title={t.linkedinPending} className="port-linkedin-pending">in · {t.contactLinkedin}</span></div><a className="port-contact-address" href="mailto:thony@maherison.com">thony@maherison.com</a><span className="port-contact-meta">{t.contactMeta}</span></div>}
  {number===4&&<div className="port-foot"><span>THANKS FOR WATCHING</span><span>END OF TRANSMISSION</span></div>}
  </section>;
 }
