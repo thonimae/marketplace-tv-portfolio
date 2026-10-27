@@ -1023,6 +1023,7 @@ export default class TvSite extends React.Component<Props, State> {
         <button aria-label="MENU: change language" onClick={() => this.toggleLanguageMenu()} className="m-theme">
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M10 2a8 8 0 0 1 0 16z" fill="currentColor" /></svg>
         </button>
+        <button aria-label={`Change TV theme (current: ${THEMES[s.theme].label})`} title={`Theme: ${THEMES[s.theme].label}`} onClick={() => this.cycleTheme()} className="m-theme" style={{fontFamily:"'VT323',monospace",fontSize:13,letterSpacing:".03em"}}>THEME</button>
         <div ref={this.tabsRef} className="m-tabs">
           {TABS.map((n, i) => (
             <button key={n} data-tab={i} aria-label={`Channel ${i}, ${NAMES[i].toLowerCase()}`} aria-current={s.ch === i || undefined} onClick={() => this.channel(i)} className="m-tab">
