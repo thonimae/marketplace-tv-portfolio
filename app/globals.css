@@ -3388,9 +3388,9 @@ a.m-navpill-app {
     display:flex!important;
     flex-direction:column!important;
     align-items:flex-start!important;
-    justify-content:flex-start!important;
+    justify-content:center!important;
     height:auto!important;
-    min-height:0!important;
+    min-height:calc(100dvh - 85px)!important;
     width:100%!important;
     max-width:850px!important;
     box-sizing:border-box!important;
@@ -3413,7 +3413,8 @@ a.m-navpill-app {
 }
 @media (max-width:620px) {
   .m-hero .m-title {
-    padding:clamp(112px,15vh,145px) 22px 45px!important;
+    padding:clamp(100px,13vh,130px) 22px 45px!important;
+    min-height:calc(100dvh - 75px)!important;
     gap:13px!important;
   }
   .m-hero .m-h1 {
