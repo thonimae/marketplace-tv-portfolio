@@ -625,8 +625,8 @@ export default class TvSite extends React.Component<Props, State> {
     const name = "display:none";
     const hoverTile = (e: React.MouseEvent<HTMLElement>) => { if (this.state.booted) this.focusTile(Number(e.currentTarget.dataset.tile)); };
     return (
-      <section id="ch-00" data-ch="0" aria-label="Channel 00, Home" className="m-hero" onClick={() => this.skip()} style={S("position:relative;height:100%;scroll-snap-align:start;overflow:hidden")}>
-        <div ref={this.r.launcher} style={S("position:absolute;inset:0;background-color:var(--bg,#000);background-image:var(--wall,none);background-size:cover;background-position:center;color:var(--ink,rgba(255,255,255,.95))")}>
+      <section id="ch-00" data-ch="0" aria-label="Channel 00, Home" className="m-hero" data-theme={s.theme} onClick={() => this.skip()} style={{...S("position:relative;height:100%;scroll-snap-align:start;overflow:hidden"),backgroundColor:THEMES[s.theme]["--bg"]}}>
+        <div ref={this.r.launcher} style={{...S("position:absolute;inset:0;background-size:cover;background-position:center"),backgroundColor:THEMES[s.theme]["--bg"],backgroundImage:THEMES[s.theme]["--wall"],color:THEMES[s.theme]["--ink"]}}>
           <div ref={this.r.ambient} style={S("position:absolute;inset:0;background:radial-gradient(55% 50% at 30% 42%,var(--glow,rgba(0,0,0,0)) 0%,transparent 70%);pointer-events:none")} />
           <div style={S("position:absolute;left:4.2cqw;right:4.2cqw;top:clamp(36px,5cqw,65px);display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'VT323',monospace;font-size:clamp(14px,1.8cqw,22px);letter-spacing:.1em")}>
             <span>MAHERISON / AMAZON OPERATIONS</span><span style={S("color:var(--brand,#cfffcf)")}>{s.lang==="fr"?"INDÉPENDANT · EUROPE":"INDEPENDENT · EUROPE"}</span>
