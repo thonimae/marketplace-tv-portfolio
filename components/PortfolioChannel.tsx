@@ -18,7 +18,7 @@ contactTitle:"Let's talk.",contactDesc:"Need an extra pair of hands on Amazon, o
 }};
 const mono:React.CSSProperties={fontFamily:"'VT323',monospace",fontSize:"clamp(16px,2cqw,25px)",letterSpacing:".12em"};
 const ink="#f2f6f0",mint="#c8f3ae";
-const action:React.CSSProperties={border:"1px solid #6a936e",borderRadius:24,padding:"10px 17px",fontSize:"clamp(13px,1.3cqw,16px)",background:"transparent",color:ink,cursor:"pointer"};
+const action:React.CSSProperties={border:"1px solid var(--port-rule,#6a936e)",borderRadius:24,padding:"10px 17px",fontSize:"clamp(13px,1.3cqw,16px)",background:"transparent",color:"var(--port-ink,#f2f6f0)",cursor:"pointer"};
 function Top({n,label}:{n:number;label:string}){return <div className="port-top"><span>CH 0{n} / {label}</span><span>● ON AIR</span></div>}
 function Portrait(){const [broken,setBroken]=useState(false);return <div className="port-portrait">{!broken?<img src="/images/thony-portrait.jpg" alt="Portrait de Thony Maherison" onError={()=>setBroken(true)}/>:<div className="port-fallback">TH<span>O</span>NY</div>}</div>}
 function Motion({mode}:{mode:number}){return <div className={"port-motion mode-"+mode} aria-hidden="true"><div className="port-orb a"/><div className="port-orb b"/><div className="port-motion-card"><i/><i/><i/></div><div className="port-motion-track"><i/><i/><i/><i/></div></div>}
