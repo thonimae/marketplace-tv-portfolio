@@ -207,6 +207,56 @@ export default function PortfolioChannel({number,lang,active,theme,onNavigate}:P
  .port-channel .port-contact-actions a{background:var(--port-accent);color:var(--port-bg);border-color:var(--port-accent)}
  .port-channel .port-linkedin-pending{border-color:var(--port-rule);color:var(--port-muted)}
  .port-channel[data-theme="paper"] .port-interview-item{border-color:var(--port-rule)}
+
+ /* CH02: all services are visible without waiting for the broadcast reel */
+ .port-ch-2{overflow:visible}
+ .port-broadcast{min-height:0}
+ .port-services{position:relative;margin-top:auto;padding:clamp(12px,1.8cqw,22px) 0 0;border-top:1px solid var(--port-rule,rgba(203,245,196,.3));background:none;z-index:2}
+ .port-services-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font:clamp(15px,1.5cqw,19px) 'VT323',monospace;letter-spacing:.13em;color:var(--port-accent)}
+ .port-services-pause{border:0;background:transparent;color:var(--port-ink);font:inherit;cursor:pointer;letter-spacing:0}
+ .port-services-pause:focus-visible,.port-service:focus-visible{outline:2px solid var(--port-accent);outline-offset:3px}
+ .port-services-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2.3cqw,30px);padding-top:clamp(10px,1.5cqw,20px)}
+ .port-service{position:relative;border:0;border-top:2px solid var(--port-rule);background:transparent;color:var(--port-ink);padding:clamp(10px,1.1cqw,16px) 0 clamp(15px,1.7cqw,24px);text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(5px,.8cqw,10px);min-width:0;cursor:pointer;transition:border-color .2s,opacity .2s}
+ .port-service[aria-pressed=true]{border-top-color:var(--port-accent)}
+ .port-service-number{font:clamp(16px,1.5cqw,21px) 'VT323',monospace;color:var(--port-accent);letter-spacing:.1em}
+ .port-service-title{display:block;font-size:clamp(17px,1.85cqw,25px);font-weight:550;line-height:1.16;letter-spacing:-.025em}
+ .port-service-desc{display:block;font-size:clamp(13px,1.26cqw,17px);line-height:1.42;color:var(--port-muted)}
+ .port-service-meter{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--port-rule)}
+ .port-service-meter i{display:block;height:100%;background:var(--port-accent);transition:width .18s linear}
+ .port-channel[data-theme="paper"] .port-broadcast-heading,.port-channel[data-theme="paper"] .port-services{color:var(--port-ink)}
+ /* When space runs short, let the TV's scroll container reveal content instead of clipping it. */
+ .port-channel:not(.port-ch-2){overflow:visible}
+ .port-ch-1 .port-about,.port-interview-stage,.port-contact{min-height:0}
+ @media(max-height:680px) and (min-width:781px){
+  .port-channel{gap:12px;padding-top:17px;padding-bottom:17px}
+  .port-ch-1 .port-about h2{margin:5px 0 10px}
+  .port-ch-1 .port-cinema-story{gap:6px}
+  .port-ch-1 .port-cinema-story p{font-size:clamp(13px,1.2cqw,16px);line-height:1.37}
+  .port-ch-1 .port-credential{gap:6px;margin-top:8px;padding-top:8px}
+  .port-ch-2>.port-top{padding-top:16px}
+  .port-broadcast{padding-top:8px;padding-bottom:14px}
+  .port-broadcast-heading{min-height:60px;gap:7px}
+  .port-broadcast .port-headline{font-size:clamp(31px,4cqw,60px)}
+  .port-service-title{font-size:clamp(16px,1.6cqw,21px)}
+  .port-service-desc{font-size:clamp(12px,1.16cqw,15px)}
+  .port-interview-stage{gap:12px}
+  .port-interview-grid{row-gap:16px}
+  .port-interview-item p{font-size:clamp(12px,1.2cqw,16px);line-height:1.33}
+  .port-interview-item h2{font-size:clamp(18px,2cqw,27px);margin-bottom:5px}
+  .port-contact{gap:10px}
+  .port-contact h2{font-size:clamp(40px,6cqw,70px)}
+ }
+ @media(max-width:780px){
+  .port-services-grid{grid-template-columns:1fr;gap:10px}
+  .port-services{padding-top:12px}
+  .port-service{padding:8px 0 11px;gap:4px}
+  .port-service-title{font-size:20px}
+  .port-service-desc{font-size:14px;line-height:1.35}
+  .port-broadcast{min-height:0;padding-bottom:20px}
+  .port-broadcast-heading{min-height:80px}
+  .port-broadcast-bottom{margin-top:14px}
+ }
+ @media(prefers-reduced-motion:reduce){.port-service-meter i{transition:none}}
   @keyframes portSpin{to{transform:rotate(360deg)}}@keyframes portFloat{50%{translate:0 -20px}}@keyframes portPulse{50%{opacity:.2;scale:.7}}
  @media(max-width:780px){.port-channel{padding:35px 22px}.port-about{grid-template-columns:minmax(0,1fr);gap:20px}.port-portrait{max-width:175px}.port-about h2,.port-how h2,.port-contact h2{font-size:clamp(33px,9vw,53px)}.port-about p{font-size:16px}.port-ch-2{padding:0}.port-broadcast{padding:25px 18px}.port-broadcast .port-headline{font-size:clamp(38px,9vw,56px)}.port-epg-body{grid-template-columns:1fr}.port-offer-nav{justify-content:flex-start}.port-contact p{font-size:16px}}
  @media(prefers-reduced-motion:reduce){.port-motion *{animation:none!important}.port-motion{background:#172a27}}
@@ -237,10 +287,13 @@ export default function PortfolioChannel({number,lang,active,theme,onNavigate}:P
  </>}
  {number===2&&<div className="port-broadcast">
  <Motion mode={offer}/><div className="port-broadcast-heading"><span className="port-broadcast-index">MAHERISON / FIELD NOTES — 0{offer+1}</span><div className="port-headline">{t.serviceHeadline}</div></div>
- <div className="port-epg"><div className="port-epg-top"><span>{t.servicePlay} / 0{offer+1}—03</span><span>EPG · AMAZON OPERATIONS</span></div><div className="port-epg-body">
- <div><h3>{t.offerNames[offer]}</h3><p>{t.offerDesc[offer]}</p></div>
- <div className="port-offer-nav">{[0,1,2].map(i=><button type="button" key={i} aria-label={t.offerNames[i]} aria-pressed={offer===i} onClick={()=>{setOffer(i);setProgress(0)}}><span>0{i+1}</span><span>{t.offerNames[i]}</span></button>)}<button className="port-broadcast-toggle" type="button" aria-label={paused?t.serviceResume:t.servicePause} onClick={()=>setPaused(x=>!x)}>{paused?"▶":"Ⅱ"}</button></div>
- </div><div className="port-progress"><i style={{width:progress+"%"}}/></div></div>
+ <div className="port-services" aria-label={lang==="fr"?"Mes trois services":"My three services"}>
+ <div className="port-services-head"><span>{lang==="fr"?"CE QUE JE PRENDS EN CHARGE":"WHAT I HANDLE"}</span><button className="port-services-pause" type="button" aria-label={paused?t.serviceResume:t.servicePause} onClick={()=>setPaused(x=>!x)}>{paused?"▶":"Ⅱ"} <span>{paused?t.serviceResume:t.servicePause}</span></button></div>
+ <div className="port-services-grid">{t.offerNames.map((name,i)=><button type="button" key={i} className="port-service" aria-pressed={offer===i} onClick={()=>{setOffer(i);setProgress(0)}}>
+ <span className="port-service-number">0{i+1}</span><span className="port-service-title">{name}</span><span className="port-service-desc">{t.offerDesc[i]}</span>
+ <span className="port-service-meter" aria-hidden="true"><i style={{width:offer===i?progress+"%":"0%"}}/></span>
+ </button>)}</div>
+ </div>
  <div className="port-broadcast-bottom"><span>{t.serviceIntro}</span><button style={action} onClick={()=>onNavigate(4)}>{t.serviceContact} ↗</button></div>
  </div>}
  {number===3&&<div className="port-interview-stage">
